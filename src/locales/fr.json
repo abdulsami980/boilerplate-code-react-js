@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "login": "Connexion",
+    "signup": "Créer un compte",
+    "otp": "Mot de passe à usage unique",
+    "forgotPassword": "Mot de passe oublié"
+  },
+  "portal": {
+    "dashboard": "Tableau de bord"
+  }
+}

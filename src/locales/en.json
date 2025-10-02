@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "otp": "One-Time Password",
+    "forgotPassword": "Forgot Password"
+  },
+  "portal": {
+    "dashboard": "Dashboard"
+  }
+}
