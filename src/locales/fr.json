@@ -1,4 +1,7 @@
 {
+  "landing": {
+    "home": "Page d'accueil"
+  },
   "auth": {
     "login": "Connexion",
     "signup": "Créer un compte",

@@ -1,4 +1,7 @@
 {
+  "landing": {
+    "home": "Landing Page"
+  },
   "auth": {
     "login": "Login",
     "signup": "Sign Up",

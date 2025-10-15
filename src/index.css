@@ -89,9 +89,9 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply outline-none; /* keep it minimal */
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-white text-black font-sans;
   }
 }

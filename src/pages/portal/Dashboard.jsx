@@ -1,3 +1,7 @@
-export default function Dashboarc() {
-  <div className="flex items-center justify-center h-screen">Dashboard</div>;
+export default function Dashboard() {
+  return (
+    <div className="flex items-center justify-center h-screen text-2xl font-semibold">
+      Dashboard
+    </div>
+  );
 }
