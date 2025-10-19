@@ -1,5 +1,4 @@
 // src/components/routing/RequireAuth.jsx
-import { PATH } from "@/config";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 

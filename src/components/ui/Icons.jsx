@@ -1,16 +1,25 @@
 import { GREEN_COLOR } from "@/config";
-import { LayoutDashboard, Settings, User } from "lucide-react";
+import {
+  LayoutDashboard,
+  Settings,
+  User,
+  HelpCircle,
+  Bell,
+  LogOut,
+} from "lucide-react";
 import PropTypes from "prop-types";
 
 const ICONS = {
-  perosn: User,
+  person: User,
   settings: Settings,
   dashboard: LayoutDashboard,
+  fallback: HelpCircle,
+  bell: Bell,
+  logout: LogOut,
 };
 
 function Icons({ name, cursor, color, ...rest }) {
-  const IconComp = ICONS[name] ?? ICONS.xInSquare;
-
+  const IconComp = ICONS[name] ?? ICONS.fallback;
   return <IconComp {...rest} style={{ color, cursor }} />;
 }
 

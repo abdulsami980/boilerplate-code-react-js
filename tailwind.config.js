@@ -10,6 +10,9 @@ export default {
           light: "#A5B4FC",
         },
       },
+      boxShadow: {
+        glow: "0 0 25px rgba(0, 128, 0, 0.15)",
+      },
     },
   },
   plugins: [],

@@ -1,65 +1,156 @@
 // src/context/AuthProvider.jsx
-import { useEffect, useState } from "react";
+import { PageLoader } from "@/components/ui/Loaders";
+import { supabase } from "@/lib/supabase-client";
+import { toast } from "sonner";
 import { AuthContext } from "./AuthContext";
+import { useEffect, useState } from "react";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // prevent flicker on refresh
+  const [isLoading, setIsLoading] = useState(true);
 
-  // 🧱 Static test credentials
-  const STATIC_CREDENTIALS = {
-    email: "abdulsamiimran786@gmail.com",
-    password: "123",
-    role: "admin",
-  };
+  // ✅ Signup function (with email verification)
+  const signup = async (email, password, fullName, role) => {
+    try {
+      // 🔹 Step 1: Check if the email already exists in profiles
+      const { data: existingUser, error: fetchError } = await supabase
+        .from("profiles")
+        .select("email")
+        .eq("email", email)
+        .maybeSingle();
 
-  // ✅ Login function
-  const login = (email, password) => {
-    if (
-      email === STATIC_CREDENTIALS.email &&
-      password === STATIC_CREDENTIALS.password
-    ) {
-      const userData = { email, role: STATIC_CREDENTIALS.role };
-      setUser(userData);
-      localStorage.setItem("authUser", JSON.stringify(userData));
+      if (fetchError) {
+        console.error("Error checking existing user:", fetchError);
+        throw new Error("Unable to verify email. Please try again.");
+      }
+
+      if (existingUser) {
+        toast.error("Email already registered. Please log in instead.");
+        return false;
+      }
+
+      // 🔹 Step 2: Proceed with signup
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName, role },
+          emailRedirectTo: `${window.location.origin}/verify-user-email`,
+        },
+      });
+
+      if (error) {
+        // Handle "user already registered" gracefully
+        if (error.message?.toLowerCase().includes("already registered")) {
+          toast.error("Email already registered. Please log in instead.");
+          return false;
+        }
+        throw error;
+      }
+
+      // 🔹 Step 3: Success feedback
+      toast.success("Check your email for a verification link!");
       return true;
-    } else {
-      alert("Invalid credentials");
+    } catch (err) {
+      console.error("Signup error:", err.message);
+      toast.error(err.message || "Signup failed. Please try again.");
       return false;
     }
   };
 
-  // ✅ Logout function
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("authUser");
+  // ✅ Reset password after user opens the Supabase email link
+  const resetPassword = async (newPassword) => {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) {
+        console.error("Password reset error:", error.message);
+        toast.error(error.message || "Failed to reset password");
+        return false;
+      }
+
+      toast.success("Password reset successful!");
+      return true;
+    } catch (err) {
+      console.error("Unexpected reset password error:", err);
+      toast.error("Something went wrong. Please try again.");
+      return false;
+    }
   };
 
-  // ✅ Restore session on page refresh
-  useEffect(() => {
-    const storedUser = localStorage.getItem("authUser");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+  // ✅ Login function
+  const login = async (email, password) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast.error(error.message);
+        return { success: false, user: null };
+      }
+
+      toast.success("Welcome back!");
+      return { success: true, user: data.user }; // ✅ ensure user returned
+    } catch (err) {
+      toast.error("Something went wrong", err);
+      return { success: false, user: null };
     }
-    setIsLoading(false);
+  };
+
+  // ✅ Logout function
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    localStorage.clear();
+  };
+
+  // ✅ Password reset (Forget Password)
+  const sendResetLink = async (email) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+
+      if (error) throw error;
+
+      toast.success("Password reset link sent! Check your email.");
+      return true;
+    } catch (err) {
+      console.error("Password reset error:", err.message);
+      toast.error(err.message || "Failed to send reset link.");
+      return false;
+    }
+  };
+
+  // ✅ Restore session on app load or refresh
+  useEffect(() => {
+    const getSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Session restore error:", error.message);
+      }
+      setUser(data?.session?.user ?? null);
+      setIsLoading(false);
+    };
+
+    getSession();
+
+    // ✅ Realtime listener for auth state changes
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => listener.subscription.unsubscribe();
   }, []);
 
-  // 🧠 Debug logging (optional)
-  useEffect(() => {
-    if (user) {
-      console.log("✅ User logged in:", user);
-    } else {
-      console.log("🚪 User logged out or not authenticated");
-    }
-  }, [user]);
-
-  // 🧭 Avoid rendering children until auth state restored
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <span className="animate-pulse">Restoring session…</span>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   return (
@@ -67,8 +158,11 @@ export function AuthProvider({ children }) {
       value={{
         user,
         isAuthenticated: !!user,
+        signup,
         login,
         logout,
+        sendResetLink,
+        resetPassword,
       }}
     >
       {children}

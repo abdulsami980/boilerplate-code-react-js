@@ -1,33 +1,43 @@
-import { PATH } from "@/config";
-import { useNavigate } from "react-router-dom";
+import ClickSpark from "@/components/reactbits/ClickSpark";
+import { GREEN_COLOR } from "@/config";
+import BenefitsSection from "./components/Benefits";
+import Header from "./components/Header";
+import HeroSection from "./components/HeroSection";
+import HlsVideoSection from "./components/HlsVideoSection";
+import ImpactSection from "./components/ImpactSection";
+import InvestorTimeline from "./components/InvestorTimeline";
+import ScrollStackVision from "./components/ScrollStackVision";
+import MessageSection from "./components/MessageSection";
+import Footer from "./components/Footer";
+import Ambassadors from "./components/Ambassadors";
 
-// src/pages/landing/Landing.jsx
-export default function Landing() {
-  const navigate = useNavigate();
+function LandingPage() {
   return (
-    <section className="flex flex-col items-center justify-center h-screen text-center bg-gray-50">
-      <h1 className="text-4xl font-bold mb-4">Welcome to Our Platform</h1>
-      <p className="text-lg text-gray-600 mb-6">
-        Your AI-powered solution starts here.
-      </p>
-      <div className="flex space-x-4">
-        <button
-          onClick={() => {
-            navigate(PATH.LOGIN);
-          }}
-          className="px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-        >
-          Login
-        </button>
-        <button
-          onClick={() => {
-            navigate(PATH.SIGNUP);
-          }}
-          className="px-6 py-3 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50"
-        >
-          Sign Up
-        </button>
-      </div>
-    </section>
+    <>
+      <Header />
+      <HeroSection />
+      <HlsVideoSection />
+      <ImpactSection />
+      <MessageSection />
+      <BenefitsSection />
+      <Ambassadors />
+      <InvestorTimeline />
+      <ScrollStackVision />
+      <Footer />
+    </>
+  );
+}
+
+export default function Landing() {
+  return (
+    <ClickSpark
+      sparkColor={GREEN_COLOR}
+      sparkSize={10}
+      sparkRadius={15}
+      sparkCount={8}
+      duration={600}
+    >
+      <LandingPage />
+    </ClickSpark>
   );
 }
