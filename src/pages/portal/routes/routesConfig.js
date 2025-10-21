@@ -11,7 +11,7 @@ const Landing = lazy(() => import("@/pages/landing/Landing"));
 // Authentication
 // =====================
 const Login = lazy(() => import("@/pages/auth/Login"));
-const Signup = lazy(() => import("@/pages/auth/Signup"));
+const SignUp = lazy(() => import("@/pages/auth/SignUp"));
 const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"));
 const VerifyUserEmail = lazy(() => import("@/pages/auth/VerifyUserEmail"));
 const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
@@ -60,7 +60,7 @@ export const routes = [
   },
   {
     path: PATH.SIGNUP,
-    component: Signup,
+    component: SignUp,
     sidebar: false,
     private: false,
   },
