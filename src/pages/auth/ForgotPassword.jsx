@@ -84,7 +84,7 @@ export default function ForgotPassword() {
           Remembered your password?{" "}
           <button
             onClick={() => navigate(PATH.LOGIN)}
-            className="text-green-600 font-medium hover:underline"
+            className="text-green-600 font-medium hover:underline cursor-pointer"
           >
             Sign in
           </button>

@@ -76,12 +76,11 @@ export default function SignUp() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="fullName" className="text-gray-700 font-medium">
-              Full Name
-            </Label>
+         
             <Input
               id="fullName"
               type="text"
+              label="Full Name"
               placeholder="John Doe"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -91,12 +90,11 @@ export default function SignUp() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 font-medium">
-              Email
-            </Label>
+           
             <Input
               id="email"
               type="email"
+              label="Email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -106,12 +104,11 @@ export default function SignUp() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-700 font-medium">
-              Password
-            </Label>
+           
             <Input
               id="password"
               type="password"
+              label="Password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -165,7 +162,7 @@ export default function SignUp() {
           Already have an account?{" "}
           <button
             onClick={() => navigate(PATH.LOGIN)}
-            className="text-green-600 font-medium hover:underline"
+            className="text-green-600 font-medium hover:underline cursor-pointer"
           >
             Sign in
           </button>

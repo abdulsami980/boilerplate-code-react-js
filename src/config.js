@@ -18,7 +18,27 @@ export const PATH = {
   // =====================
   // ADMIN
   // =====================
-  ADMIN: { DASHBOARD: "/admin/dashboard" },
-  INVESTOR: { DASHBOARD: "/investor/dashboard" },
-  FOUNDER: { DASHBOARD: "/founder/dashboard" },
+  ADMIN: {
+    DASHBOARD: "/admin/dashboard",
+    PROFLIE: "/admin/profile",
+    SETTINGS: "/admin/settings",
+  },
+
+  // =====================
+  // INVESTOR
+  // =====================
+  INVESTOR: {
+    DASHBOARD: "/investor/dashboard",
+    PROFLIE: "/investor/profile",
+    SETTINGS: "/investor/settings",
+  },
+
+  // =====================
+  // FOUNDER
+  // =====================
+  FOUNDER: {
+    DASHBOARD: "/founder/dashboard",
+    PROFLIE: "/founder/profile",
+    SETTINGS: "/founder/settings",
+  },
 };

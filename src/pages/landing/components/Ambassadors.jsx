@@ -4,24 +4,24 @@ import IMAGES from "@/assets/images";
 
 const ambassadors = [
   {
-    name: "Aisha Khan",
+    name: "Wasim Akram",
     role: "Brand Ambassador - Vision 2030",
-    image: IMAGES.MEER_GREEN_JACKET, // replace with actual image
+    image: IMAGES.WASIM_AKRAM_BG, // replace with actual image
   },
   {
-    name: "Omar Raza",
-    role: "Youth Innovation Lead",
-    image: IMAGES.MEER_SHINY_DRESS,
+    name: "Shahid Afridi",
+    role: "Brand Ambassador - Vision 2030",
+    image: IMAGES.SHAHID_AFRIDI_BG,
   },
   {
-    name: "Sara Malik",
-    role: "Global Outreach Ambassador",
-    image: IMAGES.SHAHID_AFRIDI,
+    name: "Shakeel Ahmad Meer",
+    role: "Director & Founder - Vision 2030",
+    image: IMAGES.SHAKEEL_BG,
   },
   {
-    name: "Ali Rehman",
-    role: "Community Impact Leader",
-    image: IMAGES.WASIM_AKRAM,
+    name: "Irfan Malik",
+    role: "Tech Lead - Vision 2030",
+    image: IMAGES.IRFAN_MALIK_BG,
   },
 ];
 

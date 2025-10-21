@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-// src/components/InvestorTimeline.jsx
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { UserPlus, ShieldCheck, Search, Star, Handshake } from "lucide-react";
@@ -9,7 +8,7 @@ export default function InvestorTimeline() {
   const investorRef = useRef(null);
   const founderRef = useRef(null);
 
-  // Investors line animation
+  // Scroll Animations
   const { scrollYProgress: investorProgress } = useScroll({
     target: investorRef,
     offset: ["start start", "end end"],
@@ -20,7 +19,6 @@ export default function InvestorTimeline() {
     ["0%", "100%"]
   );
 
-  // Founders line animation
   const { scrollYProgress: founderProgress } = useScroll({
     target: founderRef,
     offset: ["start start", "end end"],
@@ -92,61 +90,61 @@ export default function InvestorTimeline() {
       id="how-it-works"
       ref={sectionRef}
       data-theme="dark"
-      className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col items-center justify-start py-32"
+      className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col items-center justify-start py-20 sm:py-28 lg:py-32 px-4 sm:px-6"
     >
       {/* Header */}
-      <div className="text-center mb-20 max-w-3xl">
-        <h2 className="text-5xl font-extrabold text-green-400 mb-4">
+      <div className="text-center mb-16 sm:mb-20 max-w-3xl">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-green-400 mb-4">
           How It Works
         </h2>
-        <p className="text-gray-300 text-lg leading-relaxed">
+        <p className="text-gray-300 text-base sm:text-lg leading-relaxed">
           A simple, transparent process designed for both investors
           <br className="hidden sm:block" /> and founders.
         </p>
       </div>
 
-      {/* ================= INVESTOR FLOW ================= */}
+      {/* INVESTOR FLOW */}
       <div
         ref={investorRef}
-        className="relative w-full max-w-7xl mx-auto flex justify-center items-start mb-40"
+        className="relative w-full max-w-7xl mx-auto flex flex-col lg:flex-row justify-center items-start mb-32 sm:mb-40"
       >
         {/* Left Title */}
-        <div className="w-1/3 flex text-center pr-10 sticky top-32 self-start">
-          <h3 className="text-6xl font-extrabold text-green-400 pt-40 leading-tight">
-            For <br /> Investors
+        <div className="w-full lg:w-1/3 text-center lg:text-left lg:sticky lg:top-24 mb-10 lg:mb-0">
+          <h3 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-green-400 leading-tight pt-20">
+            For <br className="hidden sm:block" /> Investors
           </h3>
         </div>
 
-        {/* Middle Timeline */}
-        <div className="relative w-[12px] bg-gray-700 rounded-full mx-20 overflow-hidden self-stretch z-0">
+        {/* Timeline for desktop */}
+        <div className="relative hidden lg:block w-[10px] bg-gray-700 rounded-full mx-12 overflow-hidden self-stretch z-0">
           <motion.div
             style={{ height: investorLineHeight }}
             className="absolute top-0 left-0 w-full bg-green-500 rounded-full shadow-[0_0_20px_#22c55e]"
           />
         </div>
 
-        {/* Right Cards */}
-        <div className="w-1/3 flex flex-col justify-start space-y-[20vh] pb-16">
+        {/* Cards */}
+        <div className="w-full lg:w-1/3 flex flex-col justify-start gap-16 sm:gap-20 pb-10">
           {investorSteps.map((step, i) => (
             <StepCard key={i} {...step} side="right" />
           ))}
         </div>
       </div>
 
-      {/* ================= FOUNDER FLOW ================= */}
+      {/* FOUNDER FLOW */}
       <div
         ref={founderRef}
-        className="relative w-full max-w-7xl mx-auto flex justify-center items-start"
+        className="relative w-full max-w-7xl mx-auto flex flex-col lg:flex-row justify-center items-start"
       >
-        {/* Left Cards */}
-        <div className="w-1/3 flex flex-col justify-start space-y-[20vh] pb-16">
+        {/* Cards */}
+        <div className="w-full lg:w-1/3 flex flex-col justify-start gap-16 sm:gap-20 pb-10 order-2 lg:order-2">
           {founderSteps.map((step, i) => (
             <StepCard key={i} {...step} side="left" />
           ))}
         </div>
 
-        {/* Middle Timeline */}
-        <div className="relative w-[12px] bg-gray-700 rounded-full mx-20 overflow-hidden self-stretch z-0">
+        {/* Timeline for desktop only */}
+        <div className="relative hidden lg:block w-[10px] bg-gray-700 rounded-full mx-12 overflow-hidden self-stretch z-0 order-3 lg:order-2">
           <motion.div
             style={{ height: founderLineHeight }}
             className="absolute top-0 left-0 w-full bg-green-500 rounded-full shadow-[0_0_20px_#22c55e]"
@@ -154,9 +152,9 @@ export default function InvestorTimeline() {
         </div>
 
         {/* Right Title */}
-        <div className="w-1/3 flex text-center pl-10 sticky top-32 self-start">
-          <h3 className="text-6xl font-extrabold text-green-400  pt-40  leading-tight">
-            For <br /> Founders
+        <div className="w-full lg:w-1/3 text-center lg:text-right lg:sticky lg:top-24 mb-6 lg:mb-0 order-1 lg:order-3">
+          <h3 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-green-400 leading-tight pt-20">
+            For <br className="hidden sm:block" /> Founders
           </h3>
         </div>
       </div>
@@ -164,7 +162,6 @@ export default function InvestorTimeline() {
   );
 }
 
-// Reusable StepCard Component
 function StepCard({ title, desc, icon, side = "right" }) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -180,28 +177,30 @@ function StepCard({ title, desc, icon, side = "right" }) {
     <motion.div
       ref={ref}
       style={{ opacity, y, scale }}
-      className={`relative flex items-center gap-12 min-h-[48vh] z-20 ${
-        side === "left" ? "flex-row-reverse text-right" : ""
+      className={`relative flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-10 z-20 ${
+        side === "left" ? "sm:flex-row-reverse lg:text-right" : "lg:text-left"
       }`}
     >
       {/* Icon */}
       <motion.div
         style={{ opacity }}
-        className={`absolute ${
-          side === "left" ? "-right-[112px]" : "-left-[112px]"
-        } w-12 h-12 flex items-center justify-center rounded-full bg-green-500 shadow-[0_0_15px_#22c55e] z-10`}
+        className="relative sm:static flex-shrink-0 w-14 h-14 flex items-center justify-center rounded-full bg-green-500 shadow-[0_0_15px_#22c55e] z-10"
       >
         {icon}
       </motion.div>
 
       {/* Card */}
       <motion.div
-        className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-8 w-full"
+        className="backdrop-blur-lg bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-6 sm:p-8 w-full"
         whileHover={{ scale: 1.03 }}
         transition={{ type: "spring", stiffness: 100, damping: 15 }}
       >
-        <h3 className="text-2xl font-bold text-green-400 mb-3">{title}</h3>
-        <p className="text-gray-300 leading-relaxed">{desc}</p>
+        <h3 className="text-xl sm:text-2xl font-bold text-green-400 mb-3">
+          {title}
+        </h3>
+        <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+          {desc}
+        </p>
       </motion.div>
     </motion.div>
   );

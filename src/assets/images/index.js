@@ -8,6 +8,9 @@ import wasimAkram from "./wasimAkram.png";
 import lgoo from "./lgoo.png";
 import mlggo from "./mlggo.png";
 import shakeelBg from "./shakeelBg.jpg";
+import irfanMalikBg from "./irfanMalikBg.jpg";
+import wasimAkramBg from "./wasimAkramBg.png";
+import ShahidAfridiBg from "./shahidAfridiBg.jpg";
 
 const IMAGES = {
   // People
@@ -18,6 +21,9 @@ const IMAGES = {
   LGOO: lgoo,
   MLGGO: mlggo,
   SHAKEEL_BG: shakeelBg,
+  IRFAN_MALIK_BG: irfanMalikBg,
+  WASIM_AKRAM_BG: wasimAkramBg,
+  SHAHID_AFRIDI_BG: ShahidAfridiBg,
 };
 
 export default IMAGES;

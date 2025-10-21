@@ -20,8 +20,8 @@ function LandingPage() {
       <ImpactSection />
       <MessageSection />
       <BenefitsSection />
-      <Ambassadors />
       <InvestorTimeline />
+      <Ambassadors />
       <ScrollStackVision />
       <Footer />
     </>

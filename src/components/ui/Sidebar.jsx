@@ -5,11 +5,19 @@ import IMAGES from "@/assets/images";
 import { PATH } from "@/config";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { getUserInfo } from "@/lib/utils";
+
+const bottomItems = [
+  // { path: PATH.LANDING, icon: "settings", label: "Settings" },
+  // { path: PATH.LANDING, icon: "bell", label: "Notifications" },
+  { path: PATH.LANDING, icon: "logout", label: "Log Out" },
+];
 
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { name } = getUserInfo();
 
   // Get user role safely
   const role =
@@ -27,11 +35,64 @@ export default function Sidebar() {
 
   const isActivePath = (path) => location.pathname === path;
 
-  const bottomItems = [
-    { path: PATH.LANDING, icon: "settings", label: "Settings" },
-    { path: PATH.LANDING, icon: "bell", label: "Notifications" },
-    { path: PATH.LANDING, icon: "logout", label: "Log Out" },
-  ];
+  const handleProfileClick = () => {
+    switch (role) {
+      case "admin":
+        navigate(PATH.ADMIN.PROFLIE);
+        break;
+      case "investor":
+        navigate(PATH.INVESTOR.PROFLIE);
+        break;
+      case "founder":
+        navigate(PATH.FOUNDER.PROFLIE);
+        break;
+      default:
+        navigate(PATH.LANDING);
+    }
+  };
+
+  const handleBottomItemClick = async (label) => {
+    switch (label) {
+      case "Settings":
+        switch (role) {
+          case "admin":
+            navigate(PATH.ADMIN.SETTINGS);
+            break;
+          case "investor":
+            navigate(PATH.INVESTOR.SETTINGS);
+            break;
+          case "founder":
+            navigate(PATH.FOUNDER.SETTINGS);
+            break;
+          default:
+            navigate(PATH.LANDING);
+            break;
+        }
+        break;
+
+      case "Notifications":
+        // Add role-specific notification screens later if needed
+        navigate(PATH.LANDING);
+        break;
+
+      case "Log Out": {
+        const logoutPromise = (async () => {
+          await logout();
+        })();
+
+        toast.promise(logoutPromise, {
+          loading: "Logging out...",
+          success: "Logged out successfully!",
+          error: "Failed to log out. Try again.",
+        });
+        navigate(PATH.LOGIN);
+        break;
+      }
+
+      default:
+        navigate(PATH.LANDING);
+    }
+  };
 
   return (
     <aside
@@ -110,22 +171,7 @@ export default function Sidebar() {
         {bottomItems.map(({ path, icon, label }) => (
           <button
             key={path}
-            onClick={async () => {
-              if (label === "Log Out") {
-                const logoutPromise = (async () => {
-                  await logout();
-                  navigate(PATH.LANDING);
-                })();
-
-                toast.promise(logoutPromise, {
-                  loading: "Logging out...",
-                  success: "Logged out successfully!",
-                  error: "Failed to log out. Try again.",
-                });
-              } else {
-                navigate(path);
-              }
-            }}
+            onClick={() => handleBottomItemClick(label)}
             className={`flex items-center justify-center group-hover:justify-start gap-4 w-full py-2.5 px-4 rounded-xl transition-all duration-200
         ${
           isActivePath(path)
@@ -135,14 +181,15 @@ export default function Sidebar() {
           >
             <div
               className={`flex items-center justify-center min-w-[2.5rem]
-          ${
-            isActivePath(path)
-              ? "text-green-400"
-              : "text-white/90 hover:text-green-400"
-          }`}
+    ${
+      isActivePath(path)
+        ? "text-green-400"
+        : "text-white/90 group-hover:text-green-400 transition-colors duration-200"
+    }`}
             >
               <Icons name={icon} size={22} />
             </div>
+
             <span className="hidden group-hover:inline-block text-sm font-medium text-gray-300">
               {label}
             </span>
@@ -151,13 +198,14 @@ export default function Sidebar() {
 
         {/* --- Profile --- */}
         <div
-          className={`relative flex items-center justify-center group-hover:justify-start gap-4 w-full py-3 px-4 rounded-xl 
-            transition-all duration-300
-            ${
-              isActivePath("/profile")
-                ? "bg-green-500/15 text-green-300 shadow-[inset_0_0_10px_rgba(34,197,94,0.25)]"
-                : "text-gray-300 hover:bg-green-500/10"
-            }`}
+          onClick={handleProfileClick}
+          className={`relative flex items-center justify-center group-hover:justify-start gap-4 w-full py-3 px-4 rounded-xl cursor-pointer
+    transition-all duration-300
+    ${
+      location.pathname.includes("/profile")
+        ? "bg-green-500/15 text-green-300 shadow-[inset_0_0_10px_rgba(34,197,94,0.25)]"
+        : "text-gray-300 hover:bg-green-500/10"
+    }`}
         >
           <div className="relative">
             <img
@@ -169,7 +217,7 @@ export default function Sidebar() {
 
           <div className="hidden group-hover:flex flex-col whitespace-nowrap transition-all duration-300">
             <span className="font-semibold text-sm leading-tight text-white">
-              {user?.user_metadata?.name || "User"}
+              {name || "User"}
             </span>
             <span className="text-xs text-green-400/80 capitalize">{role}</span>
           </div>

@@ -1,6 +1,6 @@
-import Squares from "@/components/reactbits/Squares";
+import Iridescence from "@/components/reactbits/Iridescence";
 import { Button } from "@/components/ui/button";
-import { GREEN_COLOR, PATH } from "@/config";
+import { PATH } from "@/config";
 import { ArrowRight, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -12,13 +12,12 @@ export default function HeroSection() {
       data-theme="light"
       className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-white rounded-b-[80px] shadow-[0_10px_40px_rgba(0,0,0,0.1)]"
     >
-      {/* Animated Square Background */}
-      <Squares
-        speed={0.4}
-        squareSize={30}
-        direction="diagonal"
-        borderColor={GREEN_COLOR}
-        hoverFillColor={GREEN_COLOR}
+      <Iridescence
+        color={[0.0, 0.55, 0.2]}
+        mouseReact={false}
+        amplitude={0.06}
+        speed={1.1}
+        className="w-full h-full opacity-90"
       />
 
       {/* White Container with Permanent Green Glow */}

@@ -50,8 +50,8 @@ export default function BenefitsSection() {
               className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-lg p-6 text-white hover:bg-white/20 transition-all duration-300"
             >
               <div className="text-3xl mb-4">{benefit.icon}</div>
-              <h3 className="text-xl font-semibold mb-3">{benefit.title}</h3>
-              <p className="text-sm leading-relaxed opacity-90">
+              <h3 className="text-xl font-semibold mb-3 ">{benefit.title}</h3>
+              <p className="text-sm leading-relaxed opacity-90 ">
                 {benefit.text}
               </p>
             </div>

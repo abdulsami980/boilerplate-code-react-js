@@ -41,7 +41,7 @@ export default function ImpactSection() {
       </h1>
 
       {/* Stats — always 4 in a row for md+ */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-10 lg:gap-12 max-w-6xl mx-auto px-6 relative z-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-10 lg:gap-12 max-w-6xl mx-auto px-6 relative z-10">
         {stats.map((item, i) => {
           const digits = item.value.toString().length;
           const places = Array.from({ length: digits }, (_, idx) =>

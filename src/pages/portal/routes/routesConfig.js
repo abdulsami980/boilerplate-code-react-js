@@ -20,6 +20,7 @@ const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
 // Admin
 // =====================
 const Dashboard = lazy(() => import("@/pages/portal/admin/Dashboard"));
+const AdminProfile = lazy(() => import("@/pages/portal/admin/Profile"));
 
 // =====================
 // Investor
@@ -27,11 +28,15 @@ const Dashboard = lazy(() => import("@/pages/portal/admin/Dashboard"));
 const InvestorDashboard = lazy(() =>
   import("@/pages/portal/investor/Dashboard")
 );
+const InvestorProfile = lazy(() =>
+  import("@/pages/portal/investor/Profile/index.jsx")
+);
 
 // =====================
 // Founder
 // =====================
 const FounderDashboard = lazy(() => import("@/pages/portal/founder/Dashboard"));
+const FounderProfile = lazy(() => import("@/pages/portal/founder/Profile"));
 
 export const routes = [
   // =====================
@@ -90,6 +95,13 @@ export const routes = [
     icon: "dashboard",
     title: "Dashboard",
   },
+  {
+    path: PATH.ADMIN.PROFLIE,
+    component: AdminProfile,
+    sidebar: false,
+    private: true,
+    roles: ["admin"],
+  },
 
   // =====================
   // Investor
@@ -103,6 +115,13 @@ export const routes = [
     icon: "dashboard",
     title: "Dashboard",
   },
+  {
+    path: PATH.INVESTOR.PROFLIE,
+    component: InvestorProfile,
+    sidebar: false,
+    private: true,
+    roles: ["investor"],
+  },
 
   // =====================
   // Founder
@@ -115,5 +134,12 @@ export const routes = [
     roles: ["founder"],
     icon: "dashboard",
     title: "Dashboard",
+  },
+  {
+    path: PATH.FOUNDER.PROFLIE,
+    component: FounderProfile,
+    sidebar: false,
+    private: true,
+    roles: ["founder"],
   },
 ];

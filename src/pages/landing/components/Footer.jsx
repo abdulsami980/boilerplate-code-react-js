@@ -3,6 +3,14 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
+const navItems = [
+  { label: "Home", id: "hero-section" },
+  { label: "Vision", id: "vision" },
+  { label: "Impact", id: "impact" },
+  { label: "Ideas", id: "benefits" },
+  { label: "How It Works", id: "how-it-works" },
+];
+
 export default function Footer() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -12,6 +20,13 @@ export default function Footer() {
 
   const y = useTransform(scrollYProgress, [0, 1], [0, 60]);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.6]);
+
+  const handleScrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <footer
@@ -74,21 +89,19 @@ export default function Footer() {
             Quick Links
           </h3>
           <ul className="space-y-3">
-            {["Home", "Vision", "How It Works", "Ideas", "Impact"].map(
-              (item) => (
-                <li key={item} className="relative group w-fit">
-                  <a
-                    href="#"
-                    className="text-sm text-gray-400 hover:text-green-400 transition font-medium"
-                  >
-                    {item}
-                  </a>
+            {navItems.map((item) => (
+              <li key={item.label} className="relative group w-fit">
+                <button
+                  onClick={() => handleScrollTo(item.id)}
+                  className="text-sm text-gray-400 hover:text-green-400 transition font-medium"
+                >
+                  {item.label}
+                </button>
 
-                  {/* Animated diagonal line effect */}
-                  <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-500 ease-out group-hover:w-full group-hover:skew-x-6"></span>
-                </li>
-              )
-            )}
+                {/* Animated diagonal line effect */}
+                <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-500 ease-out group-hover:w-full group-hover:skew-x-6"></span>
+              </li>
+            ))}
           </ul>
         </div>
 

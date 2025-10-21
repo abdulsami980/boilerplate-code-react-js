@@ -65,10 +65,10 @@ export default function Login() {
           navigate(PATH.ADMIN.DASHBOARD);
           break;
         case "investor":
-          navigate(PATH.INVESTOR.DASHBOARD);
+          navigate(PATH.INVESTOR.PROFLIE);
           break;
         case "founder":
-          navigate(PATH.FOUNDER.DASHBOARD);
+          navigate(PATH.FOUNDER.PROFLIE);
           break;
         default:
           navigate(PATH.LANDING);
@@ -95,12 +95,10 @@ export default function Login() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700 font-medium">
-              Email
-            </Label>
             <Input
               id="email"
               type="email"
+              label="Email"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -110,12 +108,10 @@ export default function Login() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-gray-700 font-medium">
-              Password
-            </Label>
             <Input
               id="password"
               type="password"
+              label="Password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -177,7 +173,7 @@ export default function Login() {
           Don't have an account?{" "}
           <button
             onClick={() => navigate(PATH.SIGNUP)}
-            className="text-green-600 font-medium hover:underline"
+            className="text-green-600 font-medium hover:underline cursor-pointer"
           >
             Sign up
           </button>
