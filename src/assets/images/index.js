@@ -10,7 +10,7 @@ import mlggo from "./mlggo.png";
 import shakeelBg from "./shakeelBg.jpg";
 import irfanMalikBg from "./irfanMalikBg.jpg";
 import wasimAkramBg from "./wasimAkramBg.png";
-import ShahidAfridiBg from "./shahidAfridiBg.jpg";
+import ShahidAfridiBg from "./ShahidAfridiBg.jpg";
 
 const IMAGES = {
   // People
