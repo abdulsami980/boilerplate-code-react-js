@@ -65,10 +65,10 @@ export default function Login() {
           navigate(PATH.ADMIN.DASHBOARD);
           break;
         case "investor":
-          navigate(PATH.INVESTOR.PROFLIE);
+          navigate(PATH.INVESTOR.PROFILE);
           break;
         case "founder":
-          navigate(PATH.FOUNDER.PROFLIE);
+          navigate(PATH.FOUNDER.PROFILE);
           break;
         default:
           navigate(PATH.LANDING);

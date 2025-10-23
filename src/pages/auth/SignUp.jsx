@@ -1,14 +1,12 @@
 // src/pages/auth/SignUp.jsx
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaFacebook, FaTwitter } from "react-icons/fa";
-import { Briefcase, User } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PATH } from "@/config";
 import { useAuth } from "@/hooks/useAuth";
+import { Briefcase, User } from "lucide-react";
+import { useState } from "react";
+import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { LeftSection } from "./Login";
 
 export default function SignUp() {
@@ -76,7 +74,6 @@ export default function SignUp() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
           <div className="space-y-2">
-         
             <Input
               id="fullName"
               type="text"
@@ -90,7 +87,6 @@ export default function SignUp() {
           </div>
 
           <div className="space-y-2">
-           
             <Input
               id="email"
               type="email"
@@ -104,7 +100,6 @@ export default function SignUp() {
           </div>
 
           <div className="space-y-2">
-           
             <Input
               id="password"
               type="password"

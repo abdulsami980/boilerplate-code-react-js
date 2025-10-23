@@ -6,6 +6,8 @@ import {
   HelpCircle,
   Bell,
   LogOut,
+  DollarSign,
+  Building2,
 } from "lucide-react";
 import PropTypes from "prop-types";
 
@@ -16,6 +18,8 @@ const ICONS = {
   fallback: HelpCircle,
   bell: Bell,
   logout: LogOut,
+  dollarSign: DollarSign,
+  building: Building2,
 };
 
 function Icons({ name, cursor, color, ...rest }) {

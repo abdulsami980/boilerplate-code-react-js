@@ -14,7 +14,13 @@ export default function BenefitsSection() {
     },
     {
       title: "For Country",
-      icon: "🏳",
+      icon: (
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg"
+          alt="Pakistan Flag"
+          className="w-8 h-8"
+        />
+      ),
       text: "Access curated deals with real data, smart filters, and verified opportunities. Make informed decisions with comprehensive analytics.",
     },
     {
@@ -26,14 +32,6 @@ export default function BenefitsSection() {
 
   return (
     <>
-      {/* <ScrollVelocity
-        texts={["React Bits", "Scroll Down"]}
-        velocity={100}
-        className="custom-scroll-text"
-        damping={50}
-        stiffness={400}
-        numCopies={6}
-      /> */}
       <section
         id="benefits"
         data-theme="dark"

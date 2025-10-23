@@ -12,6 +12,18 @@ import irfanMalikBg from "./irfanMalikBg.jpg";
 import wasimAkramBg from "./wasimAkramBg.png";
 import ShahidAfridiBg from "./ShahidAfridiBg.jpg";
 
+// ==========================
+// Network Images
+// ==========================
+import akhtar from "./network/akhtar.jpg";
+import arabic from "./network/arabic.jpg";
+import dubai from "./network/dubai.jpg";
+import fahad from "./network/fahad.jpg";
+import salman from "./network/salman.jpg";
+import tech from "./network/tech.jpg";
+import wasim from "./network/wasim.jpg";
+import handShake from "./network/handShake.webp";
+
 const IMAGES = {
   // People
   MEER_GREEN_JACKET: meerGreenJacket,
@@ -24,6 +36,16 @@ const IMAGES = {
   IRFAN_MALIK_BG: irfanMalikBg,
   WASIM_AKRAM_BG: wasimAkramBg,
   SHAHID_AFRIDI_BG: ShahidAfridiBg,
+
+  // Network
+  AKHTAR: akhtar,
+  ARABIC: arabic,
+  DUBAI: dubai,
+  FAHAD: fahad,
+  SALMAN: salman,
+  TECH: tech,
+  WASIM_NETWORK: wasim,
+  HANDSHAKE: handShake,
 };
 
 export default IMAGES;

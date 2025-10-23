@@ -20,8 +20,13 @@ export const PATH = {
   // =====================
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
-    PROFLIE: "/admin/profile",
+    INVESTORS: "/admin/investors",
+    EDIT_INVESTOR: "/admin/investors/edit",
+    FOUNDERS: "/admin/founders",
+    EDIT_FOUNDER: "/admin/founders/edit",
+    PROFILE: "/admin/profile",
     SETTINGS: "/admin/settings",
+    HELP: "/admin/help",
   },
 
   // =====================
@@ -29,8 +34,9 @@ export const PATH = {
   // =====================
   INVESTOR: {
     DASHBOARD: "/investor/dashboard",
-    PROFLIE: "/investor/profile",
+    PROFILE: "/investor/profile",
     SETTINGS: "/investor/settings",
+    HELP: "/investor/help",
   },
 
   // =====================
@@ -38,7 +44,8 @@ export const PATH = {
   // =====================
   FOUNDER: {
     DASHBOARD: "/founder/dashboard",
-    PROFLIE: "/founder/profile",
+    PROFILE: "/founder/profile",
     SETTINGS: "/founder/settings",
+    HELP: "/founder/help",
   },
 };

@@ -1,125 +1,153 @@
 /* eslint-disable no-unused-vars */
-import { BarChart3, Cpu, ShieldCheck, Zap } from "lucide-react";
-import { cloneElement, useEffect, useRef } from "react";
+import {
+  Building2,
+  Handshake,
+  Rocket,
+  Globe,
+  Briefcase,
+  Users,
+  TrendingUp,
+  ShieldCheck,
+} from "lucide-react";
 import { motion } from "framer-motion";
 
-const cards = [
-  {
-    id: 1,
-    icon: <Zap />,
-    title: "Quick Access to Funding",
-    description:
-      "Connect with verified investors and secure funding faster than traditional methods.",
-  },
-  {
-    id: 2,
-    icon: <ShieldCheck />,
-    title: "Verified Investors",
-    description:
-      "Gain exposure to a curated network of serious investors looking for opportunities.",
-  },
-  {
-    id: 3,
-    icon: <Cpu />,
-    title: "Technology Empowerment",
-    description:
-      "Leverage cutting-edge technology to streamline the investment process.",
-  },
-  {
-    id: 4,
-    icon: <BarChart3 />,
-    title: "Economic Growth",
-    description:
-      "Contribute to building a stronger national economy through innovation.",
-  },
-];
-
-export default function StackCardsSection() {
-  const rootRef = useRef(null);
-
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const target = entry.target;
-          if (entry.isIntersecting) target.classList.add("is-visible");
-          else target.classList.remove("is-visible");
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    const items = root.querySelectorAll(".card-item");
-    items.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+export default function WhyJoinSection() {
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 40 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, delay, ease: "easeOut" },
+    viewport: { once: true },
+  });
 
   return (
-    <section className="relative w-full py-28 overflow-hidden bg-gradient-to-br from-white via-green-50 to-emerald-100">
-      {/* Background Glow Effects */}
-      <div className="absolute top-1/4 left-0 w-[400px] h-[400px] bg-green-400/20 blur-[150px] rounded-full"></div>
-      <div className="absolute bottom-1/4 right-0 w-[450px] h-[450px] bg-emerald-500/20 blur-[160px] rounded-full"></div>
+    <section className="relative py-28 overflow-hidden bg-gradient-to-br from-white via-green-50 to-emerald-100">
+      {/* Background Glow */}
+      <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-green-400/20 blur-[180px] rounded-full"></div>
+      <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-emerald-500/20 blur-[180px] rounded-full"></div>
 
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-14">
-          <h2 className="text-4xl md:text-5xl font-bold text-green-500">
-            Why Choose Our Platform
-          </h2>
-          <p className="mt-4 text-gray-700 text-lg">
-            Empowering entrepreneurs with access, trust, and technology to fuel
-            Pakistan’s innovation-driven future.
-          </p>
-        </div>
-
-        {/* Cards Grid */}
-        <div
-          ref={rootRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-10 items-stretch"
+        <motion.div
+          {...fadeUp(0)}
+          className="text-center max-w-3xl mx-auto mb-20"
         >
-          {cards.map((c) => (
-            <motion.article
-              key={c.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: c.id * 0.1,
-                ease: "easeOut",
-              }}
-              viewport={{ once: true }}
-              className="card-item relative bg-white/70 backdrop-blur-2xl border border-green-200/60 rounded-3xl p-8 shadow-[0_12px_60px_rgba(0,0,0,0.05)] transition-all duration-500 group hover:-translate-y-2 hover:shadow-[0_16px_60px_rgba(16,185,129,0.25)]"
-            >
-              {/* Gradient Border Hover Effect */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-green-400/30 via-transparent to-emerald-500/30 opacity-0 transition duration-500 blur-md pointer-events-none" />
+          <h2 className="text-5xl md:text-6xl font-bold text-green-700 mb-4">
+            Why Join This Platform
+          </h2>
+          <p className="text-gray-700 text-lg md:text-xl leading-relaxed">
+            Where businesses meet investors — empowering growth, innovation, and
+            collaboration for Pakistan’s next billion-dollar success stories.
+          </p>
+        </motion.div>
 
-              {/* Card Content */}
-              <div className="relative z-10 flex items-start gap-5">
-                <motion.div
-                  whileHover={{ rotate: 10 }}
-                  className="bg-gradient-to-br from-green-500/10 to-emerald-400/10 border border-green-300/40 rounded-2xl p-4 text-green-600 shadow-inner shadow-green-400/10 transition-transform duration-300"
-                >
-                  {cloneElement(c.icon, { className: "w-8 h-8" })}
-                </motion.div>
+        {/* Dual Cards: Businesses / Investors */}
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Businesses Card */}
+          <motion.div
+            {...fadeUp(0.2)}
+            className="group relative bg-white/80 backdrop-blur-2xl border border-green-200/70 rounded-3xl p-10 shadow-[0_12px_60px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_70px_rgba(16,185,129,0.25)] transition-all duration-500"
+          >
+            {/* Glow Accent */}
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-green-300/20 to-emerald-500/20 opacity-0  blur-2xl transition duration-700"></div>
 
-                <div>
-                  <h3 className="text-xl font-semibold text-green-900 mb-2">
-                    {c.title}
-                  </h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    {c.description}
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-green-500/10 p-4 rounded-2xl border border-green-300/40 text-green-600">
+                  <Briefcase className="w-7 h-7" />
+                </div>
+                <h3 className="text-2xl font-bold text-green-600">
+                  For Businesses
+                </h3>
+              </div>
+
+              <div className="space-y-6 text-gray-700 leading-relaxed">
+                <div className="flex items-start gap-3">
+                  <Building2 className="w-6 h-6 text-green-600 mt-1" />
+                  <p>
+                    <span className="font-semibold text-green-700">
+                      Connect with Confidence:
+                    </span>{" "}
+                    Gain direct access to a curated network of vetted local and
+                    international investors actively seeking growth
+                    opportunities in Pakistan.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Handshake className="w-6 h-6 text-green-600 mt-1" />
+                  <p>
+                    <span className="font-semibold text-green-700">
+                      Beyond Funding:
+                    </span>{" "}
+                    Secure more than just a cheque — find strategic partners,
+                    corporate collaborations, and mentorship to accelerate your
+                    growth.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Rocket className="w-6 h-6 text-green-600 mt-1" />
+                  <p>
+                    <span className="font-semibold text-green-700">
+                      Join the Movement:
+                    </span>{" "}
+                    Be part of the force driving Pakistan toward a
+                    multi-billion-dollar economy.
                   </p>
                 </div>
               </div>
+            </div>
+          </motion.div>
 
-              {/* Subtle Hover Accent Line */}
-              <span className="absolute bottom-0 left-0 h-[3px] w-0 bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-500 group-hover:w-full rounded-b-3xl"></span>
-            </motion.article>
-          ))}
+          {/* Investors Card */}
+          <motion.div
+            {...fadeUp(0.4)}
+            className="group relative bg-white/80 backdrop-blur-2xl border border-emerald-200/70 rounded-3xl p-10 shadow-[0_12px_60px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_70px_rgba(16,185,129,0.25)] transition-all duration-500"
+          >
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-400/20 to-green-500/20 opacity-0  blur-2xl transition duration-700"></div>
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-300/40 text-emerald-600">
+                  <Users className="w-7 h-7" />
+                </div>
+                <h3 className="text-2xl font-bold text-green-600">
+                  For Investors
+                </h3>
+              </div>
+
+              <div className="space-y-6 text-gray-700 leading-relaxed">
+                <div className="flex items-start gap-3">
+                  <TrendingUp className="w-6 h-6 text-emerald-600 mt-1" />
+                  <p>
+                    <span className="font-semibold text-emerald-700">
+                      Curated Deal Flow:
+                    </span>{" "}
+                    Access a rigorously vetted pipeline of Pakistani businesses
+                    poised for exponential growth, across all sectors.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Globe className="w-6 h-6 text-emerald-600 mt-1" />
+                  <p>
+                    <span className="font-semibold text-emerald-700">
+                      Global Network, Local Insight:
+                    </span>{" "}
+                    Leverage Neer Group’s international connections while
+                    benefiting from deep local market intelligence.
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <ShieldCheck className="w-6 h-6 text-emerald-600 mt-1" />
+                  <p>
+                    <span className="font-semibold text-emerald-700">
+                      Seamless Collaboration:
+                    </span>{" "}
+                    Our platform facilitates secure, efficient matchmaking for
+                    partnerships, joint ventures, and direct investment.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

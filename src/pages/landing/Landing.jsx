@@ -1,15 +1,18 @@
+import IMAGES from "@/assets/images";
 import ClickSpark from "@/components/reactbits/ClickSpark";
 import { GREEN_COLOR } from "@/config";
+import Ambassadors from "./components/Ambassadors";
 import BenefitsSection from "./components/Benefits";
+import BusinessHubSection from "./components/BusinessHubSection";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import HeroSection from "./components/HeroSection";
 import HlsVideoSection from "./components/HlsVideoSection";
 import ImpactSection from "./components/ImpactSection";
 import InvestorTimeline from "./components/InvestorTimeline";
-import ScrollStackVision from "./components/ScrollStackVision";
 import MessageSection from "./components/MessageSection";
-import Footer from "./components/Footer";
-import Ambassadors from "./components/Ambassadors";
+import ScrollStackVision from "./components/ScrollStackVision";
+import PortfolioGallerySection from "./components/PortfolioGallerySection";
 
 function LandingPage() {
   return (
@@ -19,9 +22,11 @@ function LandingPage() {
       <HlsVideoSection />
       <ImpactSection />
       <MessageSection />
-      <BenefitsSection />
+      <BusinessHubSection />
       <InvestorTimeline />
+      <PortfolioGallerySection />
       <Ambassadors />
+      <BenefitsSection />
       <ScrollStackVision />
       <Footer />
     </>

@@ -21,6 +21,14 @@ const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
 // =====================
 const Dashboard = lazy(() => import("@/pages/portal/admin/Dashboard"));
 const AdminProfile = lazy(() => import("@/pages/portal/admin/Profile"));
+const Investors = lazy(() => import("@/pages/portal/admin/Investors"));
+const EditInvestor = lazy(() =>
+  import("@/pages/portal/admin/Investors/EditInvestor")
+);
+const Founders = lazy(() => import("@/pages/portal/admin/Founders"));
+const EditFounder = lazy(() =>
+  import("@/pages/portal/admin/Founders/EditFounder")
+);
 
 // =====================
 // Investor
@@ -28,15 +36,14 @@ const AdminProfile = lazy(() => import("@/pages/portal/admin/Profile"));
 const InvestorDashboard = lazy(() =>
   import("@/pages/portal/investor/Dashboard")
 );
-const InvestorProfile = lazy(() =>
-  import("@/pages/portal/investor/Profile/index.jsx")
-);
-
+const InvestorProfile = lazy(() => import("@/pages/portal/investor/Profile"));
+const HelpScreenInvestors = lazy(() => import("@/pages/portal/investor/Help"));
 // =====================
 // Founder
 // =====================
 const FounderDashboard = lazy(() => import("@/pages/portal/founder/Dashboard"));
 const FounderProfile = lazy(() => import("@/pages/portal/founder/Profile"));
+const HelpScreenFounders = lazy(() => import("@/pages/portal/founder/Help"));
 
 export const routes = [
   // =====================
@@ -96,7 +103,39 @@ export const routes = [
     title: "Dashboard",
   },
   {
-    path: PATH.ADMIN.PROFLIE,
+    path: PATH.ADMIN.INVESTORS,
+    component: Investors,
+    sidebar: true,
+    private: true,
+    roles: ["admin"],
+    icon: "dollarSign",
+    title: "Investors",
+  },
+  {
+    path: PATH.ADMIN.EDIT_FOUNDER,
+    component: EditFounder,
+    sidebar: false,
+    private: true,
+    roles: ["admin"],
+  },
+  {
+    path: PATH.ADMIN.EDIT_INVESTOR,
+    component: EditInvestor,
+    sidebar: false,
+    private: true,
+    roles: ["admin"],
+  },
+  {
+    path: PATH.ADMIN.FOUNDERS,
+    component: Founders,
+    sidebar: true,
+    private: true,
+    roles: ["admin"],
+    icon: "building",
+    title: "Founders",
+  },
+  {
+    path: PATH.ADMIN.PROFILE,
     component: AdminProfile,
     sidebar: false,
     private: true,
@@ -116,8 +155,15 @@ export const routes = [
     title: "Dashboard",
   },
   {
-    path: PATH.INVESTOR.PROFLIE,
+    path: PATH.INVESTOR.PROFILE,
     component: InvestorProfile,
+    sidebar: false,
+    private: true,
+    roles: ["investor"],
+  },
+  {
+    path: PATH.INVESTOR.HELP,
+    component: HelpScreenInvestors,
     sidebar: false,
     private: true,
     roles: ["investor"],
@@ -136,10 +182,17 @@ export const routes = [
     title: "Dashboard",
   },
   {
-    path: PATH.FOUNDER.PROFLIE,
+    path: PATH.FOUNDER.PROFILE,
     component: FounderProfile,
     sidebar: false,
     private: true,
     roles: ["founder"],
+  },
+  {
+    path: PATH.FOUNDER.HELP,
+    component: HelpScreenFounders,
+    sidebar: false,
+    private: true,
+    roles: ["investor"],
   },
 ];

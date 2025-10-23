@@ -35,7 +35,7 @@ export default function MessageSection() {
             scale={1.05}
             glareEnable={true}
             glareMaxOpacity={0.1}
-            className="relative w-full max-w-md cursor-pointer"
+            className="relative w-full max-w-xl cursor-pointer" // ✅ increased from max-w-md to max-w-xl
           >
             <motion.img
               src={IMAGES.MEER_SHINY_DRESS}
@@ -45,7 +45,7 @@ export default function MessageSection() {
                 filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.25))",
               }}
               whileHover={{
-                scale: 1.05,
+                scale: 1.07, // slightly increase hover scale for bigger image
                 transition: { duration: 0.4, ease: "easeOut" },
               }}
             />
@@ -64,7 +64,7 @@ export default function MessageSection() {
           className="relative"
         >
           {/* Featured Badge */}
-          <motion.div
+          <div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -72,12 +72,12 @@ export default function MessageSection() {
           >
             <Sparkles size={16} />
             Featured Message
-          </motion.div>
+          </div>
 
           <h2 className="text-4xl mb-4 md:text-5xl font-extrabold text-gray-900 leading-tight">
-            A Message from{" "}
+            Shakeel Ahmad Meer:{" "}
             <span className="bg-gradient-to-r from-emerald-600 to-green-500 bg-clip-text text-transparent">
-              Shakeel Ahmad Meer
+              The Architect of Vision Pakistan 2030
             </span>
           </h2>
 
@@ -89,15 +89,37 @@ export default function MessageSection() {
             className="relative bg-white/80 backdrop-blur-xl border border-emerald-100 shadow-lg rounded-2xl p-8 mb-8"
           >
             <Quote className="w-10 h-10 text-emerald-600 mb-4" />
-            <p className="text-gray-700 leading-relaxed text-lg">
-              “Vision 2030 Pakistan was born from a belief that technology can
-              bridge the gap between ambition and opportunity. Every
-              entrepreneur deserves a chance to turn their vision into reality.”
+            <p className="text-gray-700 text-lg leading-relaxed">
+              In an era often dominated by short-term gains, a new breed of
+              entrepreneur is emerging—one who measures success not just by
+              revenue, but by societal impact. At the forefront of this movement
+              is Shakeel Ahmad Meer, the visionary Chairman of The Meer Group
+              and the driving force behind the monumental Vision Pakistan 2030.
             </p>
-            <p className="text-gray-700 leading-relaxed text-lg mt-5">
-              “Together, we're not just building a platform — we're shaping
-              Pakistan’s economic future. It’s a movement for innovation,
-              empowerment, and sustainable progress.”
+
+            <p className="text-gray-700 text-lg leading-relaxed mt-4">
+              Meer's philosophy is rooted in a profound belief in the power of
+              conscious business: expansive, profitable projects must
+              simultaneously serve a higher national purpose. His vision isn't
+              confined by borders; it harnesses a vast international network and
+              utilizes world-class expertise to unlock Pakistan's immense
+              potential.
+            </p>
+
+            <p className="text-gray-700 text-lg leading-relaxed mt-4">
+              He sees challenges—housing shortages, skill gaps among youth, or
+              outdated infrastructure—not as obstacles, but as opportunities for
+              monumental, positive change. Vision Pakistan 2030 interweaves
+              multi-billion dollar real estate developments, the creation of
+              highly skilled human capital, and the ignition of an
+              entrepreneurial revolution.
+            </p>
+
+            <p className="text-gray-700 text-lg leading-relaxed mt-4">
+              Shakeel Ahmad Meer is not simply initiating projects; he is laying
+              the foundation for a sustainable and prosperous future, proving
+              that global ambition and unwavering national commitment can, and
+              must, walk hand-in-hand.
             </p>
           </motion.div>
 

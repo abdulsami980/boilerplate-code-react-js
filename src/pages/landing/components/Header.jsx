@@ -100,7 +100,7 @@ const Header = () => {
               isOverDark ? "text-green-400" : "text-green-300"
             }`}
           >
-            Investor Portal
+            Business Hub
           </span>
         </div>
 

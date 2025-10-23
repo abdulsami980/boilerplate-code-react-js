@@ -1,5 +1,26 @@
+import { GREEN_COLOR } from "@/config";
 import { clsx } from "clsx";
+import Swal from "sweetalert2";
 import { twMerge } from "tailwind-merge";
+
+export const swalWrapper = ({ message, accept, reject, ...options }) =>
+  Swal.fire({
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: GREEN_COLOR,
+    cancelButtonColor: null,
+    customClass: {
+      cancelButton:
+        "border-green-500 text-green-500 bg-transparent hover:bg-green-50",
+    },
+    text: message, // <-- use `text` here
+    preConfirm: accept, // called when confirm button clicked
+    ...options,
+  }).then((result) => {
+    if (result.isDismissed && reject) {
+      reject();
+    }
+  });
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));

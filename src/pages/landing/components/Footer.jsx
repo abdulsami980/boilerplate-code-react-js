@@ -58,7 +58,7 @@ export default function Footer() {
               L
             </div>
             <h2 className="text-xl font-semibold text-green-400">
-              Investor Portal
+              Business Hub
             </h2>
           </div>
 
