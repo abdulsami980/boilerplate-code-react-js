@@ -46,9 +46,9 @@ export default function ToolBar({
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={handleSearch}
-                className="pr-10 shadow-sm rounded-lg border-gray-200"
+                className="pr-10 bg-white shadow-sm rounded-lg border-gray-200"
               />
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:cursor-pointer" />
             </div>
           )}
 

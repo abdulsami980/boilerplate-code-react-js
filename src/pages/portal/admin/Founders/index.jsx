@@ -1,41 +1,98 @@
-"use client";
+import InlineLoader, { PageLoader } from "@/components/ui/Loaders";
 import Table from "@/components/ui/table";
 import ToolBar from "@/components/ui/toolbar";
 import TopCards from "@/components/ui/topCards";
 import { PATH } from "@/config";
+import { useDebounce } from "@/hooks/useDebounce";
+import { supabase } from "@/lib/supabase-client";
 import { swalWrapper } from "@/lib/utils";
 import {
+  AlertCircle,
   Ban,
-  Building2,
   Briefcase,
-  Globe,
+  Building2,
+  CheckCircle,
+  Clock,
   Eye,
+  Globe,
+  Link,
+  Mail,
+  MapPin,
   Pencil,
+  Phone,
+  ShieldCheck,
   Trash2,
   Users,
-  Link2,
-  FileText,
-  FileCheck2,
-  MessageCircle,
-  ShieldCheck,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function Founders() {
   const navigate = useNavigate();
+
+  const [founders, setFounders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 600);
+
+  // 🎯 Actions
   const actions = [
     {
       label: "View Details",
       icon: Eye,
       color: "green",
-      onClick: () => navigate(PATH.ADMIN.EDIT_FOUNDER),
+      onClick: (r) => navigate(PATH.ADMIN.VIEW_FOUNDER.TO(r.id)),
     },
     {
       label: "Edit Profile",
       icon: Pencil,
-      color: "emerald",
-      onClick: () => navigate(PATH.ADMIN.EDIT_FOUNDER),
+      color: "green",
+      onClick: (r) => navigate(PATH.ADMIN.EDIT_FOUNDER.TO(r.id)),
+    },
+    {
+      label: (r) => (r.is_active ? "Suspend Account" : "Reactivate Account"),
+      icon: (r) => (r.is_active ? Ban : CheckCircle),
+      color: "amber",
+      onClick: (r) => {
+        const actionType = r.is_active ? "suspend" : "reactivate";
+        const confirmText = r.is_active ? "Yes, Suspend" : "Yes, Reactivate";
+        const message = r.is_active
+          ? `Are you sure you want to suspend ${r.full_name}?`
+          : `Do you want to reactivate ${r.full_name}'s account?`;
+
+        swalWrapper({
+          message,
+          confirmButtonText: confirmText,
+          cancelButtonText: "Cancel",
+          accept: async () => {
+            const newStatus = !r.is_active;
+            const { error } = await supabase
+              .from("profiles")
+              .update({ is_active: newStatus })
+              .eq("id", r.id);
+
+            if (error) {
+              toast.error(`Failed to ${actionType} account`);
+              console.error(error);
+              return;
+            }
+
+            setFounders((prev) =>
+              prev.map((f) =>
+                f.id === r.id ? { ...f, is_active: newStatus } : f
+              )
+            );
+
+            toast.success(
+              r.is_active
+                ? "Founder has been suspended successfully"
+                : "Founder has been reactivated successfully"
+            );
+          },
+        });
+      },
     },
     {
       label: "Delete Founder",
@@ -43,264 +100,247 @@ export default function Founders() {
       color: "red",
       onClick: (r) => {
         swalWrapper({
-          message: `Do you really want to delete ${r.company_name}?`,
+          message: `Do you really want to delete ${r.full_name}?`,
           confirmButtonText: "Yes, Delete",
           cancelButtonText: "Cancel",
-          accept: () => toast.error(`Deleted ${r.company_name}`),
-        });
-      },
-    },
-    {
-      label: "Suspend Account",
-      icon: Ban,
-      color: "amber",
-      onClick: (r) => {
-        swalWrapper({
-          message: `Are you sure you want to suspend ${r.company_name}?`,
-          confirmButtonText: "Yes, Suspend",
-          cancelButtonText: "Cancel",
-          accept: () => toast.warning(`Suspended ${r.company_name}`),
-        });
-      },
-    },
-  ];
+          accept: async () => {
+            try {
+              const { error } = await supabase
+                .from("profiles")
+                .update({ is_deleted: true })
+                .eq("id", r.id);
 
-  // ─── Top Cards ─────────────────────────────────────────────
-  const cards = [
-    {
-      title: "Founders",
-      value: 42,
-      meta: "3 pending",
-      icon: <Briefcase size={22} />,
-      gradient: "from-emerald-100/40 to-green-200/40",
-      ring: "ring-emerald-300/50",
-      text: "text-emerald-600",
-      glow: "from-emerald-400/20 to-green-400/10",
-    },
-    {
-      title: "Startups",
-      value: 28,
-      meta: "5 new this week",
-      icon: <Building2 size={22} />,
-      gradient: "from-green-100/40 to-emerald-200/40",
-      ring: "ring-green-300/50",
-      text: "text-green-600",
-      glow: "from-green-400/20 to-emerald-400/10",
-    },
-    {
-      title: "Documents",
-      value: 76,
-      meta: "KYC verified",
-      icon: <FileCheck2 size={22} />,
-      gradient: "from-emerald-100/40 to-green-100/30",
-      ring: "ring-emerald-300/50",
-      text: "text-emerald-600",
-      glow: "from-green-400/20 to-emerald-400/10",
-    },
-    {
-      title: "Team Members",
-      value: 210,
-      meta: "across all startups",
-      icon: <Users size={22} />,
-      gradient: "from-green-100/40 to-emerald-200/40",
-      ring: "ring-emerald-300/50",
-      text: "text-emerald-600",
-      glow: "from-emerald-400/20 to-green-400/10",
+              if (error) {
+                console.error(error);
+                toast.error("Failed to delete founder");
+                return;
+              }
+
+              setFounders((prev) => prev.filter((f) => f.id !== r.id));
+              toast.success("Founder has been deleted successfully");
+            } catch (err) {
+              console.error("Unexpected error deleting founder:", err);
+              toast.error("Something went wrong");
+            }
+          },
+        });
+      },
     },
   ];
 
   // ─── Table Columns ─────────────────────────────────────────
   const columns = [
+    { header: "Name", accessor: "full_name", icon: Users, size: "150px" },
+    { header: "Email", accessor: "email", icon: Mail, size: "190px" },
+    { header: "Phone", accessor: "phone", icon: Phone, size: "170px" },
     {
-      header: "Company Name",
+      header: "Account Status",
+      accessor: "is_active",
+      icon: ShieldCheck,
+      size: "220px",
+      render: (row) =>
+        row.is_active ? (
+          <span className="flex items-center text-emerald-600 font-medium">
+            <CheckCircle size={16} className="mr-2 text-emerald-500" /> Active
+          </span>
+        ) : (
+          <span className="flex items-center text-amber-500 font-medium">
+            <AlertCircle size={16} className="mr-2 text-amber-500" /> Suspended
+          </span>
+        ),
+    },
+    {
+      header: "Verification Status",
+      accessor: "is_verified",
+      icon: ShieldCheck,
+      size: "220px",
+      render: (row) =>
+        row.is_verified ? (
+          <span className="flex items-center text-emerald-600 font-medium">
+            <CheckCircle size={16} className="mr-2 text-emerald-500" /> Verified
+          </span>
+        ) : (
+          <span className="flex items-center text-amber-500 font-medium">
+            <AlertCircle size={16} className="mr-2 text-amber-500" /> Not
+            Verified
+          </span>
+        ),
+    },
+    {
+      header: "KYC Status",
+      accessor: "kyc_status",
+      icon: ShieldCheck,
+      size: "220px",
+      render: (row) =>
+        row.kyc_status === "approved" ? (
+          <span className="flex items-center text-emerald-600 font-medium">
+            <CheckCircle size={16} className="mr-2 text-emerald-500" /> Verified
+          </span>
+        ) : (
+          <span className="flex items-center text-amber-500 font-medium">
+            <AlertCircle size={16} className="mr-2 text-amber-500" /> Require
+            Verification
+          </span>
+        ),
+    },
+    { header: "Country", accessor: "country", icon: MapPin, size: "140px" },
+    {
+      header: "Company",
       accessor: "company_name",
       icon: Building2,
       size: "200px",
-    },
-    {
-      header: "Reg. Number",
-      accessor: "company_registration_number",
-      icon: FileText,
-      size: "200px",
-    },
-    { header: "Website", accessor: "website_url", icon: Globe, size: "180px" },
-    {
-      header: "LinkedIn",
-      accessor: "linkedin_url",
-      icon: Link2,
-      size: "180px",
     },
     {
       header: "Team Members",
       accessor: "team_members_count",
       icon: Users,
       size: "180px",
-      render: (row) => `${row.team_members_count || 0}`,
     },
     {
-      header: "KYC Documents",
-      accessor: "kyc_front_url",
-      icon: FileCheck2,
-      size: "180px",
-      render: (row) => (
-        <a
-          href={row.kyc_front_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-emerald-600 hover:underline"
-        >
-          View KYC
-        </a>
-      ),
+      header: "Website",
+      accessor: "website_url",
+      icon: Globe,
+      size: "200px",
+      render: (row) =>
+        row.website_url ? (
+          <a
+            href={row.website_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center text-emerald-600 hover:underline"
+          >
+            <Link size={16} className="mr-2 text-emerald-500" />
+            View Website
+          </a>
+        ) : (
+          "—"
+        ),
     },
     {
-      header: "Terms Consent",
-      accessor: "consent_terms",
-      icon: ShieldCheck,
-      size: "180px",
-      render: (row) => (row.consent_terms ? "✔️ Yes" : "❌ No"),
-    },
-    {
-      header: "Data Consent",
-      accessor: "consent_data_usage",
-      icon: ShieldCheck,
-      size: "180px",
-      render: (row) => (row.consent_data_usage ? "✔️ Yes" : "❌ No"),
+      header: "LinkedIn",
+      accessor: "linkedin_url",
+      icon: Briefcase,
+      size: "200px",
+      render: (row) =>
+        row.linkedin_url ? (
+          <a
+            href={row.linkedin_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center text-emerald-600 hover:underline"
+          >
+            <Link size={16} className="mr-2 text-emerald-500" />
+            View Profile
+          </a>
+        ) : (
+          "—"
+        ),
     },
   ];
-  // ─── Dummy Data ─────────────────────────────────────────────
-  const data = [
+
+  const fetchFounders = async (searchText = "") => {
+    if (searchText.trim()) setSearchLoading(true);
+    else setLoading(true);
+
+    try {
+      let profileQuery = supabase
+        .from("profiles")
+        .select("*")
+        .eq("is_deleted", false);
+
+      if (searchText.trim()) {
+        profileQuery = profileQuery.or(
+          `full_name.ilike.%${searchText}%,email.ilike.%${searchText}%`
+        );
+      }
+
+      const { data: profileList, error: profileError } = await profileQuery;
+      if (profileError) throw profileError;
+
+      const profileIds = profileList.map((p) => p.id);
+      if (!profileIds.length) {
+        setFounders([]);
+        setLoading(false);
+        setSearchLoading(false);
+        return;
+      }
+
+      const { data: founderList, error: founderError } = await supabase
+        .from("founders")
+        .select("*")
+        .in("profile_id", profileIds);
+
+      if (founderError) throw founderError;
+
+      const formatted = founderList
+        .map((f) => {
+          const profile = profileList.find((p) => p.id === f.profile_id);
+          if (!profile) return null;
+          return {
+            id: profile.id,
+            full_name: profile.full_name || "N/A",
+            email: profile.email || "N/A",
+            phone: profile.phone || "N/A",
+            country: profile.country || "N/A",
+            company_name: f.company_name || "N/A",
+            team_members_count: f.team_members_count || 0,
+            website_url: f.website_url || "",
+            linkedin_url: f.linkedin_url || "",
+            kyc_status: profile.kyc_status || "pending",
+            is_active: profile.is_active ?? true,
+            is_verified: profile.is_verified ?? false,
+          };
+        })
+        .filter(Boolean);
+
+      setFounders(formatted);
+    } catch (err) {
+      console.error(err);
+      toast.error("Error fetching founders");
+    } finally {
+      setLoading(false);
+      setSearchLoading(false);
+    }
+  };
+
+  // 📈 Stats Cards
+  const total = founders.length;
+  const active = founders.filter((f) => f.is_active).length;
+  const verified = founders.filter((f) => f.is_verified).length;
+  const pendingKyc = founders.filter((f) => f.kyc_status === "pending").length;
+
+  const cards = [
     {
-      company_name: "TechNova Solutions",
-      company_registration_number: "TN-4523",
-      website_url: "https://technova.io",
-      linkedin_url: "https://linkedin.com/company/technova",
-      team_members_count: 12,
-      kyc_front_url: "https://example.com/kyc/front1.png",
-      consent_terms: true,
-      consent_data_usage: true,
+      title: "Total Founders",
+      value: total,
+      meta: `${active} active`,
+      icon: <Users size={22} />,
     },
     {
-      company_name: "Healthify Labs",
-      company_registration_number: "HL-9231",
-      website_url: "https://healthify.com",
-      linkedin_url: "https://linkedin.com/company/healthify",
-      team_members_count: 8,
-      kyc_front_url: null,
-      consent_terms: false,
-      consent_data_usage: true,
+      title: "Active Founders",
+      value: active,
+      meta: `${total - active} inactive`,
+      icon: <CheckCircle size={22} />,
     },
     {
-      company_name: "EcoBuild Ventures",
-      company_registration_number: "EB-7782",
-      website_url: "https://ecobuild.org",
-      linkedin_url: "https://linkedin.com/company/ecobuild",
-      team_members_count: 15,
-      kyc_front_url: "https://example.com/kyc/front3.png",
-      consent_terms: true,
-      consent_data_usage: false,
+      title: "Verified Founders",
+      value: verified,
+      meta: `${total - verified} pending`,
+      icon: <ShieldCheck size={22} />,
     },
     {
-      company_name: "NextWave Analytics",
-      company_registration_number: "NW-6610",
-      website_url: "https://nextwave.ai",
-      linkedin_url: "https://linkedin.com/company/nextwave",
-      team_members_count: 20,
-      kyc_front_url: "https://example.com/kyc/front4.png",
-      consent_terms: true,
-      consent_data_usage: true,
-    },
-    {
-      company_name: "FinTrust Capital",
-      company_registration_number: "FT-8890",
-      website_url: "https://fintrust.com",
-      linkedin_url: "https://linkedin.com/company/fintrust",
-      team_members_count: 10,
-      kyc_front_url: null,
-      consent_terms: false,
-      consent_data_usage: false,
-    },
-    {
-      company_name: "BluePeak Industries",
-      company_registration_number: "BP-1109",
-      website_url: "https://bluepeak.co",
-      linkedin_url: "https://linkedin.com/company/bluepeak",
-      team_members_count: 25,
-      kyc_front_url: "https://example.com/kyc/front6.png",
-      consent_terms: true,
-      consent_data_usage: true,
-    },
-    {
-      company_name: "UrbanEdge Designs",
-      company_registration_number: "UE-3742",
-      website_url: "https://urbanedge.design",
-      linkedin_url: "",
-      team_members_count: 6,
-      kyc_front_url: null,
-      consent_terms: true,
-      consent_data_usage: false,
-    },
-    {
-      company_name: "SolarNet Energy",
-      company_registration_number: "SN-5321",
-      website_url: "https://solarnet.io",
-      linkedin_url: "https://linkedin.com/company/solarnet",
-      team_members_count: 18,
-      kyc_front_url: "https://example.com/kyc/front8.png",
-      consent_terms: true,
-      consent_data_usage: true,
-    },
-    {
-      company_name: "AgriVerse Technologies",
-      company_registration_number: "AV-9982",
-      website_url: "https://agriverse.com",
-      linkedin_url: "https://linkedin.com/company/agriverse",
-      team_members_count: 9,
-      kyc_front_url: null,
-      consent_terms: false,
-      consent_data_usage: true,
-    },
-    {
-      company_name: "Medora Health Systems",
-      company_registration_number: "MH-4570",
-      website_url: "https://medorahealth.org",
-      linkedin_url: "https://linkedin.com/company/medorahealth",
-      team_members_count: 14,
-      kyc_front_url: "https://example.com/kyc/front10.png",
-      consent_terms: true,
-      consent_data_usage: false,
-    },
-    {
-      company_name: "GreenPath Logistics",
-      company_registration_number: "GP-2391",
-      website_url: "https://greenpathlogistics.com",
-      linkedin_url: "https://linkedin.com/company/greenpath",
-      team_members_count: 30,
-      kyc_front_url: "https://example.com/kyc/front11.png",
-      consent_terms: true,
-      consent_data_usage: true,
-    },
-    {
-      company_name: "DataSphere Analytics",
-      company_registration_number: "DS-8812",
-      website_url: "https://datasphere.ai",
-      linkedin_url: "",
-      team_members_count: 7,
-      kyc_front_url: null,
-      consent_terms: false,
-      consent_data_usage: false,
-    },
-    {
-      company_name: "AeroLink Aviation",
-      company_registration_number: "AL-7005",
-      website_url: "https://aerolink.io",
-      linkedin_url: "https://linkedin.com/company/aerolink",
-      team_members_count: 22,
-      kyc_front_url: "https://example.com/kyc/front13.png",
-      consent_terms: true,
-      consent_data_usage: true,
+      title: "Pending KYC",
+      value: pendingKyc,
+      meta: `${total - pendingKyc} verified`,
+      icon: <Clock size={22} />,
     },
   ];
+
+  useEffect(() => {
+    fetchFounders(debouncedSearch);
+  }, [debouncedSearch]);
+
+  if (loading) return <PageLoader />;
 
   // ─── Render ────────────────────────────────────────────────
   return (
@@ -313,9 +353,18 @@ export default function Founders() {
         title="Registered Founders"
         subtitle="Manage all founder profiles and startup data here."
         showSearch={true}
-        onSearch={(query) => console.log("Searching:", query)}
+        onSearch={(query) => setSearchQuery(query)}
       >
-        <Table columns={columns} data={data} actions={actions} pageSize={4} />
+        {searchLoading ? (
+          <InlineLoader text="Fetching founders..." />
+        ) : (
+          <Table
+            columns={columns}
+            data={founders}
+            actions={actions}
+            pageSize={10}
+          />
+        )}
       </ToolBar>
     </div>
   );

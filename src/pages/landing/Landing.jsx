@@ -22,11 +22,11 @@ function LandingPage() {
       <HlsVideoSection />
       <ImpactSection />
       <MessageSection />
-      <BusinessHubSection />
+      <BenefitsSection />
       <InvestorTimeline />
       <PortfolioGallerySection />
       <Ambassadors />
-      <BenefitsSection />
+      <BusinessHubSection />
       <ScrollStackVision />
       <Footer />
     </>

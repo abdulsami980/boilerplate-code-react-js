@@ -2,11 +2,11 @@ import { GREEN_COLOR } from "@/config";
 import { SyncLoader } from "react-spinners";
 import { FcIdea } from "react-icons/fc";
 
-export function PageLoader() {
+export function PageLoader({ text = "Loading…" }) {
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-4">
       <SyncLoader color={GREEN_COLOR} size={12} speedMultiplier={1.2} />
-      <span className="text-gray-700 text-lg font-medium">Loading…</span>
+      <span className="text-gray-700 text-lg font-medium">{text}</span>
     </div>
   );
 }
@@ -54,6 +54,15 @@ export function ComingSoonOverlay({
           </p>
         )}
       </div>
+    </div>
+  );
+}
+
+export default function InlineLoader({ text = "Loading..." }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-16 text-center">
+      <div className="w-10 h-10 border-4 border-gray-300 border-t-green-500 rounded-full animate-spin"></div>
+      <p className="mt-4 text-gray-500 text-md">{text}</p>
     </div>
   );
 }

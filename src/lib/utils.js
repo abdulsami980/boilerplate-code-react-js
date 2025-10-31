@@ -2,6 +2,7 @@ import { GREEN_COLOR } from "@/config";
 import { clsx } from "clsx";
 import Swal from "sweetalert2";
 import { twMerge } from "tailwind-merge";
+import { supabase } from "./supabase-client";
 
 export const swalWrapper = ({ message, accept, reject, ...options }) =>
   Swal.fire({
@@ -54,5 +55,51 @@ export const getUserInfo = () => {
   } catch (err) {
     console.error("Error reading user info from localStorage:", err);
     return { name: "Guest", email: "N/A" };
+  }
+};
+
+export const getSignedUrl = async (bucket, filePath) => {
+  if (!filePath) return null;
+
+  // ✅ DO NOT encode — Supabase expects raw path
+  const { data, error } = await supabase.storage
+    .from(bucket)
+    .createSignedUrl(filePath, 60 * 60); // 1 hour
+
+  if (error) {
+    console.error(`❌ Failed to create signed URL for ${filePath}:`, error);
+    return null;
+  }
+
+  return data.signedUrl;
+};
+
+export const getLookupOptions = (category) => {
+  try {
+    const lookups = JSON.parse(localStorage.getItem("lookups")) || [];
+
+    const filtered = lookups.filter((item) => item.category === category);
+
+    return filtered.map((item) => ({
+      value: item.value,
+      label: item.label,
+    }));
+  } catch (error) {
+    console.error("Error parsing lookups:", error);
+    return [];
+  }
+};
+
+export const getCountriesOptions = () => {
+  try {
+    const countries = JSON.parse(localStorage.getItem("countries")) || [];
+
+    return countries.map((country) => ({
+      value: country.iso2, // e.g. "PK"
+      label: country.label, // e.g. "Pakistan"
+    }));
+  } catch (error) {
+    console.error("Error parsing countries:", error);
+    return [];
   }
 };

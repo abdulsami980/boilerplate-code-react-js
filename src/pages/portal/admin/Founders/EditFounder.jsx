@@ -1,4 +1,3 @@
-"use client";
 import IMAGES from "@/assets/images";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,56 +9,175 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { PageLoader } from "@/components/ui/Loaders";
+import { PATH } from "@/config";
+import { supabase } from "@/lib/supabase-client";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
-export default function EditFounder({ initialData = null }) {
-  const blank = {
-    id: "1",
-    auth_uid: "abc123",
-    is_verified: false,
-    created_at: "2025-01-01",
-    updated_at: "2025-01-15",
-    role: "founder",
-    country: "USA",
-    city: "San Francisco",
-    profile_photo_url:
-      "https://images.unsplash.com/photo-1603415526960-f2f9d28c9d6d?fit=crop&w=200&q=80",
-    kyc_status: "pending",
-    email: "jane.doe@example.com",
-    full_name: "Jane Doe",
-    phone: "+1 555 987 6543",
-    profile_id: "FND-1001",
-    team_members_count: 5,
-    consent_terms: false,
-    consent_data_usage: false,
-    company_name: "Doe Innovations",
-    company_registration_number: "REG-12345",
-    website_url: "https://doeinnovations.com",
-    linkedin_url: "https://linkedin.com/in/janedoe",
-    kyc_front_url: "kyc-front.pdf",
-    kyc_back_url: "kyc-back.pdf",
-  };
+export default function EditFounder() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const [form, setForm] = useState(
-    initialData ? { ...blank, ...initialData } : blank
-  );
+  const isViewMode = location.pathname.includes("/view/");
+
+  const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [form, setForm] = useState({
+    id: "",
+    full_name: "",
+    email: "",
+    phone: "",
+    country: "",
+    city: "",
+    is_verified: false,
+    is_active: false,
+    kyc_status: "",
+    company_name: "",
+    profile_photo_url: "",
+    company_registration_number: "",
+    website_url: "",
+    linkedin_url: "",
+    team_members_count: 0,
+    kyc_front_url: "",
+    kyc_back_url: "",
+  });
 
   const handleChange = (key, value) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
+  useEffect(() => {
+    const fetchFounder = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch profile data
+        const { data: profile, error: profileErr } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", id)
+          .maybeSingle();
+
+        if (profileErr || !profile) {
+          toast.error("Profile not found");
+          navigate(PATH.ADMIN.FOUNDERS);
+          return;
+        }
+
+        // Fetch founder data
+        const { data: founder, error: founderErr } = await supabase
+          .from("founders")
+          .select("*")
+          .eq("profile_id", profile.id)
+          .maybeSingle();
+
+        if (founderErr && founderErr.code !== "PGRST116") {
+          throw founderErr;
+        }
+
+        // Merge both objects
+        setForm({
+          id: profile.id || "",
+          full_name: profile.full_name || "",
+          profile_photo_url: profile?.profile_photo_url || "",
+          email: profile.email || "",
+          phone: profile.phone || "",
+          country: profile.country || "",
+          city: profile.city || "",
+          is_verified: profile.is_verified || false,
+          is_active: profile.is_active || false,
+          kyc_status: profile.kyc_status || "",
+          company_name: founder?.company_name || "",
+          company_registration_number:
+            founder?.company_registration_number || "",
+          website_url: founder?.website_url || "",
+          linkedin_url: founder?.linkedin_url || "",
+          team_members_count: founder?.team_members_count || 0,
+          kyc_front_url: founder?.kyc_front_url || "",
+          kyc_back_url: founder?.kyc_back_url || "",
+        });
+      } catch (err) {
+        console.error("Error fetching founder data:", err);
+        toast.error("Failed to fetch founder data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFounder();
+  }, [id, navigate]);
+
   const handleSave = async (e) => {
     e?.preventDefault?.();
     setIsSubmitting(true);
-    toast.success("Founder updated successfully!");
-    setIsSubmitting(false);
+
+    try {
+      const profileUpdate = {
+        full_name: form.full_name,
+        email: form.email,
+        phone: form.phone,
+        country: form.country,
+        city: form.city,
+        is_verified: form.is_verified,
+        is_active: form.is_active,
+        kyc_status: form.kyc_status,
+      };
+
+      const founderUpdate = {
+        company_name: form.company_name,
+        company_registration_number: form.company_registration_number,
+        website_url: form.website_url,
+        linkedin_url: form.linkedin_url,
+        team_members_count: form.team_members_count,
+        kyc_front_url: form.kyc_front_url,
+        kyc_back_url: form.kyc_back_url,
+      };
+
+      // Parallel updates (profile + founder)
+      const [
+        { error: profileError },
+        { data: existingFounder, error: fetchError },
+      ] = await Promise.all([
+        supabase.from("profiles").update(profileUpdate).eq("id", form.id),
+        supabase
+          .from("founders")
+          .select("id")
+          .eq("profile_id", form.id)
+          .maybeSingle(),
+      ]);
+
+      if (profileError) throw profileError;
+      if (fetchError && fetchError.code !== "PGRST116") throw fetchError;
+
+      if (existingFounder) {
+        // Update if exists
+        const { error: founderError } = await supabase
+          .from("founders")
+          .update(founderUpdate)
+          .eq("profile_id", form.id);
+        if (founderError) throw founderError;
+      } else {
+        // Insert if not exists
+        const { error: insertError } = await supabase
+          .from("founders")
+          .insert([{ profile_id: form.id, ...founderUpdate }]);
+        if (insertError) throw insertError;
+      }
+
+      toast.success("Founder updated successfully!");
+      navigate(PATH.ADMIN.FOUNDERS);
+    } catch (err) {
+      console.error("Error saving founder:", err);
+      toast.error("Failed to update founder");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleCancel = () => {
-    setForm(blank);
-    toast("Reverted changes");
-  };
+  if (loading) return <PageLoader />;
 
   return (
     <div className="space-y-6 p-4 md:p-6 lg:p-8">
@@ -67,29 +185,34 @@ export default function EditFounder({ initialData = null }) {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex flex-col">
           <h1 className="text-2xl text-[#10354a] font-semibold">
-            Edit Founder
+            {!isViewMode ? "Edit Founder" : "View Founder"}
           </h1>
           <p className="text-sm text-slate-600">
-            Update founder profile and company info
+            {!isViewMode
+              ? "Update founder profile and preferences"
+              : "View founder profile and preferences"}
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
-          <Button
-            variant="outline"
-            onClick={handleCancel}
-            disabled={isSubmitting}
-            className="w-full sm:w-auto"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSave}
-            isLoading={isSubmitting}
-            className="w-full sm:w-auto"
-          >
-            Save Changes
-          </Button>
-        </div>
+        {!isViewMode && (
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full md:w-auto">
+            <Button
+              variant="outline"
+              onClick={() => navigate(PATH.ADMIN.FOUNDERS)}
+              disabled={isSubmitting}
+              className="w-full sm:w-auto"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSave}
+              isLoading={isSubmitting}
+              loadingText="Saving Founder Info..."
+              className="w-full sm:w-auto"
+            >
+              Save Changes
+            </Button>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -99,7 +222,7 @@ export default function EditFounder({ initialData = null }) {
             {/* Profile Image */}
             <div className="w-full h-64 rounded-xl overflow-hidden bg-slate-100 border border-slate-200">
               <img
-                src={IMAGES.SHAHID_AFRIDI_BG}
+                src={form.profile_photo_url || IMAGES.PLACEHOLDER_MAN}
                 alt="profile"
                 className="w-full h-full object-cover"
               />
@@ -200,38 +323,84 @@ export default function EditFounder({ initialData = null }) {
                 <Input
                   label="Full Name"
                   placeholder="Enter full name"
+                  disabled
                   value={form.full_name}
                   onChange={(e) => handleChange("full_name", e.target.value)}
                 />
                 <Input
                   label="Email"
                   placeholder="Enter email"
+                  disabled
                   value={form.email}
                   onChange={(e) => handleChange("email", e.target.value)}
                 />
                 <Input
                   label="Phone"
                   placeholder="Enter phone number"
+                  disabled
                   value={form.phone}
                   onChange={(e) => handleChange("phone", e.target.value)}
                 />
                 <Input
                   label="Country"
                   placeholder="Enter country"
+                  disabled
                   value={form.country}
                   onChange={(e) => handleChange("country", e.target.value)}
                 />
                 <Input
                   label="City"
                   placeholder="Enter city"
+                  disabled
                   value={form.city}
                   onChange={(e) => handleChange("city", e.target.value)}
                 />
-                <Checkbox
-                  label="Verified"
-                  checked={form.is_verified}
-                  onCheckedChange={(val) => handleChange("is_verified", val)}
-                />
+              </div>
+              <div className="flex justify-between">
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <span className="text-sm text-slate-700 font-medium">
+                    KYC Status:
+                  </span>
+
+                  <Checkbox
+                    label="Verified"
+                    disabled={isViewMode}
+                    checked={form.kyc_status === "approved"}
+                    onCheckedChange={(val) =>
+                      handleChange("kyc_status", val ? "approved" : "pending")
+                    }
+                  />
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <span className="text-sm text-slate-700 font-medium">
+                    Account Verified:
+                  </span>
+
+                  <Checkbox
+                    label="Verified"
+                    disabled={isViewMode}
+                    checked={form.is_verified}
+                    onCheckedChange={(val) =>
+                      handleChange("is_verified", val === true)
+                    }
+                  />
+                </div>
+
+                <div className="mt-4 flex flex-wrap items-center gap-4">
+                  <span className="text-sm text-slate-700 font-medium">
+                    Account Status:
+                  </span>
+
+                  <Checkbox
+                    label="Active"
+                    disabled={isViewMode}
+                    checked={form.is_active}
+                    onCheckedChange={(val) =>
+                      handleChange("is_active", val === true)
+                    }
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -248,12 +417,14 @@ export default function EditFounder({ initialData = null }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
                   label="Company Name"
+                  disabled={isViewMode}
                   placeholder="Enter company name"
                   value={form.company_name}
                   onChange={(e) => handleChange("company_name", e.target.value)}
                 />
                 <Input
                   label="Registration Number"
+                  disabled={isViewMode}
                   placeholder="Enter registration number"
                   value={form.company_registration_number}
                   onChange={(e) =>
@@ -263,12 +434,14 @@ export default function EditFounder({ initialData = null }) {
                 <Input
                   label="Website"
                   placeholder="Enter website URL"
+                  disabled={isViewMode}
                   value={form.website_url}
                   onChange={(e) => handleChange("website_url", e.target.value)}
                 />
                 <Input
                   label="LinkedIn"
                   placeholder="Enter LinkedIn URL"
+                  disabled={isViewMode}
                   value={form.linkedin_url}
                   onChange={(e) => handleChange("linkedin_url", e.target.value)}
                 />
@@ -276,24 +449,10 @@ export default function EditFounder({ initialData = null }) {
                   label="Team Members Count"
                   type="number"
                   placeholder="Enter number of team members"
+                  disabled={isViewMode}
                   value={form.team_members_count}
                   onChange={(e) =>
                     handleChange("team_members_count", e.target.value)
-                  }
-                />
-              </div>
-
-              <div className="mt-4 flex flex-col gap-3">
-                <Checkbox
-                  label="Consent Terms"
-                  checked={form.consent_terms}
-                  onCheckedChange={(val) => handleChange("consent_terms", val)}
-                />
-                <Checkbox
-                  label="Consent Data Usage"
-                  checked={form.consent_data_usage}
-                  onCheckedChange={(val) =>
-                    handleChange("consent_data_usage", val)
                   }
                 />
               </div>

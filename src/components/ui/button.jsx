@@ -12,10 +12,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600",
+          "bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:cursor-pointer hover:to-emerald-600",
         outline:
-          "border border-green-600 text-green-700 hover:bg-green-50 bg-transparent shadow-none",
-        ghost: "text-green-700 hover:bg-green-100 bg-transparent shadow-none",
+          "border border-green-600 text-green-700 hover:cursor-pointer hover:bg-green-50 bg-transparent shadow-none",
+        ghost:
+          "text-green-700 hover:cursor-pointer hover:bg-green-100 bg-transparent shadow-none",
       },
       size: {
         default: "px-6 py-2.5 text-sm",

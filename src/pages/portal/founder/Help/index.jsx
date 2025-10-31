@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import {
@@ -109,17 +108,17 @@ export default function FounderHelpScreen() {
         {[
           {
             icon: Rocket,
-            title: "Step 1: Join the Business Hub",
+            title: "Join the Business Hub",
             desc: "Create your founder profile and connect with investors, mentors, and a trusted ecosystem to scale your startup efficiently.",
           },
           {
             icon: Globe,
-            title: "Step 2: Understand the Vision",
+            title: "Understand the Vision",
             desc: "Part of Vision Pakistan 2030 — empowering entrepreneurship, global investment, and sustainable development across Pakistan.",
           },
           {
             icon: Users,
-            title: "Step 3: Benefits for Founders",
+            title: "Benefits for Founders",
             list: [
               "Direct access to vetted local and international investors.",
               "Strategic partnerships, mentorship, and corporate collaborations.",
@@ -128,7 +127,7 @@ export default function FounderHelpScreen() {
           },
           {
             icon: Target,
-            title: "Step 4: Founder Journey",
+            title: "Founder Journey",
             list: [
               "Register & complete your profile with company info and documents.",
               "Submit your startup idea with market analysis and pitch deck.",
@@ -138,12 +137,12 @@ export default function FounderHelpScreen() {
           },
           {
             icon: Shield,
-            title: "Step 5: Impact You Make",
+            title: "Impact You Make",
             desc: "By participating, you contribute to Pakistan’s entrepreneurial revolution, drive economic growth, and expand your startup’s reach.",
           },
           {
             icon: Star,
-            title: "Step 6: Leadership & Guidance",
+            title: "Leadership & Guidance",
             desc: "Led by Shakeel Ahmad Meer — fostering conscious entrepreneurship to create sustainable business growth and national impact.",
           },
         ].map((step, idx) => (

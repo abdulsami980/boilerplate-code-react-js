@@ -13,12 +13,19 @@ export default function ImageUploader({
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (value) {
+    if (!value) {
+      setPreview(null);
+      return;
+    }
+
+    if (typeof value === "string") {
+      // value is already a URL (signed URL)
+      setPreview(value);
+    } else {
+      // value is a File
       const objectUrl = URL.createObjectURL(value);
       setPreview(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
-    } else {
-      setPreview(null);
     }
   }, [value]);
 
@@ -68,7 +75,7 @@ export default function ImageUploader({
             <button
               type="button"
               onClick={handleRemove}
-              className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-md z-20"
+              className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 hover:cursor-pointer text-white rounded-full p-2 shadow-md z-20"
             >
               <Trash2 className="w-5 h-5" />
             </button>
@@ -80,7 +87,7 @@ export default function ImageUploader({
                 e.stopPropagation();
                 triggerFileSelect();
               }}
-              className="absolute bottom-2 right-2 bg-green-600 hover:bg-green-700 text-white rounded-full p-2 shadow-md z-20"
+              className="absolute bottom-2 right-2 bg-green-600 hover:bg-green-700 hover:cursor-pointer text-white rounded-full p-2 shadow-md z-20"
             >
               <Upload className="w-5 h-5" />
             </button>

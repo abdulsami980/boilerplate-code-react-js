@@ -53,7 +53,7 @@ export default function ReviewTimeChart({ data }) {
         border border-slate-200/70
         shadow-[0_2px_8px_rgba(0,0,0,0.05)]
         hover:shadow-[0_6px_20px_rgba(0,0,0,0.08)]
-        hover:-translate-y-[2px]
+        bg-white hover:-translate-y-[3px]
         transition-all duration-500
       "
     >
@@ -73,9 +73,7 @@ export default function ReviewTimeChart({ data }) {
       </div>
 
       {/* Chart */}
-      <div className="px-5">
-        <Chart options={options} series={series} type="bar" height={230} />
-      </div>
+      <Chart options={options} series={series} type="bar" height={230} />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import {
   LogOut,
   DollarSign,
   Building2,
+  Headset,
 } from "lucide-react";
 import PropTypes from "prop-types";
 
@@ -20,6 +21,7 @@ const ICONS = {
   logout: LogOut,
   dollarSign: DollarSign,
   building: Building2,
+  headset: Headset,
 };
 
 function Icons({ name, cursor, color, ...rest }) {

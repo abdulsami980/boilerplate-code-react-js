@@ -24,6 +24,12 @@ import tech from "./network/tech.jpg";
 import wasim from "./network/wasim.jpg";
 import handShake from "./network/handShake.webp";
 
+// ==========================
+// UI
+// ==========================
+import placeholderMan from "./placeholderMan.png";
+import rectanglePlaceholder from "./rectanglePlaceholder.png";
+
 const IMAGES = {
   // People
   MEER_GREEN_JACKET: meerGreenJacket,
@@ -46,6 +52,10 @@ const IMAGES = {
   TECH: tech,
   WASIM_NETWORK: wasim,
   HANDSHAKE: handShake,
+
+  // UI
+  PLACEHOLDER_MAN: placeholderMan,
+  RECTANGLE_PLACEHOLDER: rectanglePlaceholder,
 };
 
 export default IMAGES;

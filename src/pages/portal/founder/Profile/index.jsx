@@ -12,13 +12,14 @@ import Step1 from "./Components/Step1";
 import Step2 from "./Components/Step2";
 import Step3 from "./Components/Step3";
 
-export default function Profile() {
+export default function FounderProfile() {
   const navigate = useNavigate();
   const role = getUserRole();
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState({
     // Step 1
+    profile_photo_url: null,
     fullName: "",
     email: "",
     mobile: "",
@@ -26,44 +27,42 @@ export default function Profile() {
     residencyStatus: "",
     country: "",
     city: "",
-    profilePhoto: null,
     nationalId: "",
-    idDocument: null,
     occupation: "",
-    companyName: "",
-    websiteUrl: "",
-    linkedinUrl: "",
 
     // Step 2
-    minInvestment: "",
-    maxInvestment: "",
-    investmentExperienceYears: "",
-    businessStage: "",
-    businessModel: "",
-    preferredLocation: "",
-    preferredCurrency: "",
-    annualIncomeBracket: "",
-    involvementLevel: "",
-    investmentInstrument: [],
-    preferredSectors: [],
-    taxNumber: "",
-    sourceOfFunds: "",
+    years_of_experience: "",
+    previous_startups_count: "",
+    current_employment_status: "",
+    cofounder_count: "",
+    team_members_count: "",
+    company_name: "",
+    company_registration_number: "",
+    company_website_url: "",
+    company_linkedin_url: "",
+    entrepreneurial_experience: "",
+    team_skillset_summary: "",
+    founder_vision_statement: "",
+    long_term_goals: "",
+    full_time_on_startup: false,
+    has_tech_cofounder: false,
+    equity_split_clarity: false,
+    has_cap_table: false,
 
     // Step 3
-    verificationDocUrl: null,
-    proofOfIncomeUrl: null,
-    additionalInfo: "",
+    verification_doc_url: null,
+    id_doc_url: null,
+    additional_info: "",
+    termsAccepted: false,
     nda_signed: false,
-    is_accredited_investor: false,
+    is_accredited_founder: false,
     consent_data_sharing: false,
     consent_marketing_emails: false,
-    termsAccepted: false,
 
     // inside useState initial object (add these fields)
     profilePhotoPath: null,
     idDocumentPath: null,
     verificationDocPath: null,
-    proofOfIncomePath: null,
   });
 
   const profileCache = new Map();
@@ -89,10 +88,13 @@ export default function Profile() {
 
       case 2:
         if (
-          !formData.minInvestment ||
-          !formData.maxInvestment ||
-          !formData.businessStage ||
-          !formData.businessModel
+          !formData.current_employment_status ||
+          !formData.company_name ||
+          !formData.company_registration_number ||
+          !formData.company_website_url ||
+          !formData.company_linkedin_url ||
+          !formData.entrepreneurial_experience ||
+          !formData.founder_vision_statement
         ) {
           toast.error("Please fill all required fields in Step 2.");
           return false;
@@ -103,7 +105,7 @@ export default function Profile() {
         if (
           !formData.nda_signed ||
           !formData.termsAccepted ||
-          !formData.is_accredited_investor
+          !formData.is_accredited_founder
         ) {
           toast.error("Please accept all required declarations in Step 3.");
           return false;
@@ -168,12 +170,7 @@ export default function Profile() {
           }
         );
 
-        const folder =
-          role === "investor"
-            ? "investors"
-            : role === "founder"
-            ? "founders"
-            : "others";
+        const folder = "founders";
 
         const fileName = `${Date.now()}-${file.name}`;
         const filePath = `${folder}/${fileName}`;
@@ -187,29 +184,20 @@ export default function Profile() {
         return filePath; // ✅ return path to save in DB
       };
 
-      const [
-        profilePhotoPathRes,
-        idDocumentPathRes,
-        verificationDocPathRes,
-        proofOfIncomePathRes,
-      ] = await Promise.all([
-        uploadFile(
-          "profiles",
-          formData.profilePhoto,
-          formData.profilePhotoPath
-        ),
-        uploadFile("profiles", formData.idDocument, formData.idDocumentPath),
-        uploadFile(
-          "kyc-docs",
-          formData.verificationDocUrl,
-          formData.verificationDocPath
-        ),
-        uploadFile(
-          "kyc-docs",
-          formData.proofOfIncomeUrl,
-          formData.proofOfIncomePath
-        ),
-      ]);
+      const [profilePhotoPathRes, idDocumentPathRes, verificationDocPathRes] =
+        await Promise.all([
+          uploadFile(
+            "profiles",
+            formData.profile_photo_url,
+            formData.profilePhotoPath
+          ),
+          uploadFile("profiles", formData.id_doc_url, formData.idDocumentPath),
+          uploadFile(
+            "kyc-docs",
+            formData.verification_doc_url,
+            formData.verificationDocPath
+          ),
+        ]);
 
       // ✅ Update profiles table with checkboxes that belong there
       const { data: profileData, error: profileError } = await supabase
@@ -219,12 +207,13 @@ export default function Profile() {
           full_name: formData.fullName,
           phone: formData.mobile,
           nationality: formData.nationality,
+          national_id: formData.nationalId,
           residency_status: formData.residencyStatus,
           occupation: formData.occupation,
           country: formData.country,
           city: formData.city,
           id_doc_url: idDocumentPathRes,
-          profile_photo_url: profilePhotoPathRes || null, // path
+          profile_photo_url: profilePhotoPathRes || null,
           nda_signed: formData.nda_signed,
           consent_data_sharing: formData.consent_data_sharing,
           consent_marketing_emails: formData.consent_marketing_emails,
@@ -234,36 +223,40 @@ export default function Profile() {
         .select()
         .single();
 
-      // Investors table
-      const { error: investorError } = await supabase
-        .from("investors")
-        .update({
-          company_name: formData.companyName,
-          website_url: formData.websiteUrl,
-          linkedin_url: formData.linkedinUrl,
-          min_investment: formData.minInvestment,
-          max_investment: formData.maxInvestment,
-          investment_experience_years: formData.investmentExperienceYears,
-          investment_stage: formData.businessStage,
-          business_model: formData.businessModel,
-          preferred_location: formData.preferredLocation,
-          preferred_currency: formData.preferredCurrency,
-          annual_income_bracket: formData.annualIncomeBracket,
-          involvement_level: formData.involvementLevel,
-          investment_instrument: formData.investmentInstrument,
-          preferred_sectors: formData.preferredSectors,
-          tax_number: formData.taxNumber,
-          source_of_funds: formData.sourceOfFunds,
+      // Founders table
+      const { error: founderError } = await supabase.from("founders").upsert(
+        {
+          profile_id: profileData.id, // ✅ required for matching
+          years_of_experience: formData.years_of_experience || null,
+          previous_startups_count: formData.previous_startups_count || null,
+          current_employment_status: formData.current_employment_status || null,
+          cofounder_count: formData.cofounder_count || null,
+          team_members_count: formData.team_members_count || null,
+          company_name: formData.company_name || null,
+          company_registration_number:
+            formData.company_registration_number || null,
+          company_website_url: formData.company_website_url || null,
+          company_linkedin_url: formData.company_linkedin_url || null,
+          entrepreneurial_experience:
+            formData.entrepreneurial_experience || null,
+          team_skillset_summary: formData.team_skillset_summary || null,
+          founder_vision_statement: formData.founder_vision_statement || null,
+          long_term_goals: formData.long_term_goals || null,
+          full_time_on_startup: formData.full_time_on_startup,
+          has_tech_cofounder: formData.has_tech_cofounder,
+          equity_split_clarity: formData.equity_split_clarity,
+          has_cap_table: formData.has_cap_table,
+          is_accredited_founder: formData.is_accredited_founder,
           verification_doc_url: verificationDocPathRes || null,
-          proof_of_income_url: proofOfIncomePathRes || null,
-          additional_info: formData.additionalInfo,
-          is_accredited_investor: formData.is_accredited_investor,
-        })
-        .eq("profile_id", profileData.id);
+          additional_info: formData.additional_info || null,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "profile_id" } // ✅ tells Supabase to match by profile_id
+      );
 
       if (profileError) throw profileError;
 
-      if (investorError) throw investorError;
+      if (founderError) throw founderError;
 
       toast.dismiss(loadingToast);
       toast.success("Profile saved successfully!");
@@ -300,7 +293,7 @@ export default function Profile() {
           throw new Error("User not authenticated.");
         const auth_uid = authUser.user.id;
 
-        // Use cache if available
+        // Cache
         if (profileCache.has(auth_uid)) {
           if (!ignore) {
             setFormData((prev) => ({ ...prev, ...profileCache.get(auth_uid) }));
@@ -309,103 +302,98 @@ export default function Profile() {
           return;
         }
 
-        // Fetch profiles table
+        // Fetch Profile
         const { data: profileData, error: profileError } = await supabase
           .from("profiles")
           .select("*")
           .eq("auth_uid", auth_uid)
           .single();
+
         if (profileError && profileError.code !== "PGRST116")
           throw profileError;
 
-        // Fetch investors table
-        let investorData = null;
+        // Fetch Founder Data
+        let founderData = null;
         if (profileData) {
-          const { data: invData, error: invErr } = await supabase
-            .from("investors")
+          const { data: fData, error: fErr } = await supabase
+            .from("founders")
             .select("*")
             .eq("profile_id", profileData.id)
             .single();
-          if (invErr && invErr.code !== "PGRST116") throw invErr;
-          investorData = invData || null;
+
+          if (fErr && fErr.code !== "PGRST116") throw fErr;
+          founderData = fData || null;
         }
 
-        // Get signed URLs
+        // File paths (stored in DB)
         const profilePhotoPath = profileData?.profile_photo_url || null;
         const idDocumentPath = profileData?.id_doc_url || null;
-        const verificationDocPath = investorData?.verification_doc_url || null;
-        const proofOfIncomePath = investorData?.proof_of_income_url || null;
+        const verificationDocPath = founderData?.verification_doc_url || null;
 
-        // create signed URLs only for preview, but DON'T overwrite the DB path fields
+        // Signed preview URLs
         const [
           profilePhotoSignedUrl,
           idDocumentSignedUrl,
           verificationDocSignedUrl,
-          proofOfIncomeSignedUrl,
         ] = await Promise.all([
-          profilePhotoPath
-            ? getSignedUrl("profiles", profilePhotoPath)
-            : Promise.resolve(null),
-          idDocumentPath
-            ? getSignedUrl("profiles", idDocumentPath)
-            : Promise.resolve(null),
+          profilePhotoPath ? getSignedUrl("profiles", profilePhotoPath) : null,
+          idDocumentPath ? getSignedUrl("profiles", idDocumentPath) : null,
           verificationDocPath
             ? getSignedUrl("kyc-docs", verificationDocPath)
-            : Promise.resolve(null),
-          proofOfIncomePath
-            ? getSignedUrl("kyc-docs", proofOfIncomePath)
-            : Promise.resolve(null),
+            : null,
         ]);
 
-        // Merge into formData
         const merged = {
+          // ✅ Profiles table
           fullName: profileData?.full_name || "",
           email: profileData?.email || "",
-          occupation: profileData?.occupation || "",
           mobile: profileData?.phone || "",
           nationality: profileData?.nationality || "",
           residencyStatus: profileData?.residency_status || "",
           country: profileData?.country || "",
           city: profileData?.city || "",
-          profilePhoto: profilePhotoSignedUrl,
+          occupation: profileData?.occupation || "",
           nationalId: profileData?.national_id || "",
-          idDocument: idDocumentSignedUrl,
 
-          companyName: investorData?.company_name || "",
-          websiteUrl: investorData?.website_url || "",
-          linkedinUrl: investorData?.linkedin_url || "",
+          profile_photo_url: profilePhotoSignedUrl,
+          id_doc_url: idDocumentSignedUrl,
 
-          minInvestment: investorData?.min_investment || "",
-          maxInvestment: investorData?.max_investment || "",
-          investmentExperienceYears:
-            investorData?.investment_experience_years || "",
-          businessStage: investorData?.investment_stage || "",
-          businessModel: investorData?.business_model || "",
-          preferredLocation: investorData?.preferred_location || "",
-          preferredCurrency: investorData?.preferred_currency || "",
-          annualIncomeBracket: investorData?.annual_income_bracket || "",
-          involvementLevel: investorData?.involvement_level || "",
-          investmentInstrument: investorData?.investment_instrument || [],
-          preferredSectors: investorData?.preferred_sectors || [],
-          taxNumber: investorData?.tax_number || "",
-          sourceOfFunds: investorData?.source_of_funds || "",
-          verificationDocUrl: verificationDocSignedUrl,
-          proofOfIncomeUrl: proofOfIncomeSignedUrl,
-          additionalInfo: investorData?.additional_info || "",
+          // ✅ Founders table
+          years_of_experience: founderData?.years_of_experience || "",
+          previous_startups_count: founderData?.previous_startups_count || "",
+          current_employment_status:
+            founderData?.current_employment_status || "",
+          cofounder_count: founderData?.cofounder_count || "",
+          team_members_count: founderData?.team_members_count || "",
+          company_name: founderData?.company_name || "",
+          company_registration_number:
+            founderData?.company_registration_number || "",
+          company_website_url: founderData?.company_website_url || "",
+          company_linkedin_url: founderData?.company_linkedin_url || "",
+          entrepreneurial_experience:
+            founderData?.entrepreneurial_experience || "",
+          team_skillset_summary: founderData?.team_skillset_summary || "",
+          founder_vision_statement: founderData?.founder_vision_statement || "",
+          long_term_goals: founderData?.long_term_goals || "",
+          full_time_on_startup: founderData?.full_time_on_startup || false,
+          has_tech_cofounder: founderData?.has_tech_cofounder || false,
+          equity_split_clarity: founderData?.equity_split_clarity || false,
+          has_cap_table: founderData?.has_cap_table || false,
+          verification_doc_url: verificationDocSignedUrl,
+          additional_info: founderData?.additional_info || "",
 
-          // ✅ Checkboxes
-          is_accredited_investor: investorData?.is_accredited_investor || false,
+          // ✅ Checkboxes (profiles)
           nda_signed: profileData?.nda_signed || false,
           consent_data_sharing: profileData?.consent_data_sharing || false,
           consent_marketing_emails:
             profileData?.consent_marketing_emails || false,
           termsAccepted: profileData?.termsAccepted || false,
+          is_accredited_founder: founderData?.is_accredited_founder || false,
 
-          // keep DB paths (used for saving if no new upload)
+          // ✅ DB paths (used if no new file upload)
           profilePhotoPath,
           idDocumentPath,
           verificationDocPath,
-          proofOfIncomePath,
         };
 
         profileCache.set(auth_uid, merged);
@@ -439,26 +427,29 @@ export default function Profile() {
       beforeNextStep={(currentStep) => validateStep(currentStep)}
       onFinalStepCompleted={handleFinalSubmit}
     >
+      {/* STEP 1 */}
       <Step>
         {renderStepHeader(
-          "Personal & Professional Information",
-          "Fill out your personal details carefully. Fields marked with * are required."
+          "Founder Information",
+          "Tell us about yourself and your background as a founder."
         )}
         <Step1 formData={formData} handleChange={handleChange} />
       </Step>
 
+      {/* STEP 2 */}
       <Step>
         {renderStepHeader(
-          "Investment Preferences",
-          "Set your investment preferences carefully to help us match you with the right opportunities."
+          "Startup & Vision",
+          "Provide details about your startup, team, and long-term vision."
         )}
         <Step2 formData={formData} handleChange={handleChange} />
       </Step>
 
+      {/* STEP 3 */}
       <Step>
         {renderStepHeader(
-          "Compliance & Final Declarations",
-          "Upload necessary documents and agree to the terms to complete your profile."
+          "Verification & Declarations",
+          "Upload verification documents and agree to compliance requirements."
         )}
         <Step3 formData={formData} handleChange={handleChange} />
       </Step>

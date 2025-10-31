@@ -70,7 +70,7 @@ export default function Stepper({
       {...rest}
     >
       <div
-        className={`w-full rounded-2xl shadow-xl ${stepCircleContainerClassName}`}
+        className={`w-full rounded-2xl shadow-xl bg-white${stepCircleContainerClassName}`}
       >
         {/* Step Indicators */}
         <div

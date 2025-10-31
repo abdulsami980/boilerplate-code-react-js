@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import {
@@ -109,17 +108,17 @@ export default function InvestorHelpScreen() {
         {[
           {
             icon: Rocket,
-            title: "Step 1: Unlocking Pakistan’s Potential",
+            title: "Unlocking Pakistan’s Potential",
             desc: "Connecting investors with high-potential startups through a transparent, trusted ecosystem to unleash Pakistan’s economic power.",
           },
           {
             icon: Globe,
-            title: "Step 2: The Vision",
+            title: "The Vision",
             desc: "Part of Vision Pakistan 2030 — fostering entrepreneurship, global investment, and sustainable development.",
           },
           {
             icon: Users,
-            title: "Step 3: What Investors Gain",
+            title: "What Investors Gain",
             list: [
               "Curated deal flow of vetted businesses.",
               "Global reach with local insight.",
@@ -128,7 +127,7 @@ export default function InvestorHelpScreen() {
           },
           {
             icon: Target,
-            title: "Step 4: Investor Journey",
+            title: "Investor Journey",
             list: [
               "Register & verify your investor profile.",
               "Explore curated, high-growth startups.",
@@ -138,12 +137,12 @@ export default function InvestorHelpScreen() {
           },
           {
             icon: Shield,
-            title: "Step 5: Broader Impact",
+            title: "Broader Impact",
             desc: "Empower innovators and shape a multi-billion-dollar economy through strategic, purpose-driven investments.",
           },
           {
             icon: Star,
-            title: "Step 6: Leadership",
+            title: "Leadership",
             desc: "Led by Shakeel Ahmad Meer — a visionary fostering conscious capitalism for national transformation.",
           },
         ].map((step, idx) => (

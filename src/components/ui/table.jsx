@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { Eye, Pencil, Trash2, MoreHorizontal, AlertCircle } from "lucide-react";
 import {
@@ -36,6 +35,11 @@ export default function Table({
     if (status === "Verified") colorClass = "bg-emerald-100 text-emerald-800";
     else if (status === "Pending") colorClass = "bg-yellow-100 text-yellow-800";
     else if (status === "Suspended") colorClass = "bg-red-100 text-red-700";
+    else if (status === "In Progress")
+      colorClass = "bg-yellow-100 text-yellow-800";
+    else if (status === "Resolved")
+      colorClass = "bg-emerald-100 text-emerald-800";
+    else if (status === "Open") colorClass = "bg-red-100 text-red-700";
 
     return (
       <span
@@ -132,63 +136,101 @@ export default function Table({
                                   align="end"
                                   className="bg-white rounded-xl shadow-lg border border-slate-200 p-1"
                                 >
-                                  {actions.map((action, i) => (
-                                    <DropdownMenuItem
-                                      key={i}
-                                      onClick={() => action.onClick?.(row)}
-                                      className="flex items-center gap-2 cursor-pointer text-[14px] py-2 px-3 rounded-lg transition-all hover:bg-slate-100"
-                                    >
-                                      {action.icon && (
-                                        <action.icon
-                                          size={15}
-                                          className="text-green-600"
-                                        />
-                                      )}
-                                      {action.label}
-                                    </DropdownMenuItem>
-                                  ))}
+                                  {actions
+                                    .filter((action) =>
+                                      typeof action.showIf === "function"
+                                        ? action.showIf(row)
+                                        : action.showIf !== false
+                                    )
+                                    .map((action, i) => {
+                                      const label =
+                                        typeof action.label === "function"
+                                          ? action.label(row)
+                                          : action.label;
+                                      const Icon =
+                                        typeof action.icon === "function"
+                                          ? action.icon(row)
+                                          : action.icon;
+                                      const color =
+                                        typeof action.color === "function"
+                                          ? action.color(row)
+                                          : action.color;
+
+                                      return (
+                                        <DropdownMenuItem
+                                          key={i}
+                                          onClick={() => action.onClick?.(row)}
+                                          className="flex items-center gap-2 cursor-pointer text-[14px] py-2 px-3 rounded-lg transition-all hover:bg-slate-100"
+                                        >
+                                          {Icon && (
+                                            <Icon
+                                              size={15}
+                                              className={`${
+                                                color === "red"
+                                                  ? "text-red-500"
+                                                  : color === "amber"
+                                                  ? "text-amber-500"
+                                                  : color === "green"
+                                                  ? "text-green-600"
+                                                  : "text-slate-600"
+                                              }`}
+                                            />
+                                          )}
+                                          {label}
+                                        </DropdownMenuItem>
+                                      );
+                                    })}
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             ) : (
-                              actions.map((action, i) => {
-                                const Icon =
-                                  action.icon ||
-                                  (action.label === "View"
-                                    ? Eye
-                                    : action.label === "Edit"
-                                    ? Pencil
-                                    : Trash2);
+                              actions
+                                .filter((action) =>
+                                  typeof action.showIf === "function"
+                                    ? action.showIf(row)
+                                    : action.showIf !== false
+                                )
+                                .map((action, i) => {
+                                  const label =
+                                    typeof action.label === "function"
+                                      ? action.label(row)
+                                      : action.label;
+                                  const Icon =
+                                    typeof action.icon === "function"
+                                      ? action.icon(row)
+                                      : action.icon || Eye;
+                                  const color =
+                                    typeof action.color === "function"
+                                      ? action.color(row)
+                                      : action.color;
 
-                                const colorClass =
-                                  action.color === "red"
-                                    ? "text-red-500 hover:bg-red-50"
-                                    : action.color === "green"
-                                    ? "text-emerald-600 hover:bg-green-50"
-                                    : action.color === "blue"
-                                    ? "text-blue-600 hover:bg-blue-50"
-                                    : action.color === "amber"
-                                    ? "text-amber-600 hover:bg-amber-50"
-                                    : "text-slate-600 hover:bg-slate-50";
+                                  const colorClass =
+                                    color === "red"
+                                      ? "text-red-500 hover:bg-red-50"
+                                      : color === "green"
+                                      ? "text-emerald-600 hover:bg-green-50"
+                                      : color === "amber"
+                                      ? "text-amber-600 hover:bg-amber-50"
+                                      : "text-slate-600 hover:bg-slate-50";
 
-                                return (
-                                  <Tooltip key={i}>
-                                    <TooltipTrigger asChild>
-                                      <button
-                                        onClick={() => action.onClick?.(row)}
-                                        className={`inline-flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white shadow-sm ${colorClass} hover:scale-105 transition-all duration-200`}
+                                  return (
+                                    <Tooltip key={i}>
+                                      <TooltipTrigger asChild>
+                                        <button
+                                          onClick={() => action.onClick?.(row)}
+                                          className={`inline-flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 bg-white shadow-sm ${colorClass} hover:scale-105 transition-all duration-200`}
+                                        >
+                                          <Icon size={16} />
+                                        </button>
+                                      </TooltipTrigger>
+                                      <TooltipContent
+                                        side="top"
+                                        className="bg-white border border-slate-200 text-slate-700 shadow-lg px-3 py-1.5 rounded-lg text-xs font-medium"
                                       >
-                                        <Icon size={16} />
-                                      </button>
-                                    </TooltipTrigger>
-                                    <TooltipContent
-                                      side="top"
-                                      className="bg-white border border-slate-200 text-slate-700 shadow-lg px-3 py-1.5 rounded-lg text-xs font-medium"
-                                    >
-                                      {action.label}
-                                    </TooltipContent>
-                                  </Tooltip>
-                                );
-                              })
+                                        {label}
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  );
+                                })
                             )}
                           </TooltipProvider>
                         </div>
@@ -210,7 +252,6 @@ export default function Table({
           </table>
         </div>
 
-        {/* Pagination Footer */}
         <div className="flex justify-between items-center px-6 py-4 border-t border-slate-200 bg-white rounded-b-xl shadow-inner">
           <div className="text-sm text-slate-700 font-medium px-3 py-1 bg-slate-100/40 rounded-full">
             Showing {startRecord} to {endRecord} of {data.length} records

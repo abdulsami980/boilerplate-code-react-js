@@ -4,7 +4,7 @@ import Sidebar from "@/components/ui/Sidebar";
 
 export default function PortalLayout() {
   return (
-    <div className="flex h-screen bg-gray-50 text-gray-800">
+    <div className="flex h-screen bg-gray-100 text-gray-800">
       {/* Sidebar */}
       <Sidebar />
 

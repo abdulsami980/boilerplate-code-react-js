@@ -11,7 +11,7 @@ export default function RecentActivity({ items = [] }) {
         backdrop-blur-xl
         shadow-[0_4px_20px_rgba(0,0,0,0.05)]
         hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]
-        transition-all duration-500 hover:-translate-y-[2px]
+        transition-all duration-500 hover:-translate-y-[3px]
         p-6
       "
     >
@@ -63,9 +63,6 @@ export default function RecentActivity({ items = [] }) {
           </div>
         ))}
       </div>
-
-      {/* Glow accent at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-emerald-400 via-emerald-500 to-transparent opacity-60" />
     </div>
   );
 }

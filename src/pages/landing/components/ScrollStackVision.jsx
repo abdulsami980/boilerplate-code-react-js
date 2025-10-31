@@ -44,7 +44,7 @@ export default function WhyJoinSection() {
         <div className="grid md:grid-cols-2 gap-12">
           {/* Businesses Card */}
           <motion.div
-            {...fadeUp(0.2)}
+            {...fadeUp(0.3)}
             className="group relative bg-white/80 backdrop-blur-2xl border border-green-200/70 rounded-3xl p-10 shadow-[0_12px_60px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_70px_rgba(16,185,129,0.25)] transition-all duration-500"
           >
             {/* Glow Accent */}
@@ -56,7 +56,7 @@ export default function WhyJoinSection() {
                   <Briefcase className="w-7 h-7" />
                 </div>
                 <h3 className="text-2xl font-bold text-green-600">
-                  For Businesses
+                  For Founders
                 </h3>
               </div>
 
@@ -99,7 +99,7 @@ export default function WhyJoinSection() {
 
           {/* Investors Card */}
           <motion.div
-            {...fadeUp(0.4)}
+            {...fadeUp(0.3)}
             className="group relative bg-white/80 backdrop-blur-2xl border border-emerald-200/70 rounded-3xl p-10 shadow-[0_12px_60px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_70px_rgba(16,185,129,0.25)] transition-all duration-500"
           >
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-400/20 to-green-500/20 opacity-0  blur-2xl transition duration-700"></div>

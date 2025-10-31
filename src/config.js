@@ -21,9 +21,25 @@ export const PATH = {
   ADMIN: {
     DASHBOARD: "/admin/dashboard",
     INVESTORS: "/admin/investors",
-    EDIT_INVESTOR: "/admin/investors/edit",
+    EDIT_INVESTOR: {
+      PATTERN: "/admin/investors/edit/:id",
+      TO: (id) => `/admin/investors/edit/${id}`,
+    },
+    VIEW_INVESTOR: {
+      PATTERN: "/admin/investors/view/:id",
+      TO: (id) => `/admin/investors/view/${id}`,
+    },
     FOUNDERS: "/admin/founders",
-    EDIT_FOUNDER: "/admin/founders/edit",
+    VIEW_FOUNDER: {
+      PATTERN: "/admin/founders/view/:id",
+      TO: (id) => `/admin/founders/view/${id}`,
+    },
+    EDIT_FOUNDER: {
+      PATTERN: "/admin/founders/edit/:id",
+      TO: (id) => `/admin/founders/edit/${id}`,
+    },
+
+    SUPPORT_TICKETS: "/admin/support-tickets",
     PROFILE: "/admin/profile",
     SETTINGS: "/admin/settings",
     HELP: "/admin/help",

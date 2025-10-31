@@ -20,7 +20,7 @@ export default function TicketVolumeChart({ data }) {
   ];
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md transition">
+    <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition hover:-translate-y-[3px]">
       <h5 className="text-sm font-semibold text-[#10354a] tracking-wide flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#22c55eaa]" />
         Ticket Volume

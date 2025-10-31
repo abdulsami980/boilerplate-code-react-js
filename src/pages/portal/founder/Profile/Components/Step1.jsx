@@ -13,8 +13,8 @@ export default function Step1({ formData, handleChange }) {
         <ImageUploader
           label="Profile Photo"
           required
-          value={formData.profilePhoto}
-          onChange={(file) => handleChange("profilePhoto", file)}
+          value={formData.profile_photo_url}
+          onChange={(file) => handleChange("profile_photo_url", file)}
         />
       </div>
 
@@ -96,31 +96,6 @@ export default function Step1({ formData, handleChange }) {
         placeholder="Enter your profession"
         value={formData.occupation}
         onChange={(e) => handleChange("occupation", e.target.value)}
-      />
-
-      <Input
-        label="Organization / Company Name"
-        placeholder="Enter your organization name"
-        value={formData.companyName}
-        onChange={(e) => handleChange("companyName", e.target.value)}
-      />
-
-      <Input
-        label="Website"
-        placeholder="Enter website URL"
-        value={formData.websiteUrl}
-        onChange={(e) => handleChange("websiteUrl", e.target.value)}
-        regex={/^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/\S*)?$/}
-      />
-
-      <Input
-        label="LinkedIn Profile"
-        placeholder="Enter LinkedIn link"
-        value={formData.linkedinUrl}
-        onChange={(e) => handleChange("linkedinUrl", e.target.value)}
-        regex={
-          /^https?:\/\/(www\.)?linkedin\.com\/(in|company)\/[A-Za-z0-9_-]+\/?$/
-        }
       />
     </div>
   );

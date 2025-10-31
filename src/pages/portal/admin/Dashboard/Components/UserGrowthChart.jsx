@@ -64,7 +64,7 @@ export default function UserGrowthChart({ data }) {
         relative overflow-hidden rounded-2xl bg-white
         border border-slate-200/70 shadow-[0_2px_8px_rgba(0,0,0,0.05)]
         hover:shadow-[0_6px_20px_rgba(0,0,0,0.08)] transition-all duration-500
-        hover:-translate-y-[2px]
+        hover:-translate-y-[3px]
       "
     >
       {/* Header */}

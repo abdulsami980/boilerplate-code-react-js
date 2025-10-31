@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { routes } from "@/pages/portal/routes/routesConfig";
 import Icons from "@/components/ui/Icons";
@@ -6,8 +6,9 @@ import IMAGES from "@/assets/images";
 import { PATH } from "@/config";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { getUserInfo } from "@/lib/utils";
+import { getSignedUrl, getUserInfo } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
+import { supabase } from "@/lib/supabase-client";
 
 const bottomItems = [
   {
@@ -25,17 +26,21 @@ const bottomItems = [
     getPath: () => PATH.LANDING, // fallback path
   },
 ];
+
 export default function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const { name } = getUserInfo();
   const [openMobile, setOpenMobile] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
   const role =
     user?.user_metadata?.role?.toLowerCase?.() ||
     user?.role?.toLowerCase?.() ||
     "guest";
+
+  console.log("Role", user);
 
   const sidebarItems = routes.filter(
     (r) =>
@@ -81,6 +86,44 @@ export default function Sidebar() {
     }
     setOpenMobile(false);
   };
+
+  const filteredBottomItems = bottomItems.filter(
+    (item) => !(role === "admin" && item.label === "Help")
+  );
+
+  useEffect(() => {
+    const fetchProfilePhoto = async () => {
+      try {
+        if (!user?.id) return;
+
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("profile_photo_url")
+          .eq("auth_uid", user.id)
+          .single();
+
+        if (error) throw error;
+
+        if (data?.profile_photo_url) {
+          // ✅ Generate a signed URL for display
+          const signedUrl = await getSignedUrl(
+            "profiles",
+            data.profile_photo_url // raw path like "investors/1761816121807-wasimAkramBg.png"
+          );
+
+          console.log("📸 Raw profile path:", data?.profile_photo_url);
+          console.log("✅ Signed URL generated:", signedUrl);
+
+          if (signedUrl) setProfilePhoto(signedUrl);
+        }
+      } catch (err) {
+        console.error("❌ Error loading profile photo:", err.message);
+      }
+    };
+
+    fetchProfilePhoto();
+  }, [user]);
+
   return (
     <>
       {/* 🔹 MOBILE HEADER */}
@@ -189,7 +232,7 @@ export default function Sidebar() {
 
           {/* 🔹 Profile + Logout */}
           <div className="px-3 mt-auto border-t border-green-700/30 pt-4 space-y-3">
-            {bottomItems.map((item) => (
+            {filteredBottomItems.map((item) => (
               <button
                 key={item.label}
                 onClick={() => handleBottomItemClick(item)}
@@ -239,9 +282,9 @@ export default function Sidebar() {
                 }`}
             >
               <img
-                src={IMAGES.SHAKEEL_BG}
+                src={profilePhoto || IMAGES.PLACEHOLDER_MAN}
                 alt="Profile"
-                className="w-10 h-10 rounded-full border-2 border-green-400/60 shadow-[0_0_10px_rgba(34,197,94,0.4)]"
+                className="w-10 h-10 rounded-full border-2 border-green-400/60 shadow-[0_0_10px_rgba(34,197,94,0.4)] object-cover"
               />
               <div
                 className={`flex flex-col whitespace-nowrap ${

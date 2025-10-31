@@ -1,75 +1,129 @@
+import ToggleChips from "@/components/ui/ToggleChips";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { getCountriesOptions, getLookupOptions } from "@/lib/utils";
 
 export default function Step2({ formData, handleChange }) {
+  const options = {
+    instruments: getLookupOptions("investment_instruments"),
+    sectors: getLookupOptions("sectors"),
+    income: getLookupOptions("income_bracket"),
+    currencies: getLookupOptions("currency"),
+    models: getLookupOptions("business_model"),
+    stages: getLookupOptions("business_stage"),
+    involvement: getLookupOptions("involvement_levels"),
+  };
+
+  const countryOptions = getCountriesOptions();
+
   return (
-    <div className="grid md:grid-cols-2 gap-5">
-      <Input
-        label="Minimum Investment (PKR)"
-        placeholder="Enter minimum investment"
-        required
-        type="number"
-        value={formData.minInvestment}
-        onChange={(e) => handleChange("minInvestment", e.target.value)}
-      />
-      <Input
-        label="Maximum Investment (PKR)"
-        placeholder="Enter maximum investment"
-        value={formData.maxInvestment}
-        required
-        type="number"
-        onChange={(e) => handleChange("maxInvestment", e.target.value)}
-      />
+    <>
+      <div className="grid md:grid-cols-2 gap-5">
+        {/* Investment Range */}
+        <Input
+          label="Minimum Investment (PKR)"
+          placeholder="Enter minimum investment"
+          required
+          type="number"
+          value={formData.minInvestment}
+          onChange={(e) => handleChange("minInvestment", e.target.value)}
+        />
+        <Input
+          label="Maximum Investment (PKR)"
+          placeholder="Enter maximum investment"
+          required
+          type="number"
+          value={formData.maxInvestment}
+          onChange={(e) => handleChange("maxInvestment", e.target.value)}
+        />
+        {/* Experience */}
+        <Input
+          label="Investment Experience (Years)"
+          placeholder="Enter years of experience"
+          type="number"
+          value={formData.investmentExperienceYears}
+          onChange={(e) =>
+            handleChange("investmentExperienceYears", e.target.value)
+          }
+        />
+        {/* Lookup-based Selects */}
+        <Select
+          label="Business Stage Preference"
+          placeholder="Select business stage"
+          required
+          options={options.stages}
+          value={formData.businessStage}
+          onChange={(val) => handleChange("businessStage", val)}
+        />
+        <Select
+          label="Preferred Business Model"
+          placeholder="Select business model"
+          required
+          options={options.models}
+          value={formData.businessModel}
+          onChange={(val) => handleChange("businessModel", val)}
+        />
+        <Select
+          label="Preferred Business Location"
+          placeholder="Select preferred business location"
+          options={countryOptions}
+          value={formData.preferredLocation}
+          onChange={(val) => handleChange("preferredLocation", val)}
+        />
 
-      <Select
-        label="Business Stage Preference"
-        placeholder="Select business stage"
-        required
-        options={[
-          { label: "Seed", value: "Seed" },
-          { label: "Early Stage", value: "Early Stage" },
-          { label: "Growth", value: "Growth" },
-          { label: "Mature", value: "Mature" },
-        ]}
-        value={formData.businessStage}
-        onChange={(val) => handleChange("businessStage", val)}
-      />
+        <Select
+          label="Preferred Currency"
+          placeholder="Select currency"
+          options={options.currencies}
+          value={formData.preferredCurrency}
+          onChange={(val) => handleChange("preferredCurrency", val)}
+        />
+        <Select
+          label="Annual Income Bracket"
+          placeholder="Select income bracket"
+          options={options.income}
+          value={formData.annualIncomeBracket}
+          onChange={(val) => handleChange("annualIncomeBracket", val)}
+        />
+        <Select
+          label="Involvement Level"
+          placeholder="Select involvement level"
+          options={options.involvement}
+          value={formData.involvementLevel}
+          onChange={(val) => handleChange("involvementLevel", val)}
+        />
+        <Input
+          label="Tax Number"
+          placeholder="Enter your tax number"
+          value={formData.taxNumber}
+          onChange={(e) => handleChange("taxNumber", e.target.value)}
+        />
+      </div>
 
-      <Select
-        label="Preferred Business Model"
-        placeholder="Select business model"
-        required
-        options={[
-          { label: "B2B", value: "B2B" },
-          { label: "B2C", value: "B2C" },
-          { label: "D2C", value: "D2C" },
-          { label: "SaaS", value: "SaaS" },
-          { label: "Marketplace", value: "Marketplace" },
-        ]}
-        value={formData.businessModel}
-        onChange={(val) => handleChange("businessModel", val)}
-      />
+      <div className="mt-4">
+        <Textarea
+          label="Source of Funds"
+          placeholder="Enter your source of funds"
+          value={formData.sourceOfFunds}
+          onChange={(e) => handleChange("sourceOfFunds", e.target.value)}
+        />
+      </div>
 
-      <Input
-        label="Geographic Focus"
-        placeholder="e.g., Karachi, Lahore, All Pakistan"
-        value={formData.geographicFocus}
-        onChange={(e) => handleChange("geographicFocus", e.target.value)}
-      />
-
-      <Select
+      {/* Dynamic ToggleChips */}
+      <ToggleChips
         label="Investment Instrument"
-        placeholder="Select investment instrument"
-        options={[
-          { label: "Equity", value: "Equity" },
-          { label: "Convertible Note", value: "Convertible Note" },
-          { label: "SAFE", value: "SAFE" },
-          { label: "Debt", value: "Debt" },
-          { label: "Revenue Sharing", value: "Revenue Sharing" },
-        ]}
-        value={formData.investmentInstrument}
+        options={options.instruments}
+        selected={formData.investmentInstrument}
         onChange={(val) => handleChange("investmentInstrument", val)}
       />
-    </div>
+
+      <ToggleChips
+        label="Preferred Sectors"
+        options={options.sectors}
+        selected={formData.preferredSectors}
+        onChange={(val) => handleChange("preferredSectors", val)}
+      />
+    </>
   );
 }

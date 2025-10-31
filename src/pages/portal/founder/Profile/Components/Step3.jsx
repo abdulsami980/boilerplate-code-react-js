@@ -8,21 +8,15 @@ export default function Step3({ formData, handleChange }) {
       {/* Documents */}
       <FileUploader
         label="Upload Verification Document"
-        value={formData.verificationDocUrl}
-        onChange={(file) => handleChange("verificationDocUrl", file)}
-        required
-      />
-      <FileUploader
-        label="Upload Proof of Income"
-        value={formData.proofOfIncomeUrl}
-        onChange={(file) => handleChange("proofOfIncomeUrl", file)}
+        value={formData.verification_doc_url}
+        onChange={(file) => handleChange("verification_doc_url", file)}
         required
       />
       <FileUploader
         label="Upload ID Document"
         placeholder="No File Chosen"
-        value={formData.idDocument}
-        onChange={(file) => handleChange("idDocument", file)}
+        value={formData.id_doc_url}
+        onChange={(file) => handleChange("id_doc_url", file)}
         required
       />
       {/* Additional Info */}
@@ -30,8 +24,8 @@ export default function Step3({ formData, handleChange }) {
         <Textarea
           label="Additional Info"
           placeholder="Enter any additional information"
-          value={formData.additionalInfo}
-          onChange={(e) => handleChange("additionalInfo", e.target.value)}
+          value={formData.additional_info}
+          onChange={(e) => handleChange("additional_info", e.target.value)}
           className="min-h-[120px] resize-y"
         />
       </div>
@@ -76,14 +70,14 @@ export default function Step3({ formData, handleChange }) {
         <Checkbox
           label={
             <>
-              I confirm that I am an accredited investor according to applicable
-              laws and regulations.
+              I confirm that all information provided about myself and the
+              company is accurate and truthful to the best of my knowledge.
             </>
           }
-          checked={formData.is_accredited_investor === true}
+          checked={formData.is_accredited_founder === true}
           required
           onCheckedChange={(val) =>
-            handleChange("is_accredited_investor", val === true)
+            handleChange("is_accredited_founder", val === true)
           }
         />
       </div>

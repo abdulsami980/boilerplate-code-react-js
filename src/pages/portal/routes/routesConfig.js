@@ -21,6 +21,9 @@ const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
 // =====================
 const Dashboard = lazy(() => import("@/pages/portal/admin/Dashboard"));
 const AdminProfile = lazy(() => import("@/pages/portal/admin/Profile"));
+const SupportTickets = lazy(() =>
+  import("@/pages/portal/admin/SupportTickets")
+);
 const Investors = lazy(() => import("@/pages/portal/admin/Investors"));
 const EditInvestor = lazy(() =>
   import("@/pages/portal/admin/Investors/EditInvestor")
@@ -42,7 +45,9 @@ const HelpScreenInvestors = lazy(() => import("@/pages/portal/investor/Help"));
 // Founder
 // =====================
 const FounderDashboard = lazy(() => import("@/pages/portal/founder/Dashboard"));
-const FounderProfile = lazy(() => import("@/pages/portal/founder/Profile"));
+const FounderProfile = lazy(() =>
+  import("@/pages/portal/founder/Profile/index")
+);
 const HelpScreenFounders = lazy(() => import("@/pages/portal/founder/Help"));
 
 export const routes = [
@@ -112,14 +117,14 @@ export const routes = [
     title: "Investors",
   },
   {
-    path: PATH.ADMIN.EDIT_FOUNDER,
-    component: EditFounder,
+    path: PATH.ADMIN.VIEW_INVESTOR.PATTERN,
+    component: EditInvestor,
     sidebar: false,
     private: true,
     roles: ["admin"],
   },
   {
-    path: PATH.ADMIN.EDIT_INVESTOR,
+    path: PATH.ADMIN.EDIT_INVESTOR.PATTERN,
     component: EditInvestor,
     sidebar: false,
     private: true,
@@ -133,6 +138,29 @@ export const routes = [
     roles: ["admin"],
     icon: "building",
     title: "Founders",
+  },
+  {
+    path: PATH.ADMIN.VIEW_FOUNDER.PATTERN,
+    component: EditFounder,
+    sidebar: false,
+    private: true,
+    roles: ["admin"],
+  },
+  {
+    path: PATH.ADMIN.EDIT_FOUNDER.PATTERN,
+    component: EditFounder,
+    sidebar: false,
+    private: true,
+    roles: ["admin"],
+  },
+  {
+    path: PATH.ADMIN.SUPPORT_TICKETS,
+    component: SupportTickets,
+    sidebar: true,
+    private: true,
+    roles: ["admin"],
+    icon: "headset",
+    title: "Support Tickets",
   },
   {
     path: PATH.ADMIN.PROFILE,
