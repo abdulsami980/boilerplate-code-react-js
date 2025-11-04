@@ -62,7 +62,7 @@ export default function HlsVideoSection() {
     <section
       id="vision"
       data-theme="light"
-      className="relative w-full min-h-[80vh] bg-white flex flex-col items-center justify-center text-center pt-20 pb-10 px-5 overflow-hidden"
+      className="relative w-full min-h-[80vh] bg-white flex flex-col items-center justify-center text-center py-10 px-5 overflow-hidden"
     >
       {/* Accent blobs */}
       <div className="absolute left-1/2 top-[20%] -translate-x-1/2 w-[250px] h-[250px] bg-[rgba(34,197,94,0.25)] blur-[120px] rounded-full" />
@@ -135,7 +135,7 @@ export default function HlsVideoSection() {
         </Button>
         <Button
           onClick={() => navigate(PATH.SIGNUP)}
-          className="bg-gradient-to-r from-green-700 to-emerald-600 text-white hover:from-green-800 hover:to-emerald-700 rounded-full px-7 py-3 text-sm md:text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] hover:scale-105"
+          className="bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white hover:from-green-800 hover:to-emerald-700 rounded-full px-7 py-3 text-sm md:text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] hover:scale-105"
         >
           <User className="w-4 h-4" />
           I’m a Founder

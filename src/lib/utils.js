@@ -14,8 +14,8 @@ export const swalWrapper = ({ message, accept, reject, ...options }) =>
       cancelButton:
         "border-green-500 text-green-500 bg-transparent hover:bg-green-50",
     },
-    text: message, // <-- use `text` here
-    preConfirm: accept, // called when confirm button clicked
+    text: message,
+    preConfirm: accept,
     ...options,
   }).then((result) => {
     if (result.isDismissed && reject) {
@@ -44,17 +44,19 @@ export const getUserRole = () => {
 export const getUserInfo = () => {
   try {
     const raw = localStorage.getItem("sb-saflenzzjxmfqdgkanjp-auth-token");
-    if (!raw) return { name: "Guest", email: "N/A" };
+    if (!raw) return { name: "", email: "", phone: "" };
 
     const parsed = JSON.parse(raw);
 
-    const name = parsed?.user?.user_metadata?.full_name || "Guest";
-    const email = parsed?.user?.email || "N/A";
+    const name = parsed?.user?.user_metadata?.full_name;
+    const email = parsed?.user?.email;
+    const phone = parsed?.user?.user_metadata?.phone;
+    const id = parsed?.user?.id;
 
-    return { name, email };
+    return { name, email, phone, id };
   } catch (err) {
     console.error("Error reading user info from localStorage:", err);
-    return { name: "Guest", email: "N/A" };
+    return { name: "", email: "", phone: "", id: "" };
   }
 };
 
@@ -95,8 +97,8 @@ export const getCountriesOptions = () => {
     const countries = JSON.parse(localStorage.getItem("countries")) || [];
 
     return countries.map((country) => ({
-      value: country.iso2, // e.g. "PK"
-      label: country.label, // e.g. "Pakistan"
+      value: country.value,
+      label: country.label,
     }));
   } catch (error) {
     console.error("Error parsing countries:", error);

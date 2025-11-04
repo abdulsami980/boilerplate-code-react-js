@@ -2,16 +2,20 @@
 import { Mail, Phone, MapPin } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { PATH } from "@/config";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
   { label: "Home", id: "hero-section" },
   { label: "Vision", id: "vision" },
   { label: "Impact", id: "impact" },
-  { label: "Ideas", id: "benefits" },
   { label: "How It Works", id: "how-it-works" },
+  { label: "About", id: "portfolio" },
+  { label: "Ambassadors", id: "ambassadors" },
 ];
 
 export default function Footer() {
+  const navigate = useNavigate();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -34,14 +38,28 @@ export default function Footer() {
       className="relative bg-gradient-to-br from-green-950 via-green-900 to-green-800 text-gray-300 pt-20 pb-10 px-6 md:px-20 overflow-hidden border-t border-green-700/30"
     >
       {/* Vision2030 Scroll-Animated Glow */}
-      <motion.h1
-        style={{ y, opacity }}
-        className="absolute bottom-[-40px] left-1/2 -translate-x-1/2 text-[9rem] md:text-[14rem] font-extrabold text-green-400/40 tracking-widest select-none"
-        animate={{ opacity: [0.4, 0.6, 0.4] }}
-        transition={{ duration: 6, repeat: Infinity }}
+      {/* Vision2030 Background Text (Static) */}
+      <h1
+        className="
+    absolute 
+    bottom-[-20px] 
+    left-1/2 
+    -translate-x-1/2 
+    font-extrabold 
+    text-green-400/30 
+    tracking-widest 
+    select-none 
+    pointer-events-none
+    font-[Orbitron]
+    leading-none
+    text-[4rem] 
+    sm:text-[6rem] 
+    md:text-[10rem] 
+    lg:text-[12rem]
+  "
       >
         Vision2030
-      </motion.h1>
+      </h1>
 
       {/* Soft Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-green-900/70 via-transparent to-transparent pointer-events-none" />
@@ -55,14 +73,14 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-3 mb-5">
             <div className="w-10 h-10 rounded-full border-2 border-green-500 flex items-center justify-center text-lg font-bold text-green-400">
-              L
+              BH
             </div>
             <h2 className="text-xl font-semibold text-green-400">
               Business Hub
             </h2>
           </div>
 
-          <p className="text-gray-400 text-sm leading-relaxed mb-6">
+          <p className="text-gray-300 text-sm leading-relaxed mb-6">
             A national innovation platform connecting verified investors with
             entrepreneurs — fueling Pakistan’s economic growth with trust,
             technology, and opportunity.
@@ -93,7 +111,7 @@ export default function Footer() {
               <li key={item.label} className="relative group w-fit">
                 <button
                   onClick={() => handleScrollTo(item.id)}
-                  className="text-sm text-gray-400 hover:text-green-400 transition font-medium"
+                  className="text-sm text-gray-300 hover:text-green-400 transition font-medium"
                 >
                   {item.label}
                 </button>
@@ -103,12 +121,25 @@ export default function Footer() {
               </li>
             ))}
           </ul>
+          <ul className="space-y-3 mt-3">
+            {[{ label: "Contact Support", path: PATH.CONTACT_SUPPORT }].map((item) => (
+              <li key={item.label} className="relative group w-fit">
+                <button
+                  onClick={() => navigate(item.path)}
+                  className="text-sm text-gray-300 hover:text-green-400 transition font-medium"
+                >
+                  {item.label}
+                </button>
+                <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-500 ease-out group-hover:w-full group-hover:skew-x-6"></span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Contact */}
         <div>
           <h3 className="text-green-400 text-lg font-semibold mb-5">Contact</h3>
-          <ul className="space-y-4 text-sm text-gray-400">
+          <ul className="space-y-4 text-sm text-gray-300">
             <li className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-green-400" />
               <span>info@meergroup.com</span>

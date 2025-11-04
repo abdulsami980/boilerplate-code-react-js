@@ -255,14 +255,9 @@ function StepIndicator({
       ? "inactive"
       : "complete";
 
-  const handleClick = () => {
-    if (step !== currentStep && !disableStepIndicators) onClickStep(step);
-  };
-
   return (
     <motion.div
-      onClick={handleClick}
-      className="relative cursor-pointer outline-none focus:outline-none"
+      className="relative outline-none focus:outline-none"
       initial={false}
       animate={status}
     >

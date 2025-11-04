@@ -24,8 +24,9 @@ const Header = () => {
     { label: "Home", id: "hero-section" },
     { label: "Vision", id: "vision" },
     { label: "Impact", id: "impact" },
-    { label: "Ideas", id: "benefits" },
     { label: "How It Works", id: "how-it-works" },
+    { label: "About", id: "portfolio" },
+    { label: "Ambassadors", id: "ambassadors" },
   ];
 
   // ✅ Detect overlap (light/dark sections)

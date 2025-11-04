@@ -1,6 +1,11 @@
 import Iridescence from "@/components/reactbits/Iridescence";
+import { Button } from "@/components/ui/button";
+import { PATH } from "@/config";
+import { ArrowRight, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function HeroSection() {
+  const navigate = useNavigate();
   return (
     <section
       id="hero-section"
@@ -36,8 +41,25 @@ export default function HeroSection() {
           </p>
 
           {/* Divider & Subtext */}
-          <div className="mt-4 h-[2px] w-44 bg-gradient-to-r from-transparent via-green-500 to-transparent"></div>
-         
+          <div className="my-6 h-[2px] w-44 bg-gradient-to-r from-transparent via-green-500 to-transparent"></div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 ">
+            <Button
+              onClick={() => navigate(PATH.SIGNUP)}
+              variant="outline"
+              className="border-green-500/50 text-green-600 hover:bg-green-100 rounded-full px-7 py-3 text-sm md:text-base flex items-center gap-2 font-medium transition-all duration-300 hover:shadow-[0_0_25px_rgba(34,197,94,0.4)] hover:scale-105"
+            >
+              <ArrowRight className="w-4 h-4" />
+              I’m an Investor
+            </Button>
+            <Button
+              onClick={() => navigate(PATH.SIGNUP)}
+              className="bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-full px-7 py-3 text-sm md:text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.05] hover:from-green-700 hover:to-emerald-600"
+            >
+              <User className="w-4 h-4" />
+              I’m a Founder
+            </Button>
+          </div>
         </div>
       </div>
     </section>

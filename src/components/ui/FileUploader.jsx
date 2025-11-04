@@ -14,7 +14,7 @@ const FileUploader = forwardRef(
       accept = ".pdf,.jpeg,.jpg,.png",
       className,
       maxSizeMB = 10,
-      placeholder = "Choose a file...",
+      placeholder = "Upload file...",
     },
     ref
   ) => {
@@ -28,7 +28,7 @@ const FileUploader = forwardRef(
     }, [value]);
 
     const handleFileChange = (e) => {
-      const file = e.target.files[0];
+      const file = e.target.files?.[0];
       if (!file) return;
 
       const fileSizeMB = file.size / (1024 * 1024);
@@ -53,7 +53,13 @@ const FileUploader = forwardRef(
     const getFileName = () => {
       if (isFile && value instanceof File) return value.name;
       if (!isFile && typeof value === "string") {
-        return value.split("/").pop().split("?")[0];
+        // extract filename from path/url and decode for nice display
+        try {
+          const raw = value.split("/").pop().split("?")[0];
+          return decodeURIComponent(raw);
+        } catch {
+          return value.split("/").pop().split("?")[0];
+        }
       }
       return "";
     };
@@ -63,6 +69,8 @@ const FileUploader = forwardRef(
       const url = isFile ? URL.createObjectURL(value) : value;
       window.open(url, "_blank");
     };
+
+    const filename = getFileName();
 
     return (
       <div className="flex flex-col">
@@ -74,14 +82,18 @@ const FileUploader = forwardRef(
 
         <div
           className={cn(
-            "relative flex items-center justify-between h-9 w-full rounded-md border border-gray-300 px-3 py-1 text-sm shadow-sm",
+            "relative flex items-center justify-between h-10 w-full rounded-md border border-gray-300 px-3 py-1 text-sm shadow-sm",
             (error || fileError) && "border-red-500",
             className
           )}
         >
           {/* File name / placeholder */}
-          <span className="text-gray-500 flex-1">
-            {value ? getFileName() : placeholder}
+          {/* min-w-0 allows truncation inside flex container */}
+          <span
+            className="text-gray-600 flex-1 min-w-0 truncate mr-3"
+            title={filename || placeholder}
+          >
+            {filename ? filename : placeholder}
           </span>
 
           {/* Attach button */}

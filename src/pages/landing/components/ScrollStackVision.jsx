@@ -8,10 +8,16 @@ import {
   Users,
   TrendingUp,
   ShieldCheck,
+  ArrowRight,
+  User,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { PATH } from "@/config";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export default function WhyJoinSection() {
+  const navigate = useNavigate();
   const fadeUp = (delay = 0) => ({
     initial: { opacity: 0, y: 40 },
     whileInView: { opacity: 1, y: 0 },
@@ -20,7 +26,7 @@ export default function WhyJoinSection() {
   });
 
   return (
-    <section className="relative py-28 overflow-hidden bg-gradient-to-br from-white via-green-50 to-emerald-100">
+    <section className="relative py-18 overflow-hidden bg-gradient-to-br from-white via-green-50 to-emerald-100">
       {/* Background Glow */}
       <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-green-400/20 blur-[180px] rounded-full"></div>
       <div className="absolute bottom-1/4 right-0 w-[500px] h-[500px] bg-emerald-500/20 blur-[180px] rounded-full"></div>
@@ -29,7 +35,7 @@ export default function WhyJoinSection() {
         {/* Section Header */}
         <motion.div
           {...fadeUp(0)}
-          className="text-center max-w-3xl mx-auto mb-20"
+          className="text-center max-w-3xl mx-auto mb-10"
         >
           <h2 className="text-5xl md:text-6xl font-bold text-green-700 mb-4">
             Why Join This Platform
@@ -148,6 +154,37 @@ export default function WhyJoinSection() {
               </div>
             </div>
           </motion.div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="mt-8 text-center">
+        {/* CTA helper text */}
+        <p className="text-gray-500 text-lg md:text-xl font-medium mb-4 px-4">
+          Step into a connected investment ecosystem — where founders scale and
+          investors lead innovation.
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          {/* Investor CTA */}
+          <Button
+            onClick={() => navigate(PATH.SIGNUP)}
+            variant="outline"
+            className="border-green-600 text-green-700 rounded-full px-8 py-3 text-base flex items-center gap-2 font-semibold transition-all duration-300 hover:bg-white/10 hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:scale-[1.05]"
+          >
+            <ArrowRight className="w-4 h-4" />
+            I'm an Investor
+          </Button>
+
+          {/* Founder CTA */}
+          <Button
+            onClick={() => navigate(PATH.SIGNUP)}
+            className="bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-full px-8 py-3 text-base font-semibold flex items-center gap-2 shadow-md transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.05] hover:from-green-700 hover:to-emerald-600"
+          >
+            <User className="w-4 h-4" />
+            I'm a Founder
+          </Button>
         </div>
       </div>
     </section>

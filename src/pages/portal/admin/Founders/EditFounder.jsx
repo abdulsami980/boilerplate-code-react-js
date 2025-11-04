@@ -10,8 +10,11 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { PageLoader } from "@/components/ui/Loaders";
+import { Select } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { PATH } from "@/config";
 import { supabase } from "@/lib/supabase-client";
+import { getLookupOptions, getSignedUrl } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -20,31 +23,54 @@ export default function EditFounder() {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    id: "",
+    is_active: false,
+    kyc_status: "",
+    is_verified: false,
+    profile_photo_url: null,
+    fullName: "",
+    email: "",
+    mobile: "",
+    nationality: "",
+    residencyStatus: "",
+    country: "",
+    city: "",
+    nationalId: "",
+    occupation: "",
+    years_of_experience: "",
+    previous_startups_count: "",
+    current_employment_status: "",
+    cofounder_count: "",
+    team_members_count: "",
+    company_name: "",
+    company_registration_number: "",
+    company_website_url: "",
+    company_linkedin_url: "",
+    entrepreneurial_experience: "",
+    team_skillset_summary: "",
+    founder_vision_statement: "",
+    long_term_goals: "",
+    full_time_on_startup: false,
+    has_tech_cofounder: false,
+    equity_split_clarity: false,
+    has_cap_table: false,
+    verification_doc_url: null,
+    id_doc_url: null,
+    additional_info: "",
+
+    profilePhotoPath: null,
+    idDocumentPath: null,
+    verificationDocPath: null,
+  });
 
   const isViewMode = location.pathname.includes("/view/");
 
-  const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [form, setForm] = useState({
-    id: "",
-    full_name: "",
-    email: "",
-    phone: "",
-    country: "",
-    city: "",
-    is_verified: false,
-    is_active: false,
-    kyc_status: "",
-    company_name: "",
-    profile_photo_url: "",
-    company_registration_number: "",
-    website_url: "",
-    linkedin_url: "",
-    team_members_count: 0,
-    kyc_front_url: "",
-    kyc_back_url: "",
-  });
+  const options = {
+    employmentStatuses: getLookupOptions("employment_status"),
+  };
 
   const handleChange = (key, value) =>
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -55,49 +81,77 @@ export default function EditFounder() {
         setLoading(true);
 
         // Fetch profile data
-        const { data: profile, error: profileErr } = await supabase
+        const { data: profileData, error: profileErr } = await supabase
           .from("profiles")
           .select("*")
           .eq("id", id)
           .maybeSingle();
 
-        if (profileErr || !profile) {
+        if (profileErr || !profileData) {
           toast.error("Profile not found");
           navigate(PATH.ADMIN.FOUNDERS);
           return;
         }
 
         // Fetch founder data
-        const { data: founder, error: founderErr } = await supabase
+        const { data: founderData, error: founderErr } = await supabase
           .from("founders")
           .select("*")
-          .eq("profile_id", profile.id)
+          .eq("profile_id", profileData.id)
           .maybeSingle();
 
         if (founderErr && founderErr.code !== "PGRST116") {
           throw founderErr;
         }
 
-        // Merge both objects
+        const [
+          profilePhotoSignedUrl,
+          idDocumentSignedUrl,
+          verificationDocSignedUrl,
+        ] = await Promise.all([
+          getSignedUrl("profiles", profileData?.profile_photo_url),
+          getSignedUrl("profiles", profileData?.id_doc_url),
+          getSignedUrl("kyc-docs", founderData?.verification_doc_url),
+        ]);
+
         setForm({
-          id: profile.id || "",
-          full_name: profile.full_name || "",
-          profile_photo_url: profile?.profile_photo_url || "",
-          email: profile.email || "",
-          phone: profile.phone || "",
-          country: profile.country || "",
-          city: profile.city || "",
-          is_verified: profile.is_verified || false,
-          is_active: profile.is_active || false,
-          kyc_status: profile.kyc_status || "",
-          company_name: founder?.company_name || "",
+          id: profileData?.id,
+          is_active: profileData?.is_active,
+          kyc_status: profileData?.kyc_status,
+          is_verified: profileData?.is_verified,
+          fullName: profileData?.full_name || "",
+          email: profileData?.email || "",
+          mobile: profileData?.phone || "",
+          nationality: profileData?.nationality || "",
+          residencyStatus: profileData?.residency_status || "",
+          country: profileData?.country || "",
+          city: profileData?.city || "",
+          occupation: profileData?.occupation || "",
+          nationalId: profileData?.national_id || "",
+          profile_photo_url: profilePhotoSignedUrl,
+          id_doc_url: idDocumentSignedUrl,
+          years_of_experience: founderData?.years_of_experience || "",
+          previous_startups_count: founderData?.previous_startups_count || "",
+          current_employment_status:
+            founderData?.current_employment_status || "",
+          cofounder_count: founderData?.cofounder_count || "",
+          team_members_count: founderData?.team_members_count || "",
+          company_name: founderData?.company_name || "",
           company_registration_number:
-            founder?.company_registration_number || "",
-          website_url: founder?.website_url || "",
-          linkedin_url: founder?.linkedin_url || "",
-          team_members_count: founder?.team_members_count || 0,
-          kyc_front_url: founder?.kyc_front_url || "",
-          kyc_back_url: founder?.kyc_back_url || "",
+            founderData?.company_registration_number || "",
+          company_website_url: founderData?.company_website_url || "",
+          company_linkedin_url: founderData?.company_linkedin_url || "",
+          entrepreneurial_experience:
+            founderData?.entrepreneurial_experience || "",
+          team_skillset_summary: founderData?.team_skillset_summary || "",
+          founder_vision_statement: founderData?.founder_vision_statement || "",
+          long_term_goals: founderData?.long_term_goals || "",
+          full_time_on_startup: founderData?.full_time_on_startup || false,
+          has_tech_cofounder: founderData?.has_tech_cofounder || false,
+          equity_split_clarity: founderData?.equity_split_clarity || false,
+          has_cap_table: founderData?.has_cap_table || false,
+          verification_doc_url: verificationDocSignedUrl,
+          additional_info: founderData?.additional_info || "",
         });
       } catch (err) {
         console.error("Error fetching founder data:", err);
@@ -116,27 +170,41 @@ export default function EditFounder() {
 
     try {
       const profileUpdate = {
-        full_name: form.full_name,
+        is_active: form?.is_active,
+        kyc_status: form?.kyc_status,
+        is_verified: form?.is_verified,
         email: form.email,
-        phone: form.phone,
+        full_name: form.fullName,
+        phone: form.mobile,
+        nationality: form.nationality,
+        national_id: form.nationalId,
+        residency_status: form.residencyStatus,
+        occupation: form.occupation,
         country: form.country,
         city: form.city,
-        is_verified: form.is_verified,
-        is_active: form.is_active,
-        kyc_status: form.kyc_status,
       };
 
       const founderUpdate = {
-        company_name: form.company_name,
-        company_registration_number: form.company_registration_number,
-        website_url: form.website_url,
-        linkedin_url: form.linkedin_url,
-        team_members_count: form.team_members_count,
-        kyc_front_url: form.kyc_front_url,
-        kyc_back_url: form.kyc_back_url,
+        years_of_experience: form.years_of_experience || null,
+        previous_startups_count: form.previous_startups_count || null,
+        current_employment_status: form.current_employment_status || null,
+        cofounder_count: form.cofounder_count || null,
+        team_members_count: form.team_members_count || null,
+        company_name: form.company_name || null,
+        company_registration_number: form.company_registration_number || null,
+        company_website_url: form.company_website_url || null,
+        company_linkedin_url: form.company_linkedin_url || null,
+        entrepreneurial_experience: form.entrepreneurial_experience || null,
+        team_skillset_summary: form.team_skillset_summary || null,
+        founder_vision_statement: form.founder_vision_statement || null,
+        long_term_goals: form.long_term_goals || null,
+        full_time_on_startup: form.full_time_on_startup,
+        has_tech_cofounder: form.has_tech_cofounder,
+        equity_split_clarity: form.equity_split_clarity,
+        has_cap_table: form.has_cap_table,
+        additional_info: form.additional_info || null,
       };
 
-      // Parallel updates (profile + founder)
       const [
         { error: profileError },
         { data: existingFounder, error: fetchError },
@@ -233,22 +301,45 @@ export default function EditFounder() {
               <h3 className="font-semibold text-green-700">Personal Info:</h3>
               <div className="mt-1 space-y-1 text-slate-600">
                 <p>
-                  <span className="font-medium">Name:</span> {form.full_name}
+                  <span className="font-medium">Name:</span> {form.fullName}
                 </p>
                 <p>
                   <span className="font-medium">Email:</span> {form.email}
                 </p>
                 <p>
-                  <span className="font-medium">Phone:</span> {form.phone}
+                  <span className="font-medium">Phone:</span> {form.mobile}
+                </p>
+                <p>
+                  <span className="font-medium">Nationality:</span>{" "}
+                  {form.nationality}
+                </p>
+                <p>
+                  <span className="font-medium">Residency Status:</span>{" "}
+                  {form.residencyStatus}
+                </p>
+                <p>
+                  <span className="font-medium">Occupation:</span>{" "}
+                  {form.occupation}
+                </p>
+                <p>
+                  <span className="font-medium">National ID:</span>{" "}
+                  {form.nationalId}
+                </p>
+                <p>
+                  <span className="font-medium">Country:</span> {form.country}
+                </p>
+                <p>
+                  <span className="font-medium">City:</span> {form.city}
                 </p>
               </div>
             </section>
+
             <hr className="border-slate-200" />
 
-            {/* Company Info */}
+            {/* Founder / Startup Info */}
             <section className="space-y-2">
               <h3 className="text-sm font-semibold text-green-700">
-                Company Info:
+                Startup Details:
               </h3>
               <div className="mt-1 space-y-1 text-sm text-slate-600">
                 <p>
@@ -261,47 +352,85 @@ export default function EditFounder() {
                 </p>
                 <p>
                   <span className="font-medium">Website:</span>{" "}
-                  {form.website_url}
+                  {form.company_website_url}
                 </p>
                 <p>
                   <span className="font-medium">LinkedIn:</span>{" "}
-                  {form.linkedin_url}
+                  {form.company_linkedin_url}
                 </p>
                 <p>
                   <span className="font-medium">Team Members:</span>{" "}
                   {form.team_members_count}
                 </p>
+                <p>
+                  <span className="font-medium">Co-founders:</span>{" "}
+                  {form.cofounder_count}
+                </p>
+                <p>
+                  <span className="font-medium">Tech Co-founder:</span>{" "}
+                  {form.has_tech_cofounder ? "Yes" : "No"}
+                </p>
+                <p>
+                  <span className="font-medium">Full-Time on Startup:</span>{" "}
+                  {form.full_time_on_startup ? "Yes" : "No"}
+                </p>
+                <p>
+                  <span className="font-medium">Years Experience:</span>{" "}
+                  {form.years_of_experience}
+                </p>
+                <p>
+                  <span className="font-medium">Prev Startups:</span>{" "}
+                  {form.previous_startups_count}
+                </p>
               </div>
             </section>
+
             <hr className="border-slate-200" />
 
-            {/* KYC Documents */}
+            {/* Founder Vision */}
+            <section className="space-y-2">
+              <h3 className="text-sm font-semibold text-green-700">
+                Founder Vision:
+              </h3>
+              <div className="mt-1 space-y-1 text-sm text-slate-600">
+                <p>
+                  <span className="font-medium">Vision:</span>{" "}
+                  {form.founder_vision_statement}
+                </p>
+                <p>
+                  <span className="font-medium">Long-term Goals:</span>{" "}
+                  {form.long_term_goals}
+                </p>
+              </div>
+            </section>
+
+            <hr className="border-slate-200" />
+
+            {/* KYC Docs */}
             <section className="space-y-2">
               <h3 className="text-sm font-semibold text-green-700">
                 KYC Documents:
               </h3>
               <ul className="list-disc list-inside text-sm text-slate-600 mt-1">
-                {form.kyc_front_url && (
+                {form.id_doc_url && (
                   <li>
                     <a
-                      href={form.kyc_front_url}
+                      href={form.id_doc_url}
                       target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-green-600 hover:text-green-800 underline"
+                      className="text-green-600 underline"
                     >
-                      View Front
+                      View ID Document
                     </a>
                   </li>
                 )}
-                {form.kyc_back_url && (
+                {form.verification_doc_url && (
                   <li>
                     <a
-                      href={form.kyc_back_url}
+                      href={form.verification_doc_url}
                       target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-green-600 hover:text-green-800 underline"
+                      className="text-green-600 underline"
                     >
-                      View Back
+                      View Verification Doc
                     </a>
                   </li>
                 )}
@@ -324,8 +453,8 @@ export default function EditFounder() {
                   label="Full Name"
                   placeholder="Enter full name"
                   disabled
-                  value={form.full_name}
-                  onChange={(e) => handleChange("full_name", e.target.value)}
+                  value={form.fullName}
+                  onChange={(e) => handleChange("fullName", e.target.value)}
                 />
                 <Input
                   label="Email"
@@ -338,8 +467,24 @@ export default function EditFounder() {
                   label="Phone"
                   placeholder="Enter phone number"
                   disabled
-                  value={form.phone}
-                  onChange={(e) => handleChange("phone", e.target.value)}
+                  value={form.mobile}
+                  onChange={(e) => handleChange("mobile", e.target.value)}
+                />
+                <Input
+                  label="Nationality"
+                  placeholder="Enter nationality"
+                  disabled
+                  value={form.nationality}
+                  onChange={(e) => handleChange("nationality", e.target.value)}
+                />
+                <Input
+                  label="Residency Status"
+                  placeholder="Enter residency status"
+                  disabled
+                  value={form.residencyStatus}
+                  onChange={(e) =>
+                    handleChange("residencyStatus", e.target.value)
+                  }
                 />
                 <Input
                   label="Country"
@@ -355,13 +500,27 @@ export default function EditFounder() {
                   value={form.city}
                   onChange={(e) => handleChange("city", e.target.value)}
                 />
+                <Input
+                  label="National ID"
+                  placeholder="Enter National ID"
+                  disabled
+                  value={form.nationalId}
+                  onChange={(e) => handleChange("nationalId", e.target.value)}
+                />
+                <Input
+                  label="Occupation"
+                  placeholder="Enter occupation"
+                  disabled
+                  value={form.occupation}
+                  onChange={(e) => handleChange("occupation", e.target.value)}
+                />
               </div>
-              <div className="flex justify-between">
-                <div className="mt-4 flex flex-wrap items-center gap-4">
+
+              <div className="flex justify-between mt-4 flex-wrap gap-4">
+                <div className="flex items-center gap-2">
                   <span className="text-sm text-slate-700 font-medium">
                     KYC Status:
                   </span>
-
                   <Checkbox
                     label="Verified"
                     disabled={isViewMode}
@@ -371,12 +530,10 @@ export default function EditFounder() {
                     }
                   />
                 </div>
-
-                <div className="mt-4 flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2">
                   <span className="text-sm text-slate-700 font-medium">
                     Account Verified:
                   </span>
-
                   <Checkbox
                     label="Verified"
                     disabled={isViewMode}
@@ -386,12 +543,10 @@ export default function EditFounder() {
                     }
                   />
                 </div>
-
-                <div className="mt-4 flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2">
                   <span className="text-sm text-slate-700 font-medium">
                     Account Status:
                   </span>
-
                   <Checkbox
                     label="Active"
                     disabled={isViewMode}
@@ -405,54 +560,177 @@ export default function EditFounder() {
             </CardContent>
           </Card>
 
-          {/* Company & Compliance */}
+          {/* Founder & Company Details */}
           <Card>
             <CardHeader>
-              <CardTitle>Company & Compliance</CardTitle>
+              <CardTitle>Founder & Company Details</CardTitle>
               <CardDescription>
-                Details of the founder's company and consents
+                Experience and company information
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
-                  label="Company Name"
+                  label="Years of Experience"
+                  type="number"
                   disabled={isViewMode}
-                  placeholder="Enter company name"
+                  value={form.years_of_experience}
+                  onChange={(e) =>
+                    handleChange("years_of_experience", e.target.value)
+                  }
+                />
+                <Input
+                  label="Previous Startups Count"
+                  type="number"
+                  disabled={isViewMode}
+                  value={form.previous_startups_count}
+                  onChange={(e) =>
+                    handleChange("previous_startups_count", e.target.value)
+                  }
+                />
+                <Select
+                  label="Current Employment Status"
+                  placeholder="Select employment status"
+                  required
+                  disabled={isViewMode}
+                  options={options.employmentStatuses}
+                  value={form.current_employment_status}
+                  onChange={(val) =>
+                    handleChange("current_employment_status", val)
+                  }
+                />
+
+                <Input
+                  label="Co-founder Count"
+                  type="number"
+                  disabled={isViewMode}
+                  value={form.cofounder_count}
+                  onChange={(e) =>
+                    handleChange("cofounder_count", e.target.value)
+                  }
+                />
+                <Input
+                  label="Team Members Count"
+                  type="number"
+                  disabled={isViewMode}
+                  value={form.team_members_count}
+                  onChange={(e) =>
+                    handleChange("team_members_count", e.target.value)
+                  }
+                />
+                <Input
+                  label="Company Name"
                   value={form.company_name}
+                  disabled={isViewMode}
                   onChange={(e) => handleChange("company_name", e.target.value)}
                 />
                 <Input
                   label="Registration Number"
                   disabled={isViewMode}
-                  placeholder="Enter registration number"
                   value={form.company_registration_number}
                   onChange={(e) =>
                     handleChange("company_registration_number", e.target.value)
                   }
                 />
                 <Input
-                  label="Website"
-                  placeholder="Enter website URL"
+                  label="Company Website"
                   disabled={isViewMode}
-                  value={form.website_url}
-                  onChange={(e) => handleChange("website_url", e.target.value)}
-                />
-                <Input
-                  label="LinkedIn"
-                  placeholder="Enter LinkedIn URL"
-                  disabled={isViewMode}
-                  value={form.linkedin_url}
-                  onChange={(e) => handleChange("linkedin_url", e.target.value)}
-                />
-                <Input
-                  label="Team Members Count"
-                  type="number"
-                  placeholder="Enter number of team members"
-                  disabled={isViewMode}
-                  value={form.team_members_count}
+                  value={form.company_website_url}
                   onChange={(e) =>
-                    handleChange("team_members_count", e.target.value)
+                    handleChange("company_website_url", e.target.value)
+                  }
+                />
+                <Input
+                  label="Company LinkedIn"
+                  disabled={isViewMode}
+                  value={form.company_linkedin_url}
+                  onChange={(e) =>
+                    handleChange("company_linkedin_url", e.target.value)
+                  }
+                />
+              </div>
+
+              {/* Boolean Options */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+                <Checkbox
+                  label="Working Full-time on Startup"
+                  checked={form.full_time_on_startup}
+                  disabled={isViewMode}
+                  onCheckedChange={(v) =>
+                    handleChange("full_time_on_startup", v)
+                  }
+                />
+                <Checkbox
+                  label="Has Tech Co-founder"
+                  checked={form.has_tech_cofounder}
+                  disabled={isViewMode}
+                  onCheckedChange={(v) => handleChange("has_tech_cofounder", v)}
+                />
+                <Checkbox
+                  label="Equity Split is Clear"
+                  checked={form.equity_split_clarity}
+                  disabled={isViewMode}
+                  onCheckedChange={(v) =>
+                    handleChange("equity_split_clarity", v)
+                  }
+                />
+                <Checkbox
+                  label="Has Cap Table"
+                  disabled={isViewMode}
+                  checked={form.has_cap_table}
+                  onCheckedChange={(v) => handleChange("has_cap_table", v)}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Compliance & Docs */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Compliance & Documents</CardTitle>
+              <CardDescription>KYC and verification documents</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Textarea
+                  label="Entrepreneurial Experience"
+                  value={form.entrepreneurial_experience}
+                  disabled={isViewMode}
+                  onChange={(e) =>
+                    handleChange("entrepreneurial_experience", e.target.value)
+                  }
+                />
+                <Textarea
+                  label="Team Skillset Summary"
+                  value={form.team_skillset_summary}
+                  disabled={isViewMode}
+                  onChange={(e) =>
+                    handleChange("team_skillset_summary", e.target.value)
+                  }
+                />
+                <Textarea
+                  label="Vision Statement"
+                  value={form.founder_vision_statement}
+                  disabled={isViewMode}
+                  onChange={(e) =>
+                    handleChange("founder_vision_statement", e.target.value)
+                  }
+                />
+                <Textarea
+                  label="Long-term Goals"
+                  value={form.long_term_goals}
+                  disabled={isViewMode}
+                  onChange={(e) =>
+                    handleChange("long_term_goals", e.target.value)
+                  }
+                />
+
+                <Textarea
+                  label="Additional Info"
+                  value={form.additional_info}
+                  disabled={isViewMode}
+                  onChange={(e) =>
+                    handleChange("additional_info", e.target.value)
                   }
                 />
               </div>

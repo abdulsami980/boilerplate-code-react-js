@@ -154,9 +154,8 @@ export default function Step2({ formData, handleChange }) {
         <Checkbox
           label={
             <span>
-              I confirm that I am currently working full-time on my startup and
-              dedicating my primary time and effort to building and scaling this
-              venture.
+              I am currently working full-time on my startup and dedicating my
+              primary time and effort to building and scaling this venture.
             </span>
           }
           checked={formData.full_time_on_startup === true}
@@ -168,8 +167,8 @@ export default function Step2({ formData, handleChange }) {
         <Checkbox
           label={
             <span>
-              I confirm that my founding team includes a technical co-founder
-              who is responsible for leading product development and technology
+              My founding team includes a technical co-founder who is
+              responsible for leading product development and technology
               strategy.
             </span>
           }
@@ -182,8 +181,8 @@ export default function Step2({ formData, handleChange }) {
         <Checkbox
           label={
             <span>
-              I confirm that the equity split among founders is clearly defined,
-              mutually agreed upon, and formally documented.
+              The equity split among founders is clearly defined, mutually
+              agreed upon, and formally documented.
             </span>
           }
           checked={formData.equity_split_clarity === true}
@@ -195,8 +194,8 @@ export default function Step2({ formData, handleChange }) {
         <Checkbox
           label={
             <span>
-              I confirm that our startup maintains an official and updated cap
-              table outlining equity ownership and founder shares.
+              Our startup maintains an official and updated cap table outlining
+              equity ownership and founder shares.
             </span>
           }
           checked={formData.has_cap_table === true}

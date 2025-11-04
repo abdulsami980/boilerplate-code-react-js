@@ -201,41 +201,36 @@ export default function Founders() {
       accessor: "website_url",
       icon: Globe,
       size: "200px",
-      render: (row) =>
-        row.website_url ? (
-          <a
-            href={row.website_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center text-emerald-600 hover:underline"
-          >
-            <Link size={16} className="mr-2 text-emerald-500" />
-            View Website
-          </a>
-        ) : (
-          "—"
-        ),
+      render: (row) => (
+        <a
+          href={row.website_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center text-emerald-600 hover:underline"
+        >
+          <Link size={16} className="mr-2 text-emerald-500" />
+          View Website
+        </a>
+      ),
     },
     {
       header: "LinkedIn",
       accessor: "linkedin_url",
       icon: Briefcase,
       size: "200px",
-      render: (row) =>
-        row.linkedin_url ? (
-          <a
-            href={row.linkedin_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center text-emerald-600 hover:underline"
-          >
-            <Link size={16} className="mr-2 text-emerald-500" />
-            View Profile
-          </a>
-        ) : (
-          "—"
-        ),
+      render: (row) => (
+        <a
+          href={row.linkedin_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center text-emerald-600 hover:underline"
+        >
+          <Link size={16} className="mr-2 text-emerald-500" />
+          View Profile
+        </a>
+      ),
     },
+   
   ];
 
   const fetchFounders = async (searchText = "") => {
@@ -278,17 +273,25 @@ export default function Founders() {
           if (!profile) return null;
           return {
             id: profile.id,
-            full_name: profile.full_name || "N/A",
-            email: profile.email || "N/A",
-            phone: profile.phone || "N/A",
-            country: profile.country || "N/A",
-            company_name: f.company_name || "N/A",
-            team_members_count: f.team_members_count || 0,
+            full_name: profile.full_name,
+            email: profile.email,
+            phone: profile.phone,
+            country: profile.country,
+            company_name: f.company_name,
+            team_members_count: f.team_members_count,
             website_url: f.website_url || "",
             linkedin_url: f.linkedin_url || "",
             kyc_status: profile.kyc_status || "pending",
             is_active: profile.is_active ?? true,
             is_verified: profile.is_verified ?? false,
+            years_of_experience: f.years_of_experience,
+            previous_startups_count: f.previous_startups_count,
+            current_employment_status: f.current_employment_status,
+            full_time_on_startup: f.full_time_on_startup,
+            has_tech_cofounder: f.has_tech_cofounder,
+            equity_split_clarity: f.equity_split_clarity,
+            has_cap_table: f.has_cap_table,
+            founder_vision_statement: f.founder_vision_statement || "",
           };
         })
         .filter(Boolean);

@@ -27,7 +27,10 @@ const ambassadors = [
 
 export default function Ambassadors() {
   return (
-    <section className="relative bg-white py-24 overflow-hidden">
+    <section
+      id="ambassadors"
+      className="relative bg-white py-14 overflow-hidden"
+    >
       {/* Background glow */}
       <div className="absolute inset-0 bg-gradient-to-b from-green-100 via-white to-green-50 opacity-50 pointer-events-none"></div>
 
@@ -54,19 +57,16 @@ export default function Ambassadors() {
             className="bg-white shadow-lg rounded-2xl overflow-hidden border border-green-200 hover:border-green-500 hover:shadow-2xl transition-all duration-300"
             initial={{ opacity: 0, y: 60 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.2, duration: 0.6 }}
+            transition={{ duration: 0.6 }}
             viewport={{ once: true }}
             whileHover={{ scale: 1.05 }}
           >
             <div className="overflow-hidden relative">
-              <motion.img
+              <img
                 src={amb.image}
                 alt={amb.name}
                 className="w-full h-64 object-cover"
-                whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.4 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-green-700/70 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
             </div>
             <div className="p-6 text-center">
               <h3 className="text-xl font-semibold text-green-500 mb-1">

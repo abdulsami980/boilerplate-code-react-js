@@ -14,12 +14,15 @@ export default function PortfolioGallerySection() {
   ];
 
   return (
-    <section className="relative py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-emerald-900 via-emerald-700 to-emerald-900 overflow-hidden text-white">
+    <section
+      id="portfolio"
+      className="relative py-14 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-emerald-900 via-emerald-700 to-emerald-900 overflow-hidden text-white"
+    >
       {/* Decorative Glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(34,197,94,0.25),transparent_70%)] pointer-events-none" />
 
       {/* Header Section */}
-      <div className="relative max-w-3xl mx-auto mb-20 text-center space-y-8">
+      <div className="relative max-w-3xl mx-auto mb-10 text-center space-y-8">
         <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight">
           <span className="bg-gradient-to-r from-green-400 via-emerald-300 to-green-500 bg-clip-text text-transparent">
             The Meer Group Portfolio

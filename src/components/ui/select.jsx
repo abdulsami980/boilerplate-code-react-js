@@ -43,14 +43,19 @@ export const Select = React.forwardRef(
             ref={ref}
             name={name}
             className={cn(
-              "flex h-9 w-full items-center justify-between rounded-md border px-3 py-1 text-sm shadow-sm placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-500 disabled:cursor-not-allowed disabled:opacity-50",
+              "flex h-9 w-full items-center justify-between rounded-md border px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-green-500 disabled:cursor-not-allowed disabled:opacity-50",
               error
                 ? "border-red-500"
                 : "border-gray-300 focus:border-green-500",
               className
             )}
           >
-            <SelectPrimitive.Value placeholder={placeholder} />
+            <SelectPrimitive.Value
+              placeholder={placeholder}
+              className={cn(
+                value ? "text-gray-800" : "text-gray-400" // ✅ key part
+              )}
+            />
             <SelectPrimitive.Icon asChild>
               <ChevronDown className="h-4 w-4 text-gray-500" />
             </SelectPrimitive.Icon>

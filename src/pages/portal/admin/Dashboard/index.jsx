@@ -1,7 +1,7 @@
 // src/pages/portal/Dashboard.jsx
 import { Button } from "@/components/ui/button";
 import TopCards from "@/components/ui/topCards";
-import { Box, Briefcase, LifeBuoy, Users } from "lucide-react";
+import { Box, Briefcase, Download, LifeBuoy, Users } from "lucide-react";
 import ApprovalRateGauge from "./Components/ApprovalRateGauge";
 import IdeasBySectorChart from "./Components/IdeasBySectorChart";
 import RecentActivity from "./Components/RecentActivity";
@@ -24,7 +24,7 @@ const cards = [
     icon: <Briefcase size={22} />,
   },
   {
-    title: "Ideas",
+    title: "Business Proposals",
     value: 78,
     meta: "10 under review",
     icon: <Box size={22} />,
@@ -90,7 +90,11 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <Button className="w-full sm:w-auto">Export</Button>
+          <Button className="w-full sm:w-auto">
+     
+            <Download size={16} />
+            Export
+          </Button>
         </div>
         {/* KPIs */}
         <TopCards cards={cards} />

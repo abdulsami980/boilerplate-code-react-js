@@ -9,7 +9,7 @@ export default function MessageSection() {
     <section
       id="message"
       data-theme="light"
-      className="relative py-28 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-white via-green-50 to-emerald-100 overflow-hidden"
+      className="relative pb-18 pt-28 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-white via-green-50 to-emerald-100 overflow-hidden"
     >
       {/* Decorative Background Blobs */}
       <div className="absolute inset-0 pointer-events-none">

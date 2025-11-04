@@ -90,7 +90,7 @@ export default function InvestorTimeline() {
       id="how-it-works"
       ref={sectionRef}
       data-theme="dark"
-      className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col items-center justify-start py-20 sm:py-28 lg:py-32 px-4 sm:px-6"
+      className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white flex flex-col items-center justify-start py-10 sm:py-15 lg:py-20 px-4 sm:px-6"
     >
       {/* Header */}
       <div className="text-center mb-16 sm:mb-20 max-w-3xl">
@@ -110,7 +110,7 @@ export default function InvestorTimeline() {
       >
         {/* Left Title */}
         <div className="w-full lg:w-1/3 text-center lg:text-left lg:sticky lg:top-24 mb-10 lg:mb-0">
-          <h3 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-green-400 leading-tight pt-20">
+          <h3 className="pt-5 sm:pt-20 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-green-400 leading-tight">
             For <br className="hidden sm:block" /> Investors
           </h3>
         </div>
@@ -153,7 +153,7 @@ export default function InvestorTimeline() {
 
         {/* Right Title */}
         <div className="w-full lg:w-1/3 text-center lg:text-right lg:sticky lg:top-24 mb-6 lg:mb-0 order-1 lg:order-3">
-          <h3 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-green-400 leading-tight pt-20">
+          <h3 className="pt-5 sm:pt-20 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-green-400 leading-tight">
             For <br className="hidden sm:block" /> Founders
           </h3>
         </div>

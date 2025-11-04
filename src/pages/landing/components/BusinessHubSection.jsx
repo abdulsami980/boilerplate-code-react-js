@@ -33,12 +33,20 @@ export default function BusinessHubSection() {
     >
       <ScrollVelocity />
 
-      <span className="mb-4 inline-flex items-center justify-center text-7xl text-green-500 animate-bounce">
+      {/* Icon */}
+      <span className="mb-3 inline-flex items-center justify-center text-7xl text-green-500 animate-bounce">
         <FcIdea />
       </span>
-      <div className="h-[2px] w-32 bg-white/30 rounded-full mb-3"></div>
 
-      {/* Section Header */}
+      {/* Title */}
+      <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 text-center">
+        Igniting Pakistan’s Entrepreneurial Future
+      </h2>
+
+      {/* Divider */}
+      <div className="h-[2px] w-32 bg-white/30 rounded-full mb-8"></div>
+
+      {/* Section Intro */}
       <div className="max-w-4xl text-center mb-12">
         <div className="text-white/90 text-lg md:text-xl leading-relaxed space-y-4">
           <p>
@@ -63,7 +71,7 @@ export default function BusinessHubSection() {
         </div>
       </div>
 
-      {/* Targets / Key Points Grid */}
+      {/* Targets */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl w-full">
         {targets.map((target, index) => (
           <div

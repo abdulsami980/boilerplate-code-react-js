@@ -15,6 +15,7 @@ const SignUp = lazy(() => import("@/pages/auth/SignUp"));
 const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"));
 const VerifyUserEmail = lazy(() => import("@/pages/auth/VerifyUserEmail"));
 const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
+const ContactSupport = lazy(() => import("@/pages/auth/ContactSupport"));
 
 // =====================
 // Admin
@@ -91,6 +92,13 @@ export const routes = [
   {
     path: PATH.RESET_PASSWORD,
     component: ResetPassword,
+    sidebar: false,
+    private: false,
+  },
+
+  {
+    path: PATH.CONTACT_SUPPORT,
+    component: ContactSupport,
     sidebar: false,
     private: false,
   },

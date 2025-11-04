@@ -33,9 +33,9 @@ export default function Investors() {
 
   const [investors, setInvestors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchLoading, setSearchLoading] = useState(false); // for search loader
-  const [searchQuery, setSearchQuery] = useState(""); // 🔍
-  const debouncedSearch = useDebounce(searchQuery, 600); // ⏱️ debounce delay
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearch = useDebounce(searchQuery, 600); 
 
   const actions = [
     {
@@ -213,8 +213,6 @@ export default function Investors() {
   ];
 
   const fetchInvestors = async (searchText = "") => {
-    // if no text, it's initial page load — show PageLoader
-    // else, it's a search — show InlineLoader
     if (searchText.trim()) setSearchLoading(true);
     else setLoading(true);
 

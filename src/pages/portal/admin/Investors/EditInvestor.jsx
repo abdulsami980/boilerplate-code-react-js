@@ -325,7 +325,12 @@ export default function EditInvestor() {
                 <p>
                   <span className="font-medium">Name:</span> {form.full_name}
                 </p>
-
+                <p>
+                  <span className="font-medium">Email:</span> {form.email}
+                </p>
+                <p>
+                  <span className="font-medium">Phone:</span> {form.phone}
+                </p>
                 <p>
                   <span className="font-medium">Company Name:</span>{" "}
                   {form.company_name}
