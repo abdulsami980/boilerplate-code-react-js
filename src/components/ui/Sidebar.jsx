@@ -40,7 +40,6 @@ export default function Sidebar() {
     user?.role?.toLowerCase?.() ||
     "guest";
 
-
   const sidebarItems = routes.filter(
     (r) =>
       r.sidebar === true &&
@@ -110,7 +109,6 @@ export default function Sidebar() {
             data.profile_photo_url // raw path like "investors/1761816121807-wasimAkramBg.png"
           );
 
-
           if (signedUrl) setProfilePhoto(signedUrl);
         }
       } catch (err) {
@@ -124,7 +122,7 @@ export default function Sidebar() {
   return (
     <>
       {/* 🔹 MOBILE HEADER */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[#0d2437]/95 backdrop-blur-md border-b border-green-700/30 flex items-center justify-between px-4 py-3 lg:hidden">
+      <header className="fixed top-0 left-0 right-0 z-[80] bg-[#0d2437]/95 backdrop-blur-md border-b border-green-700/30 flex items-center justify-between px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2">
           <img
             src={IMAGES.MLGGO}
@@ -144,7 +142,7 @@ export default function Sidebar() {
 
       {/* 🔹 SIDEBAR */}
       <aside
-        className={`group fixed lg:static z-40 top-0 left-0 bg-gradient-to-b from-[#0d2437] via-[#10354a] to-[#0d2437]
+        className={`group fixed lg:static z-[80] top-0 left-0 bg-gradient-to-b from-[#0d2437] via-[#10354a] to-[#0d2437]
         text-white shadow-xl border-r border-green-700/30 rounded-r-2xl
         flex flex-col justify-between overflow-hidden transition-all duration-300 ease-in-out
         ${
@@ -303,7 +301,7 @@ export default function Sidebar() {
       {/* 🔹 Overlay for mobile */}
       {openMobile && (
         <div
-          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 lg:hidden"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[70] lg:hidden"
           onClick={() => setOpenMobile(false)}
         />
       )}

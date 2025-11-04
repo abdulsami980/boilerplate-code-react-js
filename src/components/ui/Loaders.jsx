@@ -73,12 +73,24 @@ export function ComingSoonOverlay({
       if (hls) hls.destroy();
     };
   }, [videoSrc]);
+
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
+
   return (
+    // NOTE: z-20 chosen so sidebar/header with z-40 / z-50 appear above this overlay.
+    // This keeps overlay covering main content while allowing mobile sidebar to slide over it.
     <div
-      className={`absolute inset-0 z-[9999] flex flex-col items-center justify-center p-4 ${customClass}`}
+      className={`fixed inset-0 z-[50] flex flex-col items-center justify-center p-4 ${customClass}`}
       style={{
         backdropFilter: `blur(${blur}px)`,
-        backgroundColor: `rgba(255, 255, 255, ${bgOpacity / 100})`,
+        backgroundColor: `rgba(255,255,255,${bgOpacity / 100})`,
       }}
     >
       {/* Icon */}
