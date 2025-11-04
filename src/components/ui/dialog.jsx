@@ -70,8 +70,8 @@ function DialogWrapper({
               <h2 className="text-lg font-semibold text-green-600">
                 {headerTitle}
               </h2>
-              <DialogClose className="opacity-80 hover:opacity-100 text-green-700 hover:text-green-900 p-1">
-                <X className="h-5 w-5" />
+              <DialogClose className="opacity-80 hover:opacity-100 text-green-500 hover:text-green-700 p-1">
+                <X className="h-5 w-5 cursor-pointer" />
               </DialogClose>
             </div>
           )}

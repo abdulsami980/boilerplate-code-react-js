@@ -1,6 +1,9 @@
 import { GREEN_COLOR } from "@/config";
 import { SyncLoader } from "react-spinners";
 import { FcIdea } from "react-icons/fc";
+import { useEffect, useRef, useState } from "react";
+import Hls from "hls.js";
+import { Loader2, Play } from "lucide-react";
 
 export function PageLoader({ text = "Loading…" }) {
   return (
@@ -20,38 +23,115 @@ export function ComingSoonOverlay({
   titleSize = "text-5xl",
   customClass = "",
 }) {
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const videoSrc = import.meta.env.VITE_MAIN_VIDEO_UTL;
+
+  const togglePlay = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      video.play();
+      setIsPlaying(true);
+    } else {
+      video.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const handleEnded = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.currentTime = 0;
+      setIsPlaying(false);
+    }
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let hls;
+
+    if (Hls.isSupported()) {
+      hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+
+      hls.on(Hls.Events.MANIFEST_PARSED, () => setIsLoading(false));
+      hls.on(Hls.Events.ERROR, () => setIsLoading(false));
+
+      return () => hls.destroy();
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = videoSrc;
+      video.addEventListener("loadeddata", () => setIsLoading(false));
+    }
+
+    return () => {
+      if (hls) hls.destroy();
+    };
+  }, [videoSrc]);
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center ${customClass}`}
+      className={`absolute inset-0 z-[9999] flex flex-col items-center justify-center p-4 ${customClass}`}
       style={{
         backdropFilter: `blur(${blur}px)`,
         backgroundColor: `rgba(255, 255, 255, ${bgOpacity / 100})`,
       }}
     >
-      <div className="flex flex-col items-center justify-center text-center max-w-[90%] px-4">
-        <div className="relative flex flex-col items-center">
-          {/* Icon */}
-          {icon && (
-            <span className="mb-4 inline-flex items-center justify-center text-7xl text-green-500 animate-bounce">
-              {icon}
-            </span>
-          )}
+      {/* Icon */}
+      {icon && (
+        <span className="inline-flex items-center justify-center text-7xl text-green-500 animate-bounce motion-reduce:animate-none translate-y-2">
+          {icon}
+        </span>
+      )}
 
-          {/* Title */}
-          <h1
-            className={`pb-4 font-bold ${titleSize} bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-green-500 to-green-600 drop-shadow-lg`}
+      {/* Title */}
+      <h1
+        className={`pb-4 font-bold ${titleSize} bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-green-500 to-green-600 drop-shadow-lg`}
+      >
+        {title}
+      </h1>
+
+      {/* Subtitle */}
+      {subtitle && (
+        <p className="mt-2 text-gray-700/90 text-lg sm:text-xl max-w-xl leading-relaxed text-center">
+          {subtitle}
+        </p>
+      )}
+
+      {/* Video container */}
+      <div className="relative w-full max-w-[900px] aspect-[4/3] rounded-xl overflow-hidden shadow-lg z-10 mt-6 mx-auto">
+        <video
+          ref={videoRef}
+          onClick={togglePlay}
+          onEnded={handleEnded}
+          className="w-full h-full object-cover cursor-pointer"
+          playsInline
+        />
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
+
+        {/* Loader */}
+        {isLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-20">
+            <Loader2 className="w-10 h-10 text-green-400 animate-spin" />
+          </div>
+        )}
+
+        {/* Play overlay */}
+        {!isPlaying && !isLoading && (
+          <button
+            onClick={togglePlay}
+            className="absolute inset-0 flex items-center justify-center"
           >
-            {title}
-          </h1>
-
-          {/* Animated underline */}
-          <span className="block h-1 w-64 mt-2 bg-green-500 rounded-full animate-pulse" />
-        </div>
-
-        {subtitle && (
-          <p className="mt-6 text-gray-700/90 text-lg sm:text-xl max-w-xl leading-relaxed">
-            {subtitle}
-          </p>
+            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 hover:bg-white/20 transition-all duration-300">
+              <Play className="w-8 h-8 text-green-400" />
+            </div>
+          </button>
         )}
       </div>
     </div>

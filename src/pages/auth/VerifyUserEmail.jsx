@@ -54,17 +54,8 @@ export default function VerifyUserEmail() {
       // debug: help inspect what the URL contains while testing
       // remove/disable console logs in production if you prefer
 
-      console.log("verify-email: location.hash:", rawHash);
 
-      console.log(
-        "verify-email: access_token:",
-        !!access_token,
-        " refresh_token:",
-        !!refresh_token,
-        " error:",
-        error
-      );
-
+ 
       if (error) {
         setStatus({
           loading: false,
@@ -89,12 +80,7 @@ export default function VerifyUserEmail() {
             // couldn't set session — still continue to try reading user
 
             console.warn("supabase.auth.setSession error:", setError);
-          } else {
-            console.log(
-              "supabase.auth.setSession succeeded:",
-              !!setData?.session
-            );
-          }
+          } 
         }
 
         // Now try to get current user (from session if set)

@@ -1,6 +1,6 @@
 // src/pages/portal/Dashboard.jsx
 import { Card, CardContent } from "@/components/ui/card";
-// import { ComingSoonOverlay } from "@/components/ui/Loaders";
+import { ComingSoonOverlay } from "@/components/ui/Loaders";
 import {
   ArrowUpRight,
   BarChart3,
@@ -67,7 +67,7 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* <ComingSoonOverlay /> */}
+      <ComingSoonOverlay />
       <div className="space-y-8">
         {/* Greeting */}
         <div className="flex justify-between items-center">

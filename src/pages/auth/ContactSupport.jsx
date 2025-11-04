@@ -41,7 +41,7 @@ export default function ContactSupport() {
 
       setOptions({ ticketTypes: formatted });
     } catch (err) {
-      console.log("Lookup fetch error:", err);
+      console.error(err);
       toast.error("Failed to load ticket types");
     }
   };

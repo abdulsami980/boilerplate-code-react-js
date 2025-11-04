@@ -167,7 +167,6 @@ export default function EditInvestor() {
           return;
         }
 
-        console.log("profile", profile);
 
         // Fetch investor
         const { data: investor, error: invErr } = await supabase
@@ -181,14 +180,7 @@ export default function EditInvestor() {
           return;
         }
 
-        // ✅ Get signed URLs for images & docs
-        console.log("Paths before generating signed URLs:", {
-          profilePhotoPath: profile.profile_photo_url,
-          idDocumentPath: profile.id_doc_url,
-          verificationDocPath: investor.verification_doc_url,
-          proofOfIncomePath: investor.proof_of_income_url,
-        });
-
+   
         const [
           profilePhotoSignedUrl,
           idDocumentSignedUrl,
@@ -201,12 +193,7 @@ export default function EditInvestor() {
           getSignedUrl("kyc-docs", investor?.proof_of_income_url),
         ]);
 
-        console.log("Signed URLs:", {
-          profilePhotoSignedUrl,
-          idDocumentSignedUrl,
-          verificationDocSignedUrl,
-          proofOfIncomeSignedUrl,
-        });
+     
 
         // Merge profile + investor + signed URLs
         setForm({

@@ -40,7 +40,6 @@ export default function Sidebar() {
     user?.role?.toLowerCase?.() ||
     "guest";
 
-  console.log("Role", user);
 
   const sidebarItems = routes.filter(
     (r) =>
@@ -111,8 +110,6 @@ export default function Sidebar() {
             data.profile_photo_url // raw path like "investors/1761816121807-wasimAkramBg.png"
           );
 
-          console.log("📸 Raw profile path:", data?.profile_photo_url);
-          console.log("✅ Signed URL generated:", signedUrl);
 
           if (signedUrl) setProfilePhoto(signedUrl);
         }

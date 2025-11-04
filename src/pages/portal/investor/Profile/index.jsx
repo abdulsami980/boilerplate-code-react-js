@@ -140,8 +140,6 @@ export default function Profile() {
         throw new Error("User not authenticated.");
       const auth_uid = authUser.user.id;
 
-      console.log("auth_uid", auth_uid);
-
       const uploadFile = async (bucket, file, existingPath = null) => {
         if (!file) return existingPath || null;
 

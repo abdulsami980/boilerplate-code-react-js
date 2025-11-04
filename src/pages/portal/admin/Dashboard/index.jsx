@@ -9,6 +9,7 @@ import ReviewTimeChart from "./Components/ReviewTimeChart";
 import ShortlistTrendChart from "./Components/ShortlistTrendChart";
 import TicketVolumeChart from "./Components/TicketVolumeChart";
 import UserGrowthChart from "./Components/UserGrowthChart";
+import { toast } from "sonner";
 
 const cards = [
   {
@@ -90,8 +91,12 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <Button className="w-full sm:w-auto">
-     
+          <Button
+            className="w-full sm:w-auto"
+            onClick={() => {
+              toast.info("Export will be Available Soon!");
+            }}
+          >
             <Download size={16} />
             Export
           </Button>

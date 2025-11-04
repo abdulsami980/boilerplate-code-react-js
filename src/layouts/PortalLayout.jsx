@@ -11,7 +11,7 @@ export default function PortalLayout() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* ✅ Add margin-top to push content below the fixed header */}
-        <main className="flex-1 p-6 overflow-y-auto mt-[64px] lg:mt-0">
+        <main className="flex-1 overflow-y-auto mt-[64px] lg:mt-0 p-6 relative">
           <Outlet />
         </main>
       </div>
