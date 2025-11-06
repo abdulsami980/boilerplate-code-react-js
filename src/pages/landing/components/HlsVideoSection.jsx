@@ -6,36 +6,27 @@ import { useNavigate } from "react-router-dom";
 import { PATH } from "@/config";
 
 export default function HlsVideoSection() {
-  const videoRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const videoSrc = import.meta.env.VITE_MAIN_VIDEO_UTL;
   const navigate = useNavigate();
+  const videoRef = useRef(null);
+  const progressBarRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const videoSrc = import.meta.env.VITE_MAIN_VIDEO_UTL;
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  const toggleFullscreen = () => {
+    const videoContainer = videoRef.current?.parentElement;
+    if (!videoContainer) return;
 
-    let hls;
-
-    if (Hls.isSupported()) {
-      hls = new Hls();
-      hls.loadSource(videoSrc);
-      hls.attachMedia(video);
-
-      hls.on(Hls.Events.MANIFEST_PARSED, () => setIsLoading(false));
-      hls.on(Hls.Events.ERROR, () => setIsLoading(false));
-
-      return () => hls.destroy();
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = videoSrc;
-      video.addEventListener("loadeddata", () => setIsLoading(false));
+    if (!document.fullscreenElement) {
+      videoContainer.requestFullscreen?.();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen?.();
+      setIsFullscreen(false);
     }
-
-    return () => {
-      if (hls) hls.destroy();
-    };
-  }, [videoSrc]);
+  };
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -57,6 +48,57 @@ export default function HlsVideoSection() {
       setIsPlaying(false);
     }
   };
+
+  const handleSeek = (e) => {
+    const video = videoRef.current;
+    if (!video || !progressBarRef.current) return;
+
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const newTime = (clickX / rect.width) * video.duration;
+
+    video.currentTime = newTime;
+    setProgress((clickX / rect.width) * 100);
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Update progress as video plays
+    const handleTimeUpdate = () => {
+      const percentage = (video.currentTime / video.duration) * 100;
+      setProgress(percentage || 0);
+    };
+    video.addEventListener("timeupdate", handleTimeUpdate);
+
+    // Setup HLS
+    let hls;
+    if (Hls.isSupported()) {
+      hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+
+      hls.on(Hls.Events.MANIFEST_PARSED, () => setIsLoading(false));
+      hls.on(Hls.Events.ERROR, () => setIsLoading(false));
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = videoSrc;
+      video.addEventListener("loadeddata", () => setIsLoading(false));
+    }
+
+    // Handle fullscreen state sync
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    // ✅ Proper unified cleanup
+    return () => {
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      if (hls) hls.destroy();
+    };
+  }, [videoSrc]);
 
   return (
     <section
@@ -93,8 +135,17 @@ export default function HlsVideoSection() {
 
         {/* Loader */}
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-20">
-            <Loader2 className="w-10 h-10 text-green-400 animate-spin" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md z-20 transition-opacity duration-500">
+            {/* Outer rotating green ring */}
+            <div className="relative flex items-center justify-center">
+              {/* Inner pulsating glow */}
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-green-400 to-emerald-400 animate-pulse shadow-[0_0_25px_rgba(34,197,94,0.7)]" />
+            </div>
+
+            {/* Loading text */}
+            <p className="mt-5 text-green-300 text-sm tracking-wide font-medium animate-fade-in">
+              Loading video, please wait...
+            </p>
           </div>
         )}
 
@@ -109,6 +160,56 @@ export default function HlsVideoSection() {
             </div>
           </button>
         )}
+
+        {/* Fullscreen Button */}
+        <button
+          onClick={toggleFullscreen}
+          className="absolute bottom-4 right-4 z-30 bg-black/40 backdrop-blur-md border border-white/20 rounded-full p-2 hover:bg-black/60 transition-all duration-300 cursor-pointer"
+        >
+          {isFullscreen ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5 text-green-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 15h4v4m0 0h-4m4 0v-4M9 9H5V5m0 0h4M5 5v4m14 6h-4v4m0 0h4m-4 0v-4"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5 text-green-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 3H5a2 2 0 00-2 2v3m0 8v3a2 2 0 002 2h3m8-18h3a2 2 0 012 2v3m0 8v3a2 2 0 01-2 2h-3"
+              />
+            </svg>
+          )}
+        </button>
+
+        {/* Custom Progress Bar */}
+        <div
+          ref={progressBarRef}
+          onClick={handleSeek}
+          className="absolute bottom-0 left-0 w-full h-2 bg-black/30 cursor-pointer group-hover:h-3 transition-all duration-200"
+        >
+          <div
+            className="h-full bg-gradient-to-r from-green-500 via-emerald-400 to-green-500 rounded-full transition-all duration-150"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
 
       {/* ✨ Enhanced CTA Section */}

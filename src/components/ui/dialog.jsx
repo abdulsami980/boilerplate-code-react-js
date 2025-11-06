@@ -4,8 +4,6 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-/* -------- STATIC SHADCN BASE -------- */
-
 const DialogPortal = DialogPrimitive.Portal;
 const DialogClose = DialogPrimitive.Close;
 
@@ -22,16 +20,12 @@ const DialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
 ));
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-/* -------- SIZE MAP -------- */
-
 const sizeClasses = {
   sm: "w-[300px] sm:w-[380px] max-w-[90vw]",
   md: "w-[450px] sm:w-[520px] max-w-[90vw]",
   lg: "w-[650px] sm:w-[720px] max-w-[90vw]",
   xl: "w-[900px] sm:w-[1080px] max-w-[95vw]",
 };
-
-/* -------- MODAL WRAPPER -------- */
 
 function DialogWrapper({
   show = false,
@@ -76,14 +70,14 @@ function DialogWrapper({
             </div>
           )}
 
-          {/* Body (scrollable if long text) */}
+          {/* Body (scrollable) */}
           <div className="p-6 overflow-y-auto text-gray-800 flex-1">
             {children}
           </div>
 
-          {/* Footer */}
+          {/* Sticky Footer */}
           {actions?.length > 0 && (
-            <div className="flex justify-end gap-2 px-5 py-4 bg-green-50 border-t border-green-200">
+            <div className="sticky bottom-0 flex justify-end gap-2 px-5 py-4 bg-green-50 border-t border-green-200 z-10">
               {actions.map((btn, i) => (
                 <Button
                   key={i}
@@ -92,7 +86,7 @@ function DialogWrapper({
                   disabled={btn.disabled}
                   className={btn.className}
                 >
-                  {btn.label}
+                  {btn.icon} {btn.label}
                 </Button>
               ))}
             </div>
@@ -103,5 +97,4 @@ function DialogWrapper({
   );
 }
 
-/* -------- EXPORT WRAPPER -------- */
 export { DialogWrapper as Dialog };

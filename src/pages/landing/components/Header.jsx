@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, LogIn, Menu, X } from "lucide-react";
 import { PATH } from "@/config";
 import { useNavigate } from "react-router-dom";
+import IMAGES from "@/assets/images";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -96,13 +97,11 @@ const Header = () => {
           onClick={() => handleScroll("hero-section")}
           className="flex items-center gap-2 cursor-pointer"
         >
-          <span
-            className={`font-semibold text-lg md:text-xl tracking-tight transition-colors duration-300 ${
-              isOverDark ? "text-green-400" : "text-green-300"
-            }`}
-          >
-            Business Hub
-          </span>
+          <img
+            src={IMAGES.MAIN_LOGO}
+            alt="Main Logo"
+            className="w-16 h-auto" // 👈 Adjust width & height as needed
+          />
         </div>
 
         {/* Desktop Navigation */}
@@ -211,7 +210,7 @@ const Header = () => {
                 navigate(PATH.SIGNUP);
                 setMenuOpen(false);
               }}
-              className="bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white rounded-full py-2 font-medium shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
+              className="bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-full px-8 py-3 text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.05] hover:from-green-700 hover:to-emerald-600"
             >
               Get Started
             </Button>

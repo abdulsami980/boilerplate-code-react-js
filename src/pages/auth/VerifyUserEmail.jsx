@@ -51,11 +51,6 @@ export default function VerifyUserEmail() {
       const { access_token, refresh_token, error, errorDescription, rawHash } =
         parseParams();
 
-      // debug: help inspect what the URL contains while testing
-      // remove/disable console logs in production if you prefer
-
-
- 
       if (error) {
         setStatus({
           loading: false,
@@ -65,11 +60,8 @@ export default function VerifyUserEmail() {
         return;
       }
 
-      // If we have tokens in URL fragment, attach them to session
       try {
         if (access_token) {
-          // setSession accepts { access_token, refresh_token }
-          // this persists the session client-side (works in v1/v2)
           const { data: setData, error: setError } =
             await supabase.auth.setSession({
               access_token,
@@ -77,22 +69,15 @@ export default function VerifyUserEmail() {
             });
 
           if (setError) {
-            // couldn't set session — still continue to try reading user
-
             console.warn("supabase.auth.setSession error:", setError);
-          } 
+          }
         }
 
-        // Now try to get current user (from session if set)
         const { data: userData, error: getUserError } =
           await supabase.auth.getUser();
 
         if (getUserError) {
-          // If getUser fails, try a last-resort check: if access_token exists,
-          // call the legacy getUser(access_token) signature if available.
-          // (some SDK versions accept access_token arg)
           try {
-            // attempt legacy call (wrapped safely)
 
             console.warn(
               "supabase.auth.getUser() failed, attempting legacy fallback:",
@@ -288,11 +273,11 @@ export default function VerifyUserEmail() {
               <Button
                 onClick={handleResend}
                 disabled={resendStatus.loading}
-                className="bg-green-600 hover:bg-green-700 mt-2"
+                isLoading={resendStatus.loading}
+                loadingText="Resend Verification Email..."
+                className="w-full bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-full px-7 py-3 text-sm md:text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.05] hover:from-green-700 hover:to-emerald-600"
               >
-                {resendStatus.loading
-                  ? "Sending..."
-                  : "Resend Verification Email"}
+                Resend Verification Email
               </Button>
 
               {resendStatus.message && (

@@ -64,6 +64,7 @@ export const PATH = {
     PROFILE: "/founder/profile",
     SETTINGS: "/founder/settings",
     HELP: "/founder/help",
+    MY_BUSINESS_PROPOSALS: "/founder/my-business-proposals",
   },
 };
 
@@ -132,7 +133,7 @@ Applies to all users including investors, businesses, and affiliates. By registe
 <hr class="my-4"/>
 
 <p class="text-center text-gray-600 font-medium mt-6">
-Meer Group – Business Hub  
+Vision 2030 – Business Hub  
 <span class="block text-xs">Connecting Vision with Investment</span>
 </p>`;
 
@@ -166,7 +167,40 @@ export const NDA_CONTENT = `
 <p>By accepting this Agreement, you acknowledge that you have read, understood, and agree to abide by its terms and conditions.</p>
 
 <p class="text-center text-gray-600 font-medium mt-6">
-Meer Group – Business Hub  
+Vision 2030 – Business Hub  
 <span class="block text-xs">Connecting Vision with Investment</span>
 </p
+`;
+
+export const COOKIE_POLICY_CONTENT = `
+<h2 class="font-semibold text-base">Cookie Policy</h2>
+
+<p>Our platform uses cookies and similar technologies to enhance your browsing experience and provide personalized services. By using the Business Hub, you consent to our use of cookies in accordance with this policy.</p>
+
+<h3 class="mt-4 font-medium">1. What are Cookies?</h3>
+<p>Cookies are small text files stored on your device by your web browser that help the platform remember your preferences, login information, and interactions.</p>
+
+<h3 class="mt-4 font-medium">2. Types of Cookies We Use</h3>
+<ul class="list-disc pl-5 space-y-1">
+<li><strong>Essential Cookies:</strong> Required for core platform functionality, login, and security.</li>
+<li><strong>Performance Cookies:</strong> Help us analyze platform usage and improve user experience.</li>
+<li><strong>Functional Cookies:</strong> Remember your preferences and settings for convenience.</li>
+<li><strong>Advertising Cookies:</strong> Used for marketing purposes and to deliver relevant promotional content.</li>
+</ul>
+
+<h3 class="mt-4 font-medium">3. Managing Cookies</h3>
+<p>You can manage or disable cookies via your browser settings. Please note that disabling essential cookies may affect the proper functioning of the platform.</p>
+
+<h3 class="mt-4 font-medium">4. Third-Party Cookies</h3>
+<p>We may use third-party services such as analytics or marketing providers that set cookies to measure platform performance and deliver relevant content. These are subject to the respective third-party policies.</p>
+
+<h3 class="mt-4 font-medium">5. Updates to This Policy</h3>
+<p>We may update this Cookie Policy periodically. Changes will be reflected on this page with the last updated date. Continued use of the platform indicates acceptance of the updated policy.</p>
+
+<hr class="my-4"/>
+
+<p class="text-center text-gray-600 font-medium mt-6">
+Vision 2030 – Business Hub  
+<span class="block text-xs">Connecting Vision with Investment</span>
+</p>
 `;

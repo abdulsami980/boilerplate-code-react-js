@@ -133,9 +133,10 @@ export default function Login() {
 
           <Button
             type="submit"
+            disabled={isLoggingIn}
             isLoading={isLoggingIn}
             loadingText="Signing In..."
-            className="w-full"
+            className="w-full bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-full px-7 py-3 text-sm md:text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.05] hover:from-green-700 hover:to-emerald-600"
           >
             Sign In
           </Button>

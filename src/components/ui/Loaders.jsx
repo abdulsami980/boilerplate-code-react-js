@@ -1,9 +1,9 @@
 import { GREEN_COLOR } from "@/config";
-import { SyncLoader } from "react-spinners";
-import { FcIdea } from "react-icons/fc";
-import { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
-import { Loader2, Play } from "lucide-react";
+import { Maximize, Minimize, Play } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { FcIdea } from "react-icons/fc";
+import { SyncLoader } from "react-spinners";
 
 export function PageLoader({ text = "Loading…" }) {
   return (
@@ -24,14 +24,17 @@ export function ComingSoonOverlay({
   customClass = "",
 }) {
   const videoRef = useRef(null);
+  const progressBarRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [progress, setProgress] = useState(0);
   const videoSrc = import.meta.env.VITE_MAIN_VIDEO_UTL;
 
+  // Toggle play/pause
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
-
     if (video.paused) {
       video.play();
       setIsPlaying(true);
@@ -41,6 +44,7 @@ export function ComingSoonOverlay({
     }
   };
 
+  // Restart when ended
   const handleEnded = () => {
     const video = videoRef.current;
     if (video) {
@@ -49,12 +53,44 @@ export function ComingSoonOverlay({
     }
   };
 
+  // Seek handler
+  const handleSeek = (e) => {
+    const video = videoRef.current;
+    if (!video || !progressBarRef.current) return;
+
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const newTime = (clickX / rect.width) * video.duration;
+    video.currentTime = newTime;
+    setProgress((clickX / rect.width) * 100);
+  };
+
+  // Fullscreen toggle
+  const toggleFullscreen = () => {
+    const container = videoRef.current?.parentElement;
+    if (!container) return;
+    if (!document.fullscreenElement) {
+      container.requestFullscreen?.();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen?.();
+      setIsFullscreen(false);
+    }
+  };
+
+  // Video + HLS setup
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    let hls;
+    const handleTimeUpdate = () => {
+      const percentage = (video.currentTime / video.duration) * 100;
+      setProgress(percentage || 0);
+    };
 
+    video.addEventListener("timeupdate", handleTimeUpdate);
+
+    let hls;
     if (Hls.isSupported()) {
       hls = new Hls();
       hls.loadSource(videoSrc);
@@ -62,30 +98,33 @@ export function ComingSoonOverlay({
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => setIsLoading(false));
       hls.on(Hls.Events.ERROR, () => setIsLoading(false));
-
-      return () => hls.destroy();
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = videoSrc;
       video.addEventListener("loadeddata", () => setIsLoading(false));
     }
 
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
     return () => {
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
       if (hls) hls.destroy();
     };
   }, [videoSrc]);
 
+  // Prevent background scroll
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = "hidden";
-
     return () => {
       document.body.style.overflow = originalStyle;
     };
   }, []);
 
   return (
-    // NOTE: z-20 chosen so sidebar/header with z-40 / z-50 appear above this overlay.
-    // This keeps overlay covering main content while allowing mobile sidebar to slide over it.
     <div
       className={`fixed inset-0 z-[50] flex flex-col items-center justify-center p-4 ${customClass}`}
       style={{
@@ -115,12 +154,29 @@ export function ComingSoonOverlay({
       )}
 
       {/* Video container */}
-      <div className="relative w-full max-w-[900px] aspect-[4/3] rounded-xl overflow-hidden shadow-lg z-10 mt-6 mx-auto">
+      <div
+        className="
+    relative 
+    w-full 
+    max-w-[90vw] 
+    md:max-w-[400px] 
+    lg:max-w-[600px] 
+    xl:max-w-[800px]
+    aspect-video 
+    rounded-xl 
+    overflow-hidden 
+    shadow-lg 
+    z-10 
+    mt-6 
+    mx-auto 
+    group
+  "
+      >
         <video
           ref={videoRef}
           onClick={togglePlay}
           onEnded={handleEnded}
-          className="w-full h-full object-cover cursor-pointer"
+          className="w-full h-full object-contain cursor-pointer bg-black"
           playsInline
         />
 
@@ -129,8 +185,13 @@ export function ComingSoonOverlay({
 
         {/* Loader */}
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-20">
-            <Loader2 className="w-10 h-10 text-green-400 animate-spin" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md z-20 transition-opacity duration-500">
+            <div className="relative flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-green-400 to-emerald-400 animate-pulse shadow-[0_0_25px_rgba(34,197,94,0.7)]" />
+            </div>
+            <p className="mt-5 text-green-300 text-sm tracking-wide font-medium animate-fade-in">
+              Loading video, please wait...
+            </p>
           </div>
         )}
 
@@ -145,6 +206,30 @@ export function ComingSoonOverlay({
             </div>
           </button>
         )}
+
+        {/* Fullscreen Button */}
+        <button
+          onClick={toggleFullscreen}
+          className="absolute bottom-4 right-4 z-30 bg-black/40 backdrop-blur-md border border-white/20 rounded-full p-2 hover:bg-black/60 transition-all duration-300"
+        >
+          {isFullscreen ? (
+            <Minimize className="w-5 h-5 text-green-400" />
+          ) : (
+            <Maximize className="w-5 h-5 text-green-400" />
+          )}
+        </button>
+
+        {/* Custom Progress Bar */}
+        <div
+          ref={progressBarRef}
+          onClick={handleSeek}
+          className="absolute bottom-0 left-0 w-full h-2 bg-black/30 cursor-pointer group-hover:h-3 transition-all duration-200"
+        >
+          <div
+            className="h-full bg-gradient-to-r from-green-500 via-emerald-400 to-green-500 rounded-full transition-all duration-150"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
     </div>
   );

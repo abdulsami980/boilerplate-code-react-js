@@ -22,7 +22,7 @@ export default function HeroSection() {
 
       {/* White Container with Permanent Green Glow */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative flex flex-col items-center text-center max-w-3xl px-8 py-16 rounded-3xl bg-white/95 backdrop-blur-md shadow-[0_0_120px_40px_rgba(34,197,94,0.5)] transition-transform hover:scale-[1.02]">
+        <div className="relative flex flex-col items-center text-center max-w-3xl px-8 py-10 rounded-3xl bg-white/95 backdrop-blur-md shadow-[0_0_120px_40px_rgba(34,197,94,0.5)] transition-transform hover:scale-[1.02]">
           {/* Tagline */}
           <p className="flex items-center justify-center gap-2 text-green-600 text-lg font-semibold mb-3 tracking-wide">
             ⚡ The Business Hub Pakistan

@@ -115,13 +115,15 @@ export default function SignUp() {
           <Button
             type="submit"
             disabled={loading}
+            isLoading={loading}
+            loadingText="Creating Account..."
             className={`w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-semibold rounded-full py-2 transition-transform duration-200 ${
               loading
                 ? "opacity-70 cursor-not-allowed"
                 : "hover:scale-105 shadow-md"
             }`}
           >
-            {loading ? "Creating Account..." : "Sign Up"}
+            Sign Up
           </Button>
         </form>
 

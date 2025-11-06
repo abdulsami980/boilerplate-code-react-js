@@ -125,7 +125,7 @@ export default function Sidebar() {
       <header className="fixed top-0 left-0 right-0 z-[80] bg-[#0d2437]/95 backdrop-blur-md border-b border-green-700/30 flex items-center justify-between px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2">
           <img
-            src={IMAGES.MLGGO}
+            src={IMAGES.FAV_LOGO}
             alt="Logo"
             className="w-8 h-8 rounded-md object-contain"
           />
@@ -154,18 +154,18 @@ export default function Sidebar() {
         {/* 🔹 CONTENT WRAPPER WITH PADDING TOP/BOTTOM */}
         <div className="flex flex-col justify-between flex-1 py-6">
           {/* 🔹 Logo Section (no duplicate issue now) */}
-          <div className="flex items-center justify-center mb-6 px-3">
+          <div className="flex items-center justify-center px-3">
             <img
-              src={IMAGES.LGOO}
+              src={IMAGES.MAIN_LOGO}
               alt="Main Logo"
               className={`transition-all duration-300 ${
                 openMobile ? "block" : "hidden lg:group-hover:block"
-              } w-[90px] h-auto`}
+              } w-[120px] h-auto`}
             />
             <img
-              src={IMAGES.MLGGO}
+              src={IMAGES.FAV_LOGO}
               alt="Small Logo"
-              className={`transition-all duration-300 hidden lg:block lg:group-hover:hidden w-10 h-10 rounded-md`}
+              className={`transition-all duration-300 hidden lg:block lg:group-hover:hidden w-14 h-14 rounded-md`}
             />
           </div>
 

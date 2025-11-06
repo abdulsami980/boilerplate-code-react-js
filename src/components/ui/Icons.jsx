@@ -9,6 +9,8 @@ import {
   DollarSign,
   Building2,
   Headset,
+  File,
+  BriefcaseBusiness,
 } from "lucide-react";
 import PropTypes from "prop-types";
 
@@ -22,6 +24,8 @@ const ICONS = {
   dollarSign: DollarSign,
   building: Building2,
   headset: Headset,
+  file: File,
+  briefcase: BriefcaseBusiness
 };
 
 function Icons({ name, cursor, color, ...rest }) {

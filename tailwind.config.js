@@ -3,6 +3,9 @@ export default {
   darkMode: "class", // 👈 toggle via class
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Urbanist", "system-ui", "sans-serif"],
+      },
       colors: {
         brand: {
           DEFAULT: "#6366F1",

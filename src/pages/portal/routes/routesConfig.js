@@ -49,6 +49,9 @@ const FounderDashboard = lazy(() => import("@/pages/portal/founder/Dashboard"));
 const FounderProfile = lazy(() =>
   import("@/pages/portal/founder/Profile/index")
 );
+const MyBusinessProposals = lazy(() =>
+  import("@/pages/portal/founder/MyBusinessProposals/index")
+);
 const HelpScreenFounders = lazy(() => import("@/pages/portal/founder/Help"));
 
 export const routes = [
@@ -95,7 +98,6 @@ export const routes = [
     sidebar: false,
     private: false,
   },
-
   {
     path: PATH.CONTACT_SUPPORT,
     component: ContactSupport,
@@ -218,6 +220,15 @@ export const routes = [
     title: "Dashboard",
   },
   {
+    path: PATH.FOUNDER.MY_BUSINESS_PROPOSALS,
+    component: MyBusinessProposals,
+    sidebar: true,
+    private: true,
+    roles: ["founder"],
+    icon: "briefcase",
+    title: "My Business Proposals",
+  },
+  {
     path: PATH.FOUNDER.PROFILE,
     component: FounderProfile,
     sidebar: false,
@@ -229,6 +240,6 @@ export const routes = [
     component: HelpScreenFounders,
     sidebar: false,
     private: true,
-    roles: ["investor"],
+    roles: ["founder"],
   },
 ];

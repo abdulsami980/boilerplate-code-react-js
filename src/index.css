@@ -89,9 +89,14 @@
 
 @layer base {
   * {
-    @apply outline-none; /* keep it minimal */
+    @apply outline-none;
   }
   body {
     @apply bg-white text-black font-sans;
+  }
+
+  html,
+  body {
+    font-family: "Urbanist", system-ui, sans-serif;
   }
 }

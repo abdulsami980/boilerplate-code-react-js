@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button";
 import TopCards from "@/components/ui/topCards";
 import { Box, Briefcase, Download, LifeBuoy, Users } from "lucide-react";
+import { toast } from "sonner";
+import * as XLSX from "xlsx";
 import ApprovalRateGauge from "./Components/ApprovalRateGauge";
 import IdeasBySectorChart from "./Components/IdeasBySectorChart";
 import RecentActivity from "./Components/RecentActivity";
@@ -9,7 +11,6 @@ import ReviewTimeChart from "./Components/ReviewTimeChart";
 import ShortlistTrendChart from "./Components/ShortlistTrendChart";
 import TicketVolumeChart from "./Components/TicketVolumeChart";
 import UserGrowthChart from "./Components/UserGrowthChart";
-import { toast } from "sonner";
 
 const cards = [
   {
@@ -77,8 +78,94 @@ const recentEvents = [
 ];
 
 export default function Dashboard() {
+  const handleExport = () => {
+    try {
+      // Create a new workbook
+      const wb = XLSX.utils.book_new();
+
+      // 1️⃣ KPI Cards
+      const cardsSheet = XLSX.utils.json_to_sheet(
+        cards.map((c) => ({
+          Title: c.title,
+          Value: c.value,
+          Meta: c.meta,
+        }))
+      );
+      XLSX.utils.book_append_sheet(wb, cardsSheet, "KPIs");
+
+      // 2️⃣ User Growth
+      const userGrowthSheet = XLSX.utils.json_to_sheet(
+        userGrowth.labels.map((label, i) => ({
+          Month: label,
+          Investors: userGrowth.investors[i],
+          Founders: userGrowth.founders[i],
+        }))
+      );
+      XLSX.utils.book_append_sheet(wb, userGrowthSheet, "User Growth");
+
+      // 3️⃣ Ideas by Sector
+      const ideasSheet = XLSX.utils.json_to_sheet(
+        ideasBySector.map((i) => ({
+          Sector: i.sector,
+          Ideas: i.count,
+        }))
+      );
+      XLSX.utils.book_append_sheet(wb, ideasSheet, "Ideas by Sector");
+
+      // 4️⃣ Shortlist Trend
+      const shortlistSheet = XLSX.utils.json_to_sheet(
+        shortlistTrend.labels.map((label, i) => ({
+          Month: label,
+          Count: shortlistTrend.counts[i],
+        }))
+      );
+      XLSX.utils.book_append_sheet(wb, shortlistSheet, "Shortlist Trend");
+
+      // 5️⃣ Ticket Volume
+      const ticketSheet = XLSX.utils.json_to_sheet(
+        ticketVolume.labels.map((label, i) => ({
+          Month: label,
+          Open: ticketVolume.open[i],
+          Resolved: ticketVolume.resolved[i],
+          Escalated: ticketVolume.escalated[i],
+        }))
+      );
+      XLSX.utils.book_append_sheet(wb, ticketSheet, "Ticket Volume");
+
+      // 6️⃣ Approval Rate
+      const approvalSheet = XLSX.utils.json_to_sheet([
+        { Metric: "Approval Rate (%)", Value: approvalRate.value },
+      ]);
+      XLSX.utils.book_append_sheet(wb, approvalSheet, "Approval Rate");
+
+      // 7️⃣ Review Time
+      const reviewSheet = XLSX.utils.json_to_sheet(
+        reviewTime.labels.map((label, i) => ({
+          Stage: label,
+          "Average Days": reviewTime.avgDays[i],
+        }))
+      );
+      XLSX.utils.book_append_sheet(wb, reviewSheet, "Review Time");
+
+      // 8️⃣ Recent Activity
+      const activitySheet = XLSX.utils.json_to_sheet(
+        recentEvents.map((e) => ({
+          Event: e.text,
+          Time: e.time,
+        }))
+      );
+      XLSX.utils.book_append_sheet(wb, activitySheet, "Recent Activity");
+
+      // 9️⃣ Save file
+      XLSX.writeFile(wb, "SuperAdminDashboardData.xlsx");
+    } catch (err) {
+      console.error("Export failed:", err);
+      toast.error("Failed to export data.");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#f9fafb] text-[#0d2437] p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-[1400px] mx-auto space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -91,12 +178,7 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <Button
-            className="w-full sm:w-auto"
-            onClick={() => {
-              toast.info("Export will be Available Soon!");
-            }}
-          >
+          <Button className="w-full sm:w-auto" onClick={handleExport}>
             <Download size={16} />
             Export
           </Button>
