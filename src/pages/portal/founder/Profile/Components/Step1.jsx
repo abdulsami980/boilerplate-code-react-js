@@ -55,14 +55,12 @@ export default function Step1({ formData, handleChange }) {
         required
       />
 
-      {/* Residency Status */}
-      <Select
-        label="Residency Status"
-        placeholder="Select residency status"
-        options={residencyOptions}
-        value={formData.residencyStatus}
-        onChange={(val) => handleChange("residencyStatus", val)}
+      <Input
+        label="National ID / Passport Number"
+        placeholder="Enter your national ID or passport number"
         required
+        value={formData.nationalId}
+        onChange={(e) => handleChange("nationalId", e.target.value)}
       />
 
       {/* Country */}
@@ -83,12 +81,13 @@ export default function Step1({ formData, handleChange }) {
         onChange={(e) => handleChange("city", e.target.value)}
       />
 
-      <Input
-        label="National ID / Passport Number"
-        placeholder="Enter your national ID or passport number"
-        required
-        value={formData.nationalId}
-        onChange={(e) => handleChange("nationalId", e.target.value)}
+      {/* Residency Status */}
+      <Select
+        label="Residency Status"
+        placeholder="Select residency status"
+        options={residencyOptions}
+        value={formData.residencyStatus}
+        onChange={(val) => handleChange("residencyStatus", val)}
       />
 
       <Input

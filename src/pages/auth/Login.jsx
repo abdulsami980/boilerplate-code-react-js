@@ -1,12 +1,11 @@
-import { useState, memo } from "react";
-import { useNavigate } from "react-router-dom";
+import Iridescence from "@/components/reactbits/Iridescence";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PATH } from "@/config";
 import { useAuth } from "@/hooks/useAuth";
-import Iridescence from "@/components/reactbits/Iridescence";
+import { memo, useState } from "react";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 // 🧠 Left section memoized for performance
 export const LeftSection = memo(() => (
@@ -136,14 +135,14 @@ export default function Login() {
             disabled={isLoggingIn}
             isLoading={isLoggingIn}
             loadingText="Signing In..."
-            className="w-full bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-full px-7 py-3 text-sm md:text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.05] hover:from-green-700 hover:to-emerald-600"
+            className="w-full bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-full px-7 py-2 text-sm md:text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.05] hover:from-green-700 hover:to-emerald-600"
           >
             Sign In
           </Button>
         </form>
 
         {/* Divider */}
-        <div className="flex items-center w-full max-w-sm my-6">
+        <div className="flex items-center w-full max-w-sm my-4">
           <div className="flex-grow h-px bg-gray-300" />
           <span className="px-3 text-gray-500 text-sm font-medium">
             or continue with
@@ -170,7 +169,7 @@ export default function Login() {
         </div>
 
         {/* Sign up link */}
-        <p className="mt-8 text-sm text-gray-700">
+        <p className="mt-4 text-sm text-gray-700">
           Don't have an account?{" "}
           <button
             onClick={() => navigate(PATH.SIGNUP)}

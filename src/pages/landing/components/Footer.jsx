@@ -47,7 +47,7 @@ export default function Footer() {
     <>
       <footer
         ref={ref}
-        className="relative bg-gradient-to-br from-green-950 via-green-900 to-green-800 text-gray-300 pt-20 pb-10 px-6 md:px-20 overflow-hidden border-t border-green-700/30"
+        className="relative bg-gradient-to-br from-green-950 via-green-900 to-green-800 text-gray-300 pt-10 pb-10 px-6 md:px-20 overflow-hidden border-t border-green-700/30"
       >
         {/* Vision2030 Background Text (Static) */}
         <h1
@@ -88,12 +88,9 @@ export default function Footer() {
                 alt="Main Logo"
                 className="w-32 h-auto"
               />
-              <h2 className="text-xl font-semibold text-green-400">
-                Business Hub
-              </h2>
             </div>
 
-            <p className="text-gray-300 text-sm leading-relaxed mb-6">
+            <p className="text-gray-300 text-sm leading-relaxed">
               A national innovation platform connecting verified investors with
               entrepreneurs — fueling Pakistan’s economic growth with trust,
               technology, and opportunity.
@@ -115,7 +112,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links + Contact (2 columns) */}
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             {/* Quick Links */}
             <div>
               <h3 className="text-green-400 text-lg font-semibold mb-5">

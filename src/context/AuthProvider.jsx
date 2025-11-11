@@ -35,7 +35,8 @@ export function AuthProvider({ children }) {
         password,
         options: {
           data: { full_name: fullName, role },
-          emailRedirectTo: `${window.location.origin}/verify-user-email`,
+          emailRedirectTo:
+            "https://incomparable-cobbler-5d9687.netlify.app/verify-user-email",
         },
       });
 

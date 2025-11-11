@@ -3,36 +3,58 @@ import { FileUploader } from "@/components/ui/FileUploader";
 import LegalModal from "@/components/ui/LegalModal";
 import { Textarea } from "@/components/ui/textarea";
 import { LEGAL_CONTENT, NDA_CONTENT } from "@/config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Step3({ formData, handleChange }) {
   const [showModal, setShowModal] = useState(false);
-  const [showNDAModal, setShowNDAModal] = useState(false);
+  const [showNDAModal, setShowNDAModal] = useState(false); // Track which checkboxes were prefilled (loaded from server)
+  const [prefilled, setPrefilled] = useState({
+    termsAccepted: false,
+    nda_signed: false,
+    is_accredited_investor: false,
+    consent_data_sharing: false,
+  });
+
+  // On mount: detect prefilled values
+  useEffect(() => {
+    setPrefilled({
+      termsAccepted: !!formData.termsAccepted,
+      nda_signed: !!formData.nda_signed,
+      is_accredited_investor: !!formData.is_accredited_investor,
+      consent_data_sharing: !!formData.consent_data_sharing,
+    });
+  }, []); // runs once, using initial formData
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {/* Documents */}
-      <FileUploader
-        label="Upload Verification Document"
-        value={formData.verificationDocUrl}
-        onChange={(file) => handleChange("verificationDocUrl", file)}
-        required
-      />
-      <FileUploader
-        label="Upload Proof of Income"
-        value={formData.proofOfIncomeUrl}
-        onChange={(file) => handleChange("proofOfIncomeUrl", file)}
-        required
-      />
       <FileUploader
         label="Upload ID Document"
         placeholder="No File Chosen"
         value={formData.idDocument}
         onChange={(file) => handleChange("idDocument", file)}
+        tooltipText="Upload a government-issued identification document, such as your National Identity Card (CNIC) or Passport, to verify your personal identity."
         required
       />
+
+      <FileUploader
+        label="Upload Verification Document"
+        value={formData.verificationDocUrl}
+        onChange={(file) => handleChange("verificationDocUrl", file)}
+        tooltipText="Submit your company verification or KYC document, such as a Certificate of Incorporation, Business Registration Certificate, or any official proof verifying your business identity."
+        required
+      />
+
+      <FileUploader
+        label="Upload Proof of Income"
+        value={formData.proofOfIncomeUrl}
+        onChange={(file) => handleChange("proofOfIncomeUrl", file)}
+        tooltipText="Provide valid proof of income or financial standing, such as a recent bank statement, salary slip, investment portfolio summary, or tax return."
+        required
+      />
+
       {/* Additional Info */}
-      <div className="col-span-2">
+      <div className="col-span-1 md:col-span-3">
         <Textarea
           label="Additional Info"
           placeholder="Enter any additional information"
@@ -43,9 +65,23 @@ export default function Step3({ formData, handleChange }) {
       </div>
       {/* ---------- TERMS (Terms + Privacy) ---------- */}
       <div className="col-span-2">
-        {formData.termsAccepted ? (
+        {prefilled?.termsAccepted ? (
           <p className="text-sm text-gray-500 font-medium">
-            ✅ You have already accepted the Terms of Service & Privacy Policy.
+            ✅ You have already accepted the{" "}
+            <a
+              className="text-green-600 underline hover:cursor-pointer"
+              onClick={() => setShowModal(true)}
+            >
+              Terms of Service
+            </a>{" "}
+            &{" "}
+            <a
+              className="text-green-600 underline hover:cursor-pointer"
+              onClick={() => setShowModal(true)}
+            >
+              Privacy Policy
+            </a>
+            .
           </p>
         ) : (
           <Checkbox
@@ -84,9 +120,16 @@ export default function Step3({ formData, handleChange }) {
 
       {/* ---------- NDA ---------- */}
       <div className="col-span-2">
-        {formData.nda_signed ? (
+        {prefilled?.nda_signed ? (
           <p className="text-sm text-gray-500 font-medium">
-            ✅ You have already agreed to the Non-Disclosure Agreement (NDA).
+            ✅ You have already agreed to the{" "}
+            <a
+              className="text-green-600 underline hover:cursor-pointer"
+              onClick={() => setShowNDAModal(true)}
+            >
+              Non-Disclosure Agreement
+            </a>{" "}
+            (NDA).
           </p>
         ) : (
           <Checkbox
@@ -113,7 +156,7 @@ export default function Step3({ formData, handleChange }) {
 
       {/* ---------- Accredited Investor ---------- */}
       <div className="col-span-2">
-        {formData.is_accredited_investor ? (
+        {prefilled?.is_accredited_investor ? (
           <p className="text-sm text-gray-500 font-medium">
             ✅ You have already confirmed accredited investor status.
           </p>
@@ -131,7 +174,7 @@ export default function Step3({ formData, handleChange }) {
 
       {/* ---------- Consent: Data Sharing ---------- */}
       <div className="col-span-2">
-        {formData.consent_data_sharing ? (
+        {prefilled?.consent_data_sharing ? (
           <p className="text-sm text-gray-500 font-medium">
             ✅ You have already consented to data sharing with the platform and
             partners.
@@ -150,20 +193,13 @@ export default function Step3({ formData, handleChange }) {
 
       {/* ---------- Consent: Marketing Emails ---------- */}
       <div className="col-span-2">
-        {formData.consent_marketing_emails ? (
-          <p className="text-sm text-gray-500 font-medium">
-            ✅ You have already opted in to receive marketing emails and
-            updates.
-          </p>
-        ) : (
-          <Checkbox
-            label="I want to receive marketing emails and new feature updates from the platform."
-            checked={formData.consent_marketing_emails === true}
-            onCheckedChange={(val) =>
-              handleChange("consent_marketing_emails", val === true)
-            }
-          />
-        )}
+        <Checkbox
+          label="I want to receive marketing emails and new feature updates from the platform."
+          checked={formData.consent_marketing_emails === true}
+          onCheckedChange={(val) =>
+            handleChange("consent_marketing_emails", val === true)
+          }
+        />
       </div>
 
       <LegalModal

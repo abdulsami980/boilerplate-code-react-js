@@ -55,16 +55,6 @@ export default function Step1({ formData, handleChange }) {
         required
       />
 
-      {/* Residency Status */}
-      <Select
-        label="Residency Status"
-        placeholder="Select residency status"
-        options={residencyOptions}
-        value={formData.residencyStatus}
-        onChange={(val) => handleChange("residencyStatus", val)}
-        required
-      />
-
       {/* Country */}
       <Select
         label="Country"
@@ -89,6 +79,23 @@ export default function Step1({ formData, handleChange }) {
         required
         value={formData.nationalId}
         onChange={(e) => handleChange("nationalId", e.target.value)}
+      />
+
+      <Input
+        label="Tax Number"
+        placeholder="Enter your tax number"
+        value={formData.taxNumber}
+        required
+        onChange={(e) => handleChange("taxNumber", e.target.value)}
+      />
+
+      {/* Residency Status */}
+      <Select
+        label="Residency Status"
+        placeholder="Select residency status"
+        options={residencyOptions}
+        value={formData.residencyStatus}
+        onChange={(val) => handleChange("residencyStatus", val)}
       />
 
       <Input

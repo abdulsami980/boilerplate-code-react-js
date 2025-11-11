@@ -13,6 +13,7 @@ import InvestorTimeline from "./components/InvestorTimeline";
 import MessageSection from "./components/MessageSection";
 import ScrollStackVision from "./components/ScrollStackVision";
 import PortfolioGallerySection from "./components/PortfolioGallerySection";
+import CookieConsent from "./components/CookieConsent";
 
 function LandingPage() {
   return (
@@ -28,6 +29,7 @@ function LandingPage() {
       <Ambassadors />
       <BusinessHubSection />
       <ScrollStackVision />
+      <CookieConsent />
       <Footer />
     </>
   );

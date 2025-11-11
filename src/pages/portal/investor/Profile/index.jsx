@@ -75,12 +75,15 @@ export default function Profile() {
     switch (step) {
       case 1:
         if (
+          !formData.profilePhoto ||
           !formData.fullName ||
           !formData.email ||
           !formData.mobile ||
+          !formData.nationality ||
           !formData.nationalId ||
           !formData.country ||
-          !formData.city
+          !formData.city ||
+          !formData.taxNumber
         ) {
           toast.error("Please fill all required fields in Step 1.");
           return false;
@@ -92,7 +95,8 @@ export default function Profile() {
           !formData.minInvestment ||
           !formData.maxInvestment ||
           !formData.businessStage ||
-          !formData.businessModel
+          !formData.businessModel ||
+          !formData.annualIncomeBracket
         ) {
           toast.error("Please fill all required fields in Step 2.");
           return false;
@@ -101,9 +105,13 @@ export default function Profile() {
 
       case 3:
         if (
-          !formData.nda_signed ||
+          !formData.idDocument ||
+          !formData.verificationDocUrl ||
+          !formData.proofOfIncomeUrl ||
           !formData.termsAccepted ||
-          !formData.is_accredited_investor
+          !formData.nda_signed ||
+          !formData.is_accredited_investor ||
+          !formData.consent_data_sharing
         ) {
           toast.error("Please accept all required declarations in Step 3.");
           return false;
@@ -217,6 +225,7 @@ export default function Profile() {
           full_name: formData.fullName,
           phone: formData.mobile,
           nationality: formData.nationality,
+          national_id: formData?.nationalId || "",
           residency_status: formData.residencyStatus,
           occupation: formData.occupation,
           country: formData.country,
@@ -233,9 +242,9 @@ export default function Profile() {
         .single();
 
       // Investors table
-      const { error: investorError } = await supabase
-        .from("investors")
-        .update({
+      const { error: investorError } = await supabase.from("investors").upsert(
+        {
+          profile_id: profileData.id, // must include this!
           company_name: formData.companyName,
           website_url: formData.websiteUrl,
           linkedin_url: formData.linkedinUrl,
@@ -256,8 +265,9 @@ export default function Profile() {
           proof_of_income_url: proofOfIncomePathRes || null,
           additional_info: formData.additionalInfo,
           is_accredited_investor: formData.is_accredited_investor,
-        })
-        .eq("profile_id", profileData.id);
+        },
+        { onConflict: ["profile_id"] } // <--- this tells Supabase to update if profile_id exists
+      );
 
       if (profileError) throw profileError;
 

@@ -74,9 +74,11 @@ export default function FounderProfile() {
     switch (step) {
       case 1:
         if (
+          !formData.profile_photo_url ||
           !formData.fullName ||
           !formData.email ||
           !formData.mobile ||
+          !formData.nationality ||
           !formData.nationalId ||
           !formData.country ||
           !formData.city
@@ -88,7 +90,6 @@ export default function FounderProfile() {
 
       case 2:
         if (
-          !formData.current_employment_status ||
           !formData.company_name ||
           !formData.company_registration_number ||
           !formData.company_website_url ||
@@ -103,6 +104,8 @@ export default function FounderProfile() {
 
       case 3:
         if (
+          !formData.id_doc_url ||
+          !formData.verification_doc_url ||
           !formData.nda_signed ||
           !formData.termsAccepted ||
           !formData.is_accredited_founder
@@ -141,7 +144,6 @@ export default function FounderProfile() {
       if (authError || !authUser?.user)
         throw new Error("User not authenticated.");
       const auth_uid = authUser.user.id;
-
 
       const uploadFile = async (bucket, file, existingPath = null) => {
         if (!file) return existingPath || null;

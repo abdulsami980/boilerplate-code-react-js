@@ -29,7 +29,7 @@ export function ComingSoonOverlay({
   const [isLoading, setIsLoading] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [progress, setProgress] = useState(0);
-  const videoSrc = import.meta.env.VITE_MAIN_VIDEO_UTL;
+  const videoSrc = import.meta.env.VITE_MAIN_VIDEO_URL;
 
   // Toggle play/pause
   const togglePlay = () => {

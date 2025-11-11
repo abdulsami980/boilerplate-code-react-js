@@ -37,16 +37,7 @@ export default function Step2({ formData, handleChange }) {
           value={formData.maxInvestment}
           onChange={(e) => handleChange("maxInvestment", e.target.value)}
         />
-        {/* Experience */}
-        <Input
-          label="Investment Experience (Years)"
-          placeholder="Enter years of experience"
-          type="number"
-          value={formData.investmentExperienceYears}
-          onChange={(e) =>
-            handleChange("investmentExperienceYears", e.target.value)
-          }
-        />
+
         {/* Lookup-based Selects */}
         <Select
           label="Business Stage Preference"
@@ -65,6 +56,25 @@ export default function Step2({ formData, handleChange }) {
           onChange={(val) => handleChange("businessModel", val)}
         />
         <Select
+          label="Annual Income Bracket"
+          placeholder="Select income bracket"
+          options={options.income}
+          value={formData.annualIncomeBracket}
+          required
+          onChange={(val) => handleChange("annualIncomeBracket", val)}
+        />
+
+        {/* Experience */}
+        <Input
+          label="Investment Experience (Years)"
+          placeholder="Enter years of experience"
+          type="number"
+          value={formData.investmentExperienceYears}
+          onChange={(e) =>
+            handleChange("investmentExperienceYears", e.target.value)
+          }
+        />
+        <Select
           label="Preferred Business Location"
           placeholder="Select preferred business location"
           options={countryOptions}
@@ -79,25 +89,13 @@ export default function Step2({ formData, handleChange }) {
           value={formData.preferredCurrency}
           onChange={(val) => handleChange("preferredCurrency", val)}
         />
-        <Select
-          label="Annual Income Bracket"
-          placeholder="Select income bracket"
-          options={options.income}
-          value={formData.annualIncomeBracket}
-          onChange={(val) => handleChange("annualIncomeBracket", val)}
-        />
+
         <Select
           label="Involvement Level"
           placeholder="Select involvement level"
           options={options.involvement}
           value={formData.involvementLevel}
           onChange={(val) => handleChange("involvementLevel", val)}
-        />
-        <Input
-          label="Tax Number"
-          placeholder="Enter your tax number"
-          value={formData.taxNumber}
-          onChange={(e) => handleChange("taxNumber", e.target.value)}
         />
       </div>
 

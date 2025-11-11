@@ -46,7 +46,7 @@ export default function FounderHelpScreen() {
     ticketTypes: getLookupOptions("ticket_type"),
   };
 
-  const videoSrc = import.meta.env.VITE_MAIN_VIDEO_UTL;
+  const videoSrc = import.meta.env.VITE_MAIN_VIDEO_URL;
 
   const uploadTicketAttachment = async (file) => {
     if (!file) return null;
@@ -432,6 +432,7 @@ export default function FounderHelpScreen() {
                 label="Attachment"
                 value={form.attachment}
                 onChange={(file) => handleChange("attachment", file)}
+                tooltipText="Attach any relevant document, screenshot, or file that can help our support team better understand your inquiry. Accepted formats: PDF, JPG, or PNG (max 10MB)."
               />
             </div>
 

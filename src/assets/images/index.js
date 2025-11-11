@@ -1,14 +1,14 @@
 // ========================
 //  PEOPLE
 // ========================
+import irfanMalikBg from "./irfanMalikBg.jpg";
 import meerGreenJacket from "./meerGreenJacket.png";
 import meerShinyDress from "./meerShinyDress.webp";
 import shahidAfridi from "./shahidAfridi.png";
-import wasimAkram from "./wasimAkram.png";
-import shakeelBg from "./shakeelBg.jpg";
-import irfanMalikBg from "./irfanMalikBg.jpg";
-import wasimAkramBg from "./wasimAkramBg.png";
 import ShahidAfridiBg from "./ShahidAfridiBg.jpg";
+import shakeelBg from "./shakeelBg.jpg";
+import wasimAkram from "./wasimAkram.png";
+import wasimAkramBg from "./wasimAkramBg.png";
 
 // ==========================
 // Network Images
@@ -17,10 +17,10 @@ import akhtar from "./network/akhtar.jpg";
 import arabic from "./network/arabic.jpg";
 import dubai from "./network/dubai.jpg";
 import fahad from "./network/fahad.jpg";
+import handShake from "./network/handShake.webp";
 import salman from "./network/salman.jpg";
 import tech from "./network/tech.jpg";
 import wasim from "./network/wasim.jpg";
-import handShake from "./network/handShake.webp";
 
 // ==========================
 // UI
@@ -31,9 +31,8 @@ import rectanglePlaceholder from "./rectanglePlaceholder.png";
 // ==========================
 // LOGOS
 // ==========================
-import MainLogo from "./MainLogo.png";
-import MainLogoDark from "./MainLogoDark.png";
 import Fav from "./Fav.png";
+import MainLogo from "./MainLogo.png";
 
 const IMAGES = {
   // People
@@ -62,7 +61,6 @@ const IMAGES = {
 
   // LOGO
   MAIN_LOGO: MainLogo,
-  MAIN_LOGO_DARK: MainLogoDark,
   FAV_LOGO: Fav,
 };
 

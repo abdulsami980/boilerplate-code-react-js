@@ -1,5 +1,5 @@
 import { forwardRef, useState, useEffect, useRef } from "react";
-import { Eye, Link, Trash2 } from "lucide-react";
+import { Eye, Link, Trash2, CircleHelp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -15,6 +15,7 @@ const FileUploader = forwardRef(
       className,
       maxSizeMB = 10,
       placeholder = "Upload file...",
+      tooltipText, // 👈 new prop
     },
     ref
   ) => {
@@ -53,7 +54,6 @@ const FileUploader = forwardRef(
     const getFileName = () => {
       if (isFile && value instanceof File) return value.name;
       if (!isFile && typeof value === "string") {
-        // extract filename from path/url and decode for nice display
         try {
           const raw = value.split("/").pop().split("?")[0];
           return decodeURIComponent(raw);
@@ -75,9 +75,31 @@ const FileUploader = forwardRef(
     return (
       <div className="flex flex-col">
         {label && (
-          <label className="text-sm font-medium text-gray-700 mb-1">
-            {label} {required && <span className="text-red-500">*</span>}
-          </label>
+          <div className="flex items-center justify-between mb-1">
+            <label className="text-sm font-medium text-gray-700 flex items-center">
+              {label}{" "}
+              {required && <span className="text-red-500 ml-0.5">*</span>}
+            </label>
+
+            {/* Tooltip icon (conditionally shown) */}
+            {tooltipText && (
+              <div className="relative group flex items-center">
+                <CircleHelp
+                  size={16}
+                  className="text-gray-400 hover:text-green-600 cursor-pointer transition-colors"
+                />
+                <div
+                  className="
+                    absolute right-0 top-6 z-20 hidden w-56 rounded-lg bg-gray-900 px-3 py-2 text-xs text-white 
+                    shadow-lg group-hover:block transition-all duration-200
+                  "
+                >
+                  {tooltipText}
+                  <div className="absolute right-2 -top-1 h-2 w-2 rotate-45 bg-gray-900"></div>
+                </div>
+              </div>
+            )}
+          </div>
         )}
 
         <div
@@ -87,8 +109,6 @@ const FileUploader = forwardRef(
             className
           )}
         >
-          {/* File name / placeholder */}
-          {/* min-w-0 allows truncation inside flex container */}
           <span
             className="text-gray-600 flex-1 min-w-0 truncate mr-3"
             title={filename || placeholder}
@@ -96,7 +116,6 @@ const FileUploader = forwardRef(
             {filename ? filename : placeholder}
           </span>
 
-          {/* Attach button */}
           {!value && (
             <button
               type="button"
@@ -108,7 +127,6 @@ const FileUploader = forwardRef(
             </button>
           )}
 
-          {/* View / Remove buttons */}
           {value && (
             <div className="flex items-center gap-2">
               <button
@@ -131,7 +149,6 @@ const FileUploader = forwardRef(
             </div>
           )}
 
-          {/* Hidden native file input */}
           <input
             type="file"
             accept={accept}

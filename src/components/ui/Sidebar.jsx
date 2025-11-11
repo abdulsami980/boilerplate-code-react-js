@@ -106,7 +106,7 @@ export default function Sidebar() {
           // ✅ Generate a signed URL for display
           const signedUrl = await getSignedUrl(
             "profiles",
-            data.profile_photo_url // raw path like "investors/1761816121807-wasimAkramBg.png"
+            data.profile_photo_url
           );
 
           if (signedUrl) setProfilePhoto(signedUrl);
@@ -160,7 +160,7 @@ export default function Sidebar() {
               alt="Main Logo"
               className={`transition-all duration-300 ${
                 openMobile ? "block" : "hidden lg:group-hover:block"
-              } w-[120px] h-auto`}
+              } w-[100px] h-auto`}
             />
             <img
               src={IMAGES.FAV_LOGO}

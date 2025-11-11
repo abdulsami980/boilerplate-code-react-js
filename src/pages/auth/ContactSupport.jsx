@@ -199,9 +199,10 @@ export default function ContactSupport() {
             />
 
             <FileUploader
-              label="Attachment (optional)"
+              label="Attachment"
               value={form.attachment}
               onChange={(file) => handleChange("attachment", file)}
+              tooltipText="Attach any relevant document, screenshot, or file that can help our support team better understand your inquiry. Accepted formats: PDF, JPG, or PNG (max 10MB)."
             />
           </div>
 

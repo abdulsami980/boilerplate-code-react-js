@@ -117,18 +117,14 @@ export default function SignUp() {
             disabled={loading}
             isLoading={loading}
             loadingText="Creating Account..."
-            className={`w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-700 hover:to-emerald-600 text-white font-semibold rounded-full py-2 transition-transform duration-200 ${
-              loading
-                ? "opacity-70 cursor-not-allowed"
-                : "hover:scale-105 shadow-md"
-            }`}
+            className="w-full bg-gradient-to-r from-green-600 via-green-500 to-emerald-500 text-white rounded-full px-7 py-2 text-sm md:text-base font-medium flex items-center gap-2 shadow-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-[1.05] hover:from-green-700 hover:to-emerald-600"
           >
             Sign Up
           </Button>
         </form>
 
         {/* Divider */}
-        <div className="flex items-center w-full max-w-sm my-6">
+        <div className="flex items-center w-full max-w-sm my-4">
           <div className="flex-grow h-px bg-gray-300" />
           <span className="px-3 text-gray-500 text-sm font-medium">
             or continue with
@@ -155,7 +151,7 @@ export default function SignUp() {
         </div>
 
         {/* Sign in link */}
-        <p className="mt-8 text-sm text-gray-700">
+        <p className="mt-4 text-sm text-gray-700">
           Already have an account?{" "}
           <button
             onClick={() => navigate(PATH.LOGIN)}

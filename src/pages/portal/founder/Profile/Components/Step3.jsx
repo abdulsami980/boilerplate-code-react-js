@@ -1,30 +1,52 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Checkbox } from "@/components/ui/checkbox";
 import { FileUploader } from "@/components/ui/FileUploader";
 import LegalModal from "@/components/ui/LegalModal";
 import { Textarea } from "@/components/ui/textarea";
 import { LEGAL_CONTENT, NDA_CONTENT } from "@/config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Step3({ formData, handleChange }) {
   const [showModal, setShowModal] = useState(false);
   const [showNDAModal, setShowNDAModal] = useState(false);
 
+  // Track which checkboxes were prefilled (loaded from server)
+  const [prefilled, setPrefilled] = useState({
+    termsAccepted: false,
+    nda_signed: false,
+    is_accredited_founder: false,
+    consent_data_sharing: false,
+  });
+
+  // On mount: detect prefilled values
+  useEffect(() => {
+    setPrefilled({
+      termsAccepted: !!formData.termsAccepted,
+      nda_signed: !!formData.nda_signed,
+      is_accredited_founder: !!formData.is_accredited_founder,
+      consent_data_sharing: !!formData.consent_data_sharing,
+    });
+  }, []); // runs once, using initial formData
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
       {/* Documents */}
-      <FileUploader
-        label="Upload Verification Document"
-        value={formData.verification_doc_url}
-        onChange={(file) => handleChange("verification_doc_url", file)}
-        required
-      />
       <FileUploader
         label="Upload ID Document"
         placeholder="No File Chosen"
         value={formData.id_doc_url}
         onChange={(file) => handleChange("id_doc_url", file)}
+        tooltipText="Upload a government-issued identification document, such as your National Identity Card (CNIC) or Passport, to verify your personal identity."
         required
       />
+      <FileUploader
+        label="Upload Verification Document"
+        value={formData.verification_doc_url}
+        onChange={(file) => handleChange("verification_doc_url", file)}
+        tooltipText="Submit your company verification or KYC document, such as a Certificate of Incorporation, Business Registration Certificate, or any official proof verifying your business identity."
+        required
+      />
+
       {/* Additional Info */}
       <div className="col-span-2">
         <Textarea
@@ -37,9 +59,23 @@ export default function Step3({ formData, handleChange }) {
       </div>
       {/* ✅ Terms Accepted */}
       <div className="col-span-2">
-        {formData.termsAccepted ? (
+        {prefilled?.termsAccepted ? (
           <p className="text-sm text-gray-500 font-medium">
-            ✅ You have already accepted the Terms of Service & Privacy Policy.
+            ✅ You have already accepted the{" "}
+            <a
+              className="text-green-600 underline hover:cursor-pointer"
+              onClick={() => setShowModal(true)}
+            >
+              Terms of Service
+            </a>{" "}
+            &{" "}
+            <a
+              className="text-green-600 underline hover:cursor-pointer"
+              onClick={() => setShowModal(true)}
+            >
+              Privacy Policy
+            </a>
+            .
           </p>
         ) : (
           <Checkbox
@@ -75,12 +111,18 @@ export default function Step3({ formData, handleChange }) {
           />
         )}
       </div>
-
       {/* ✅ NDA Signed */}
       <div className="col-span-2">
-        {formData.nda_signed ? (
+        {prefilled?.nda_signed ? (
           <p className="text-sm text-gray-500 font-medium">
-            ✅ NDA already accepted.
+            ✅ You have already agreed to the{" "}
+            <a
+              className="text-green-600 underline hover:cursor-pointer"
+              onClick={() => setShowNDAModal(true)}
+            >
+              Non-Disclosure Agreement
+            </a>{" "}
+            (NDA).
           </p>
         ) : (
           <Checkbox
@@ -104,12 +146,11 @@ export default function Step3({ formData, handleChange }) {
           />
         )}
       </div>
-
       {/* ✅ Accredited Founder */}
       <div className="col-span-2">
-        {formData.is_accredited_founder ? (
+        {prefilled?.is_accredited_founder ? (
           <p className="text-sm text-gray-500 font-medium">
-            ✅ Accredited founder confirmed.
+            ✅ You have already confirmed accredited founder status.
           </p>
         ) : (
           <Checkbox
@@ -122,12 +163,12 @@ export default function Step3({ formData, handleChange }) {
           />
         )}
       </div>
-
       {/* ✅ Consent Data Sharing */}
       <div className="col-span-2">
-        {formData.consent_data_sharing ? (
+        {prefilled?.consent_data_sharing ? (
           <p className="text-sm text-gray-500 font-medium">
-            ✅ You already consented to data sharing.
+            ✅ You have already consented to data sharing with the platform and
+            partners.
           </p>
         ) : (
           <Checkbox
@@ -140,31 +181,22 @@ export default function Step3({ formData, handleChange }) {
           />
         )}
       </div>
-
       {/* ✅ Consent Marketing Emails */}
       <div className="col-span-2">
-        {formData.consent_marketing_emails ? (
-          <p className="text-sm text-gray-500 font-medium">
-            ✅ You already opted-in for marketing updates.
-          </p>
-        ) : (
-          <Checkbox
-            label="I want to receive marketing emails and new feature updates."
-            checked={formData.consent_marketing_emails === true}
-            onCheckedChange={(val) =>
-              handleChange("consent_marketing_emails", val === true)
-            }
-          />
-        )}
+        <Checkbox
+          label="I want to receive marketing emails and new feature updates."
+          checked={formData.consent_marketing_emails === true}
+          onCheckedChange={(val) =>
+            handleChange("consent_marketing_emails", val === true)
+          }
+        />
       </div>
-
       <LegalModal
         open={showModal}
         onClose={() => setShowModal(false)}
         title="Terms & Privacy"
         content={LEGAL_CONTENT}
       />
-
       <LegalModal
         open={showNDAModal}
         onClose={() => setShowNDAModal(false)}
