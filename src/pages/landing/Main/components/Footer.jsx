@@ -7,7 +7,7 @@ import {
   NDA_CONTENT,
   PATH,
 } from "@/config";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -35,21 +35,18 @@ export default function Footer() {
   const [showNDAModal, setShowNDAModal] = useState(false);
   const [showCookiesModal, setShowCookiesModal] = useState(false);
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [0, 60]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.6]);
-
   const handleScrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+    const landingPath = PATH.LANDING;
+
+    if (window.location.pathname !== landingPath) {
+      navigate(landingPath);
+    } else {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
-
   return (
     <>
       <footer

@@ -15,10 +15,16 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleScroll = (id) => {
+    const landingPath = PATH.LANDING;
     setActive(id);
-    const section = document.getElementById(id);
-    if (section) section.scrollIntoView({ behavior: "smooth" });
-    setMenuOpen(false);
+    if (window.location.pathname !== landingPath) {
+      navigate(landingPath);
+    } else {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
   };
 
   const navItems = [

@@ -39,8 +39,9 @@ export default function Step1({ formData, handleChange }) {
 
       <Input
         label="Mobile Number"
-        placeholder="e.g., +92 300 1234567"
+        placeholder="e.g., 0300 1234567"
         required
+      type="number"
         value={formData.mobile}
         onChange={(e) => handleChange("mobile", e.target.value)}
       />

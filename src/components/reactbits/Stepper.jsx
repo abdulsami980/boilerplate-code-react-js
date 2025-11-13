@@ -158,10 +158,23 @@ function StepContentWrapper({ currentStep, direction, children, className }) {
   const [parentHeight, setParentHeight] = useState("auto");
 
   useLayoutEffect(() => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      setParentHeight(Math.ceil(rect.height));
-    }
+    const updateHeight = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setParentHeight(Math.ceil(rect.height));
+      }
+    };
+
+    // Run after next paint
+    const raf = requestAnimationFrame(updateHeight);
+
+    // Optional: also run again after images/fonts might load
+    const timeout = setTimeout(updateHeight, 100);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timeout);
+    };
   }, [children]);
 
   return (
@@ -169,7 +182,7 @@ function StepContentWrapper({ currentStep, direction, children, className }) {
       ref={containerRef}
       animate={{ height: parentHeight }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className={`${className} overflow-visible`}
+      className={`${className} overflow-visible min-h-[300px]`} // set reasonable min-height
       style={{ position: "relative" }}
     >
       <AnimatePresence initial={false} custom={direction}>
