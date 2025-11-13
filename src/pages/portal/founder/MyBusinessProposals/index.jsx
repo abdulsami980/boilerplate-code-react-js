@@ -1,5 +1,6 @@
 import IMAGES from "@/assets/images";
 import BusinessProposalCard from "@/components/ui/businessProposalCard";
+import Tabs from "@/components/ui/Tabs";
 import ToolBar from "@/components/ui/toolbar";
 import TopCards from "@/components/ui/topCards";
 import {
@@ -8,6 +9,7 @@ import {
   Edit,
   Eye,
   FileTextIcon,
+  Plus,
   XCircle,
 } from "lucide-react";
 
@@ -158,6 +160,43 @@ export default function MyBusinessProposals() {
     },
   ];
 
+  // Define your tabs dynamically
+  const tabsData = [
+    {
+      label: "Under Review",
+      value: "under_review",
+      count: pList.filter((p) => p.status === "under_review").length,
+      content: (
+        <BusinessProposalCard
+          data={pList.filter((p) => p.status === "under_review")}
+          actions={pActions}
+        />
+      ),
+    },
+    {
+      label: "Approved",
+      value: "approved",
+      count: pList.filter((p) => p.status === "approved").length,
+      content: (
+        <BusinessProposalCard
+          data={pList.filter((p) => p.status === "approved")}
+          actions={pActions}
+        />
+      ),
+    },
+    {
+      label: "Rejected",
+      value: "rejected",
+      count: pList.filter((p) => p.status === "rejected").length,
+      content: (
+        <BusinessProposalCard
+          data={pList.filter((p) => p.status === "rejected")}
+          actions={pActions}
+        />
+      ),
+    },
+  ];
+
   // ─── Render ────────────────────────────────────────────────
   return (
     <>
@@ -171,12 +210,16 @@ export default function MyBusinessProposals() {
           subtitle="Manage and post all of your business proposals here."
           showSearch={true}
           onSearch={() => {}}
+          extraButton={{
+            text: (
+              <span className="flex items-center gap-2">
+                <Plus size={16} /> Add New Proposal
+              </span>
+            ),
+            onClick: () => alert("Clicked!"),
+          }}
         >
-          {/* {searchLoading ? (
-            <InlineLoader text="Fetching founders..." />
-          ) : ( */}
-          <BusinessProposalCard data={pList} actions={pActions} />
-          {/* )} */}
+          <Tabs tabs={tabsData} />
         </ToolBar>
       </div>
     </>

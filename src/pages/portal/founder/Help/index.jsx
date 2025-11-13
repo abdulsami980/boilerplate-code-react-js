@@ -246,6 +246,10 @@ export default function FounderHelpScreen() {
           <video
             ref={videoRef}
             onClick={togglePlay}
+            onLoadStart={() => setIsLoading(true)}
+            onCanPlay={() => setIsLoading(false)}
+            onWaiting={() => setIsLoading(true)}
+            onPlaying={() => setIsLoading(false)}
             onEnded={handleEnded}
             className="w-full h-full object-cover cursor-pointer"
             playsInline

@@ -50,7 +50,6 @@ export default function Profile() {
     sourceOfFunds: "",
 
     // Step 3
-    verificationDocUrl: null,
     proofOfIncomeUrl: null,
     additionalInfo: "",
     nda_signed: false,
@@ -67,8 +66,6 @@ export default function Profile() {
   });
 
   const profileCache = new Map();
-
-  // ✅ Fetch existing profile + investor data
 
   // ✅ Validation per step
   const validateStep = (step) => {
@@ -106,7 +103,6 @@ export default function Profile() {
       case 3:
         if (
           !formData.idDocument ||
-          !formData.verificationDocUrl ||
           !formData.proofOfIncomeUrl ||
           !formData.termsAccepted ||
           !formData.nda_signed ||
@@ -196,7 +192,6 @@ export default function Profile() {
       const [
         profilePhotoPathRes,
         idDocumentPathRes,
-        verificationDocPathRes,
         proofOfIncomePathRes,
       ] = await Promise.all([
         uploadFile(
@@ -207,7 +202,6 @@ export default function Profile() {
         uploadFile("profiles", formData.idDocument, formData.idDocumentPath),
         uploadFile(
           "kyc-docs",
-          formData.verificationDocUrl,
           formData.verificationDocPath
         ),
         uploadFile(
@@ -261,7 +255,6 @@ export default function Profile() {
           preferred_sectors: formData.preferredSectors,
           tax_number: formData.taxNumber,
           source_of_funds: formData.sourceOfFunds,
-          verification_doc_url: verificationDocPathRes || null,
           proof_of_income_url: proofOfIncomePathRes || null,
           additional_info: formData.additionalInfo,
           is_accredited_investor: formData.is_accredited_investor,
@@ -348,7 +341,6 @@ export default function Profile() {
         const [
           profilePhotoSignedUrl,
           idDocumentSignedUrl,
-          verificationDocSignedUrl,
           proofOfIncomeSignedUrl,
         ] = await Promise.all([
           profilePhotoPath
@@ -397,7 +389,6 @@ export default function Profile() {
           preferredSectors: investorData?.preferred_sectors || [],
           taxNumber: investorData?.tax_number || "",
           sourceOfFunds: investorData?.source_of_funds || "",
-          verificationDocUrl: verificationDocSignedUrl,
           proofOfIncomeUrl: proofOfIncomeSignedUrl,
           additionalInfo: investorData?.additional_info || "",
 

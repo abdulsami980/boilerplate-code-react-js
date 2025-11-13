@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { PageLoader } from "./components/ui/Loaders";
 import RequireAuth from "@/components/routing/RequireAuth";
 import PortalLayout from "@/layouts/PortalLayout";
-import { routes } from "@/pages/portal/routes/routesConfig";
+import { routes } from "@/pages/routes/routesConfig";
 import { Route, Routes } from "react-router-dom";
 import { Toaster } from "sonner";
 import NotFound from "./components/ui/NotFound";

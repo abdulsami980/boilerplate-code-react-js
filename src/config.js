@@ -1,10 +1,16 @@
 export const GREEN_COLOR = "#22c55e"; // Tailwind green-500
+export const MAX_FAILED_ATTEMPTS = 5;
+export const SUSPEND_DURATION_MINUTES = 120;
 
 export const PATH = {
   // =====================
-  // LANDING PAGE
+  // WEBSITE
   // =====================
   LANDING: "/",
+  DATA_DELETION_POLICY: "/data-deletion-policy",
+  TERMS_OF_SERVICE: "/terms-of-service",
+  PRIVACY_POLICY: "/privacy-policy",
+  COOKIE_POLICY: "/cookie-policy",
 
   // =====================
   // AUTHENTICATION
@@ -15,6 +21,7 @@ export const PATH = {
   VERIFY_USER_EMAIL: "/verify-user-email",
   FORGOT_PASSWORD: "/forgot-password",
   CONTACT_SUPPORT: "/contact-support",
+  AUTH_CALLBACK: "/authentication-callback",
 
   // =====================
   // ADMIN

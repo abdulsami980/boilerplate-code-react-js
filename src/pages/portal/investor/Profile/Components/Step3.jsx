@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Checkbox } from "@/components/ui/checkbox";
 import { FileUploader } from "@/components/ui/FileUploader";
 import LegalModal from "@/components/ui/LegalModal";
@@ -7,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function Step3({ formData, handleChange }) {
   const [showModal, setShowModal] = useState(false);
-  const [showNDAModal, setShowNDAModal] = useState(false); // Track which checkboxes were prefilled (loaded from server)
+  const [showNDAModal, setShowNDAModal] = useState(false);
   const [prefilled, setPrefilled] = useState({
     termsAccepted: false,
     nda_signed: false,
@@ -15,7 +16,6 @@ export default function Step3({ formData, handleChange }) {
     consent_data_sharing: false,
   });
 
-  // On mount: detect prefilled values
   useEffect(() => {
     setPrefilled({
       termsAccepted: !!formData.termsAccepted,
@@ -23,10 +23,10 @@ export default function Step3({ formData, handleChange }) {
       is_accredited_investor: !!formData.is_accredited_investor,
       consent_data_sharing: !!formData.consent_data_sharing,
     });
-  }, []); // runs once, using initial formData
+  }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Documents */}
       <FileUploader
         label="Upload ID Document"
@@ -38,18 +38,10 @@ export default function Step3({ formData, handleChange }) {
       />
 
       <FileUploader
-        label="Upload Verification Document"
-        value={formData.verificationDocUrl}
-        onChange={(file) => handleChange("verificationDocUrl", file)}
-        tooltipText="Submit your company verification or KYC document, such as a Certificate of Incorporation, Business Registration Certificate, or any official proof verifying your business identity."
-        required
-      />
-
-      <FileUploader
         label="Upload Proof of Income"
         value={formData.proofOfIncomeUrl}
         onChange={(file) => handleChange("proofOfIncomeUrl", file)}
-        tooltipText="Provide valid proof of income or financial standing, such as a recent bank statement, salary slip, investment portfolio summary, or tax return."
+        tooltipText="Provide valid proof of income or financial standing, such as a recent bank statement, salary slip, or tax return."
         required
       />
 

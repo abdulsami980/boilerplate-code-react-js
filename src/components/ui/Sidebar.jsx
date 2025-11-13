@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { routes } from "@/pages/portal/routes/routesConfig";
+import { routes } from "@/pages/routes/routesConfig";
 import Icons from "@/components/ui/Icons";
 import IMAGES from "@/assets/images";
 import { PATH } from "@/config";
@@ -36,6 +36,7 @@ export default function Sidebar() {
   const [profilePhoto, setProfilePhoto] = useState(null);
 
   const role =
+    localStorage.getItem("user_role")?.toLowerCase() ||
     user?.user_metadata?.role?.toLowerCase?.() ||
     user?.role?.toLowerCase?.() ||
     "guest";
@@ -158,7 +159,7 @@ export default function Sidebar() {
             <img
               src={IMAGES.MAIN_LOGO}
               alt="Main Logo"
-              className={`transition-all duration-300 ${
+              className={`transition-all duration-300 mb-6 ${
                 openMobile ? "block" : "hidden lg:group-hover:block"
               } w-[100px] h-auto`}
             />

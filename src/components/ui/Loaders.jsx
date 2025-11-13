@@ -176,6 +176,10 @@ export function ComingSoonOverlay({
           ref={videoRef}
           onClick={togglePlay}
           onEnded={handleEnded}
+          onLoadStart={() => setIsLoading(true)}
+          onCanPlay={() => setIsLoading(false)}
+          onWaiting={() => setIsLoading(true)}
+          onPlaying={() => setIsLoading(false)}
           className="w-full h-full object-contain cursor-pointer bg-black"
           playsInline
         />

@@ -29,7 +29,7 @@ export default function Step3({ formData, handleChange }) {
   }, []); // runs once, using initial formData
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid md:grid-cols-3 gap-6">
       {/* Documents */}
       <FileUploader
         label="Upload ID Document"
@@ -40,15 +40,22 @@ export default function Step3({ formData, handleChange }) {
         required
       />
       <FileUploader
-        label="Upload Verification Document"
+        label="Upload Business Verification Document"
         value={formData.verification_doc_url}
         onChange={(file) => handleChange("verification_doc_url", file)}
-        tooltipText="Submit your company verification or KYC document, such as a Certificate of Incorporation, Business Registration Certificate, or any official proof verifying your business identity."
+        tooltipText="Submit your company verification or KYC document, such as a Certificate of Incorporation, Business Registration Certificate, or NTN Certificate verifying your business identity."
+        required
+      />
+      <FileUploader
+        label="Upload Proof of Income"
+        value={formData.proofOfIncomeUrl}
+        onChange={(file) => handleChange("proofOfIncomeUrl", file)}
+        tooltipText="Provide valid proof of income or financial standing, such as a recent bank statement, salary slip, or tax return."
         required
       />
 
       {/* Additional Info */}
-      <div className="col-span-2">
+      <div className="col-span-1 md:col-span-3">
         <Textarea
           label="Additional Info"
           placeholder="Enter any additional information"

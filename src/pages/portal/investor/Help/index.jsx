@@ -245,6 +245,10 @@ export default function FounderHelpScreen() {
         <div className="relative max-w-6xl w-full aspect-video rounded-2xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.2)] group transition-transform duration-500 hover:scale-[1.01] z-10">
           <video
             ref={videoRef}
+            onLoadStart={() => setIsLoading(true)}
+            onCanPlay={() => setIsLoading(false)}
+            onWaiting={() => setIsLoading(true)}
+            onPlaying={() => setIsLoading(false)}
             onClick={togglePlay}
             onEnded={handleEnded}
             className="w-full h-full object-cover cursor-pointer"

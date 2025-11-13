@@ -5,13 +5,14 @@ import { PATH } from "@/config";
 import { useAuth } from "@/hooks/useAuth";
 import { Briefcase, User } from "lucide-react";
 import { useState } from "react";
-import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { FaFacebook } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { LeftSection } from "./Login";
 
 export default function SignUp() {
-  const { signup } = useAuth();
   const navigate = useNavigate();
+
+  const { signup, loginWithGoogle } = useAuth();
 
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
@@ -137,10 +138,11 @@ export default function SignUp() {
           <Button className="bg-[#1877F2] hover:bg-[#166FE0] text-white flex items-center gap-2 px-5">
             <FaFacebook className="w-4 h-4" /> Facebook
           </Button>
-          <Button className="bg-[#1DA1F2] hover:bg-[#1991DA] text-white flex items-center gap-2 px-5">
-            <FaTwitter className="w-4 h-4" /> Twitter
-          </Button>
-          <Button className="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 flex items-center gap-2 px-5">
+
+          <Button
+            onClick={() => loginWithGoogle()}
+            className="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 flex items-center gap-2 px-5"
+          >
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
               alt="Google"

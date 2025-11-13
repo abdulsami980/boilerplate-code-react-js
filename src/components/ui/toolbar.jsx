@@ -10,6 +10,7 @@ export default function ToolBar({
   onSearch = () => {},
   children,
   actions = [], // array of { label, icon, onClick, color }
+  extraButton = null, // new prop: { text, onClick }
 }) {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -66,6 +67,15 @@ export default function ToolBar({
                   {a.label}
                 </Button>
               ))}
+            </div>
+          )}
+
+          {/* Extra Button */}
+          {extraButton && (
+            <div className="mt-2 sm:mt-0 sm:ml-2">
+              <Button variant="default" size="sm" onClick={extraButton.onClick}>
+                {extraButton.text}
+              </Button>
             </div>
           )}
         </div>

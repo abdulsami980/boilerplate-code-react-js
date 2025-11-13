@@ -126,6 +126,10 @@ export default function HlsVideoSection() {
           ref={videoRef}
           onClick={togglePlay}
           onEnded={handleEnded}
+          onLoadStart={() => setIsLoading(true)}
+          onCanPlay={() => setIsLoading(false)}
+          onWaiting={() => setIsLoading(true)}
+          onPlaying={() => setIsLoading(false)}
           className="w-full h-full object-cover cursor-pointer"
           playsInline
         />

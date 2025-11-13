@@ -21,6 +21,13 @@ const navItems = [
   { label: "Ambassadors", id: "ambassadors" },
 ];
 
+const legalLinks = [
+  { label: "Terms & Service", path: PATH.TERMS_OF_SERVICE },
+  { label: "Privay Policy", path: PATH.PRIVACY_POLICY },
+  { label: "User Data Deletion Policies", path: PATH.DATA_DELETION_POLICY },
+  { label: "Cookies Policy", path: PATH.COOKIE_POLICY },
+];
+
 export default function Footer() {
   const navigate = useNavigate();
   const ref = useRef(null);
@@ -112,7 +119,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links + Contact (2 columns) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             {/* Quick Links */}
             <div>
               <h3 className="text-green-400 text-lg font-semibold mb-5">
@@ -133,7 +140,7 @@ export default function Footer() {
               </ul>
 
               <ul className="space-y-3 mt-3">
-                {[{ label: "Contact Support", path: PATH.CONTACT_SUPPORT }].map(
+                {[{ label: "Need Help?", path: PATH.CONTACT_SUPPORT }].map(
                   (item) => (
                     <li key={item.label} className="relative group w-fit">
                       <button
@@ -146,6 +153,25 @@ export default function Footer() {
                     </li>
                   )
                 )}
+              </ul>
+            </div>
+            {/* Legal Links */}
+            <div>
+              <h3 className="text-green-400 text-lg font-semibold mb-5">
+                Legal Links
+              </h3>
+              <ul className="space-y-3">
+                {legalLinks.map((item) => (
+                  <li key={item.label} className="relative group w-fit">
+                    <button
+                      onClick={() => navigate(item.path)}
+                      className="text-sm text-gray-300 hover:text-green-400 transition font-medium cursor-pointer"
+                    >
+                      {item.label}
+                    </button>
+                    <span className="absolute left-0 bottom-0 h-[2px] w-0 bg-gradient-to-r from-green-400 to-emerald-500 transition-all duration-500 ease-out group-hover:w-full group-hover:skew-x-6"></span>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -164,7 +190,7 @@ export default function Footer() {
                   <span>+971-555901047</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-green-400 mt-1" />
+                  <MapPin className="w-4 h-4 text-green-400 flex-shrink-0 mt-1" />
                   <span>
                     Deira - 99 Al Maktoum Rd, Port Saeed - Dubai, United Arab
                     Emirates
@@ -176,33 +202,11 @@ export default function Footer() {
         </div>
 
         {/* Divider + Bottom Bar */}
-        <div className="relative z-10 mt-12 border-t border-green-700/40 pt-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-300">
+        <div className="relative z-10 mt-12 border-t border-green-700/40 pt-6 flex flex-col md:flex-row items-center justify-center text-sm text-gray-300">
           <div>
             © 2025{" "}
             <span className="text-green-400 font-medium">Business Hub</span>{" "}
             Pakistan. All rights reserved.
-          </div>
-
-          {/* Legal Buttons */}
-          <div className="mt-3 md:mt-0 flex gap-4">
-            <button
-              onClick={() => setShowModal(true)}
-              className="text-gray-300 hover:text-green-400 transition font-medium text-sm cursor-pointer"
-            >
-              Terms & Privacy
-            </button>
-            <button
-              onClick={() => setShowNDAModal(true)}
-              className="text-gray-300 hover:text-green-400 transition font-medium text-sm cursor-pointer"
-            >
-              NDA Rules
-            </button>
-            <button
-              onClick={() => setShowCookiesModal(true)}
-              className="text-gray-300 hover:text-green-400 transition font-medium text-sm cursor-pointer"
-            >
-              Cookies Policy
-            </button>
           </div>
         </div>
       </footer>

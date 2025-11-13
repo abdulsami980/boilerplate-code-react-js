@@ -10,7 +10,7 @@ export default function Step2({ formData, handleChange }) {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-5">
+    <div className="grid md:grid-cols-3 gap-5">
       {/* Company Name */}
       <Input
         label="Company Name"
@@ -101,7 +101,7 @@ export default function Step2({ formData, handleChange }) {
       />
 
       {/* Entrepreneurial Experience */}
-      <div className="md:col-span-2">
+      <div className="md:col-span-3">
         <Textarea
           label="Entrepreneurial Experience"
           required
@@ -114,7 +114,7 @@ export default function Step2({ formData, handleChange }) {
       </div>
 
       {/* Vision */}
-      <div className="md:col-span-2">
+      <div className="md:col-span-3">
         <Textarea
           label="Founder Vision Statement"
           required
@@ -127,7 +127,7 @@ export default function Step2({ formData, handleChange }) {
       </div>
 
       {/* Long-Term Goals */}
-      <div className="md:col-span-2">
+      <div className="md:col-span-3">
         <Textarea
           label="Long-Term Goals"
           placeholder="Where do you see your venture going?"
@@ -137,7 +137,7 @@ export default function Step2({ formData, handleChange }) {
       </div>
 
       {/* Team Skills */}
-      <div className="md:col-span-2">
+      <div className="md:col-span-3">
         <Textarea
           label="Team Skillset Summary"
           placeholder="Describe your team's core skills"

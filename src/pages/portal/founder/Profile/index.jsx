@@ -50,6 +50,7 @@ export default function FounderProfile() {
     has_cap_table: false,
 
     // Step 3
+    proofOfIncomeUrl: null,
     verification_doc_url: null,
     id_doc_url: null,
     additional_info: "",
@@ -63,6 +64,7 @@ export default function FounderProfile() {
     profilePhotoPath: null,
     idDocumentPath: null,
     verificationDocPath: null,
+    proofOfIncomePath: null,
   });
 
   const profileCache = new Map();
@@ -106,6 +108,7 @@ export default function FounderProfile() {
         if (
           !formData.id_doc_url ||
           !formData.verification_doc_url ||
+          !formData.proofOfIncomeUrl ||
           !formData.nda_signed ||
           !formData.termsAccepted ||
           !formData.is_accredited_founder
@@ -185,20 +188,29 @@ export default function FounderProfile() {
         return filePath; // ✅ return path to save in DB
       };
 
-      const [profilePhotoPathRes, idDocumentPathRes, verificationDocPathRes] =
-        await Promise.all([
-          uploadFile(
-            "profiles",
-            formData.profile_photo_url,
-            formData.profilePhotoPath
-          ),
-          uploadFile("profiles", formData.id_doc_url, formData.idDocumentPath),
-          uploadFile(
-            "kyc-docs",
-            formData.verification_doc_url,
-            formData.verificationDocPath
-          ),
-        ]);
+      const [
+        profilePhotoPathRes,
+        idDocumentPathRes,
+        verificationDocPathRes,
+        proofOfIncomePathRes,
+      ] = await Promise.all([
+        uploadFile(
+          "profiles",
+          formData.profile_photo_url,
+          formData.profilePhotoPath
+        ),
+        uploadFile("profiles", formData.id_doc_url, formData.idDocumentPath),
+        uploadFile(
+          "kyc-docs",
+          formData.verification_doc_url,
+          formData.verificationDocPath
+        ),
+        uploadFile(
+          "kyc-docs",
+          formData.proofOfIncomeUrl,
+          formData.proofOfIncomePath
+        ),
+      ]);
 
       // ✅ Update profiles table with checkboxes that belong there
       const { data: profileData, error: profileError } = await supabase
@@ -248,6 +260,7 @@ export default function FounderProfile() {
           equity_split_clarity: formData.equity_split_clarity,
           has_cap_table: formData.has_cap_table,
           is_accredited_founder: formData.is_accredited_founder,
+          proof_of_income_url: proofOfIncomePathRes || null,
           verification_doc_url: verificationDocPathRes || null,
           additional_info: formData.additional_info || null,
           updated_at: new Date().toISOString(),
@@ -330,18 +343,23 @@ export default function FounderProfile() {
         const profilePhotoPath = profileData?.profile_photo_url || null;
         const idDocumentPath = profileData?.id_doc_url || null;
         const verificationDocPath = founderData?.verification_doc_url || null;
+        const proofOfIncomePath = founderData?.proof_of_income_url || null;
 
         // Signed preview URLs
         const [
           profilePhotoSignedUrl,
           idDocumentSignedUrl,
           verificationDocSignedUrl,
+          proofOfIncomeSignedUrl,
         ] = await Promise.all([
           profilePhotoPath ? getSignedUrl("profiles", profilePhotoPath) : null,
           idDocumentPath ? getSignedUrl("profiles", idDocumentPath) : null,
           verificationDocPath
             ? getSignedUrl("kyc-docs", verificationDocPath)
             : null,
+          proofOfIncomePath
+            ? getSignedUrl("kyc-docs", proofOfIncomePath)
+            : Promise.resolve(null),
         ]);
 
         const merged = {
@@ -381,6 +399,7 @@ export default function FounderProfile() {
           equity_split_clarity: founderData?.equity_split_clarity || false,
           has_cap_table: founderData?.has_cap_table || false,
           verification_doc_url: verificationDocSignedUrl,
+          proofOfIncomeUrl: proofOfIncomeSignedUrl,
           additional_info: founderData?.additional_info || "",
 
           // ✅ Checkboxes (profiles)
@@ -395,6 +414,7 @@ export default function FounderProfile() {
           profilePhotoPath,
           idDocumentPath,
           verificationDocPath,
+          proofOfIncomePath,
         };
 
         profileCache.set(auth_uid, merged);

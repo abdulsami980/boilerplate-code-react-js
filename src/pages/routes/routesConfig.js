@@ -3,9 +3,15 @@ import { PATH } from "@/config";
 import { lazy } from "react";
 
 // =====================
-// Landing Page
+// Website
 // =====================
-const Landing = lazy(() => import("@/pages/landing/Landing"));
+const Landing = lazy(() => import("@/pages/landing/Main/Landing"));
+const DataDeletionPolicy = lazy(() =>
+  import("@/pages/landing/DataDeletionPolicy")
+);
+const CookiesPolicy = lazy(() => import("@/pages/landing/CookiesPolicy"));
+const PrivacyPolicy = lazy(() => import("@/pages/landing/PrivacyPolicy"));
+const TermsService = lazy(() => import("@/pages/landing/TermsService"));
 
 // =====================
 // Authentication
@@ -16,6 +22,7 @@ const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"));
 const VerifyUserEmail = lazy(() => import("@/pages/auth/VerifyUserEmail"));
 const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
 const ContactSupport = lazy(() => import("@/pages/auth/ContactSupport"));
+const AuthCallback = lazy(() => import("@/pages/auth/AuthCallback"));
 
 // =====================
 // Admin
@@ -56,11 +63,35 @@ const HelpScreenFounders = lazy(() => import("@/pages/portal/founder/Help"));
 
 export const routes = [
   // =====================
-  // Landing Page
+  // Website
   // =====================
   {
     path: PATH.LANDING,
     component: Landing,
+    sidebar: false,
+    private: false,
+  },
+  {
+    path: PATH.DATA_DELETION_POLICY,
+    component: DataDeletionPolicy,
+    sidebar: false,
+    private: false,
+  },
+  {
+    path: PATH.TERMS_OF_SERVICE,
+    component: TermsService,
+    sidebar: false,
+    private: false,
+  },
+  {
+    path: PATH.PRIVACY_POLICY,
+    component: PrivacyPolicy,
+    sidebar: false,
+    private: false,
+  },
+  {
+    path: PATH.COOKIE_POLICY,
+    component: CookiesPolicy,
     sidebar: false,
     private: false,
   },
@@ -101,6 +132,12 @@ export const routes = [
   {
     path: PATH.CONTACT_SUPPORT,
     component: ContactSupport,
+    sidebar: false,
+    private: false,
+  },
+  {
+    path: PATH.AUTH_CALLBACK,
+    component: AuthCallback,
     sidebar: false,
     private: false,
   },

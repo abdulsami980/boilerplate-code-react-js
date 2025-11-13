@@ -50,7 +50,6 @@ const TicketDetailsDialog = memo(({ ticket, open, onClose }) => {
           ticket?.attachment_url
         );
         setSignedUrl(url);
-        console.log("URL", signedUrl);
       } else {
         setSignedUrl(null);
       }

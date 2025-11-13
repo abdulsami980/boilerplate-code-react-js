@@ -17,10 +17,12 @@ export default function RequireAuth() {
     return <Navigate to={PATH.LOGIN} state={{ from: location }} replace />;
   }
 
-  // ✅ FIX: Get the real role from user_metadata
+  // 🔹 Get role from user object or localStorage fallback
   const role =
-    user?.user_metadata?.role?.toLowerCase() || user?.role?.toLowerCase();
-
+    localStorage.getItem("user_role")?.toLowerCase() ||
+    user?.user_metadata?.role?.toLowerCase() ||
+    user?.role?.toLowerCase();
+  // If still no role, show loader
   if (!role) {
     return <PageLoader />;
   }
@@ -36,7 +38,7 @@ export default function RequireAuth() {
   const isAuthorizedPath = pathname.startsWith(allowedPaths[role]);
 
   if (!isAuthorizedPath) {
-    // ✅ Redirect to the user's own dashboard
+    // Redirect to the user's own dashboard
     const redirectPath =
       role === "admin"
         ? PATH.ADMIN.DASHBOARD

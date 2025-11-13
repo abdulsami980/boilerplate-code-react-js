@@ -5,7 +5,7 @@ import { Check, Clock, X } from "lucide-react";
 export default function BusinessProposalCard({ data, actions = [] }) {
   if (Array.isArray(data)) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         {data.map((item, i) => (
           <BusinessProposalCard key={i} data={item} actions={actions} />
         ))}
